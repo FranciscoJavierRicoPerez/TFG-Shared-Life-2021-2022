@@ -3,12 +3,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {
-    path: 'register', component: UserRegisterComponent
-  },
-  {
-    path: '', redirectTo: 'register', pathMatch: 'full' // al iniciar la aplicacion se redirigira directamente aquí
-  }
+  { path: 'register', component: UserRegisterComponent },
+  { path: '', redirectTo: 'register', pathMatch: 'full'} // al iniciar la aplicacion se redirigira directamente aquí}
 ];
 
 @NgModule({
