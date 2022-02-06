@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import net.tfg.sharedlife.exception.DataIncorrectException;
 import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.service.UserService;
 
@@ -23,7 +25,13 @@ public class UserControllerImpl implements UserController{
 	@Override
 	@PostMapping("/users")
 	public User createUser(@RequestBody User user) {
-		return userService.createUser(user);
+		var newUser = new User();
+		try {
+			newUser = userService.createUser(user);
+		}catch(DataIncorrectException e) {
+			System.err.println(e.getMessage());
+		}
+		return newUser;
 	}
 
 	@Override

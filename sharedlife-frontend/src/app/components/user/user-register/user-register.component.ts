@@ -1,6 +1,7 @@
 import { UserService } from './../../../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user/user';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-user-register',
@@ -11,7 +12,14 @@ export class UserRegisterComponent implements OnInit {
 
   user: User = new User();
 
-  constructor(private UserService: UserService) { }
+  myForm = new FormGroup({
+    firstName: new FormControl('', Validators.required),
+    lastName: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email])
+  });
+
+  constructor(
+    private UserService: UserService) {}
 
   ngOnInit(): void {
   }
@@ -25,7 +33,7 @@ export class UserRegisterComponent implements OnInit {
 
   onSubmit(){
     console.log(this.user);
-    this.saveUser();
+    console.warn(this.myForm.value);
+    this.saveUser(); // DESCOMENTAR
   }
-
 }
