@@ -1,0 +1,39 @@
+<div class="text-center">
+  <h1>Bienvenido a Shared Life</h1>
+  <h3>Registrate!!</h3>
+</div>
+<form [formGroup]="myForm" (ngSubmit) = "onSubmit()" novalidate>
+  <div class="form-group">
+    <label>Nombre</label>
+    <input type="text" formControlName="firstName"  id="firstName" class="form-control"
+      [(ngModel)] = "user.firstName" name = "firstName" placeholder="Introduce tu nombre">
+    <div *ngIf="myForm.get('firstName')?.hasError('required') && myForm.get('firstName')?.touched">
+      El nombre es un campo requerido
+    </div>
+  </div>
+
+  <br>
+  <div class="form-group">
+    <label>Apellidos</label>
+    <input type="text" id="lastName" class="form-control"
+      [(ngModel)] = "user.lastName" name = "lastName" formControlName="lastName" placeholder="Introduce tus apellidos">
+      <div *ngIf="myForm.get('lastName')?.hasError('required') && myForm.get('lastName')?.touched">
+        Los apellidos son un campo requerido
+      </div>
+  </div>
+  <br>
+  <div class="form-group">
+    <label>Correo Electrónico</label>
+    <input type="email" id="email" class="form-control"
+      [(ngModel)] = "user.email" name = "email" formControlName="email" placeholder="Introduce tu correo electrónico">
+      <div *ngIf="myForm.get('email')?.hasError('required') && myForm.get('email')?.touched">
+        El correo es un campo requerido
+      </div>
+      <div *ngIf="myForm.get('email')?.hasError('email') && myForm.get('email')?.touched">
+        El correo tiene un formato incorrecto
+      </div>
+  </div>
+  <br>
+  <!-- EL [disabled]="!myForm.valid" desactiva el boton hasta que no se cumplan las validaciones -->
+  <button type="submit" [disabled]="!myForm.valid"  class="btn btn-primary">Registrate</button>
+</form>
