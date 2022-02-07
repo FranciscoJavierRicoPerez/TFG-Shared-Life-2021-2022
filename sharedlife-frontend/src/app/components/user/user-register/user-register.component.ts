@@ -34,6 +34,6 @@ export class UserRegisterComponent implements OnInit {
   onSubmit(){
     console.log(this.user);
     console.warn(this.myForm.value);
-    this.saveUser(); // DESCOMENTAR
+    this.saveUser();
   }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,17 @@ public class UserControllerImpl implements UserController{
 	@GetMapping("/users")
 	public List<User> getAllUsers() {
 		return userService.getAllUsers();
+	}
+	
+	@GetMapping("/users/{idUser}")
+	public User getUserById(@PathVariable("idUser") Long idUser) {
+		var user = new User();
+		try {
+			user = userService.findUserById(idUser);
+		}catch(DataIncorrectException e) {
+			System.err.println(e.getMessage());
+		}
+		return user;
 	}
 	
 }

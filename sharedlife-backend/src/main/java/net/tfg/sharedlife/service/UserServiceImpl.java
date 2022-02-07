@@ -31,8 +31,19 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<User> getAllUsers() {
-		// TODO Auto-generated method stub
 		return userRepository.findAll();
-	}	
+	}
+	
+	@Override
+	public User findUserById(Long id) throws DataIncorrectException{
+		if(null == id) {
+			throw new DataIncorrectException(ErrorMessages.ID_NULL);
+		}
+		var user = userRepository.findById(id).orElse(null);
+		if(null == user) {
+			throw new DataIncorrectException(ErrorMessages.USER_NOT_FOUND);
+		}
+		return user;
+	}
 
 }
