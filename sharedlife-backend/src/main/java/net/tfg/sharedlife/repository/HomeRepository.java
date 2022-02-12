@@ -3,10 +3,10 @@ package net.tfg.sharedlife.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import net.tfg.sharedlife.model.User;
+import net.tfg.sharedlife.model.Home;
 
 /**
- * The Interface UserRepository.
+ * The Interface HomeRepository.
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>{}
+public interface HomeRepository extends JpaRepository<Home, Long>{}
