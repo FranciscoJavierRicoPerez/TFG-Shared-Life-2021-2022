@@ -1,4 +1,4 @@
-package net.tfg.sharedlife.service;
+package net.tfg.sharedlife.service.user;
 
 import java.util.List;
 
@@ -11,13 +11,25 @@ import net.tfg.sharedlife.exception.DataIncorrectException;
 import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.repository.UserRepository;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserServiceImpl.
+ */
 @Service
 public class UserServiceImpl implements UserService{
 
+	/** The user repository. */
 	@Autowired
 	private UserRepository userRepository;
 	
 	
+	/**
+	 * Creates the user.
+	 *
+	 * @param user the user
+	 * @return the user
+	 * @throws DataIncorrectException the data incorrect exception
+	 */
 	@Override
 	public User createUser(User user) throws DataIncorrectException{
 		if(user.getFirstName().equals(Strings.EMPTY) 
@@ -29,11 +41,23 @@ public class UserServiceImpl implements UserService{
 	}
 
 
+	/**
+	 * Gets the all users.
+	 *
+	 * @return the all users
+	 */
 	@Override
 	public List<User> getAllUsers() {
 		return userRepository.findAll();
 	}
 	
+	/**
+	 * Find user by id.
+	 *
+	 * @param id the id
+	 * @return the user
+	 * @throws DataIncorrectException the data incorrect exception
+	 */
 	@Override
 	public User findUserById(Long id) throws DataIncorrectException{
 		if(null == id) {
