@@ -25,14 +25,13 @@ export class UserRegisterComponent implements OnInit {
   }
 
   saveUser(){
-    this.UserService.createUser(this.user).subscribe( data => {
+    this.UserService.createUser(this.myForm.value).subscribe( data => {
       console.log(data);
       // HACER UNA REDIRECCIÓN A LA PAGINA DE LOGIN CUANDO ESTE HECHA
     }, error => console.log(error));
   }
 
   onSubmit(){
-    console.log(this.user);
     console.warn(this.myForm.value);
     this.saveUser();
   }

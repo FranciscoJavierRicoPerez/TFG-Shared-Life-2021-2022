@@ -2,11 +2,14 @@
   <h1>Bienvenido a Shared Life</h1>
   <h3>Registrate!!</h3>
 </div>
-<form [formGroup]="myForm" (ngSubmit) = "onSubmit()" novalidate>
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
-    <label>Nombre</label>
-    <input type="text" formControlName="firstName"  id="firstName" class="form-control"
-      [(ngModel)] = "user.firstName" name = "firstName" placeholder="Introduce tu nombre">
+    <label for="firstName">Nombre</label>
+    <input type="text"
+           id="firstName"
+           class="form-control"
+           formControlName="firstName"
+           placeholder="Introduce tu nombre">
     <div *ngIf="myForm.get('firstName')?.hasError('required') && myForm.get('firstName')?.touched">
       El nombre es un campo requerido
     </div>
@@ -14,18 +17,24 @@
 
   <br>
   <div class="form-group">
-    <label>Apellidos</label>
-    <input type="text" id="lastName" class="form-control"
-      [(ngModel)] = "user.lastName" name = "lastName" formControlName="lastName" placeholder="Introduce tus apellidos">
+    <label for="lastName">Apellidos</label>
+    <input type="text"
+           id="lastName"
+           class="form-control"
+           formControlName="lastName"
+           placeholder="Introduce tus apellidos">
       <div *ngIf="myForm.get('lastName')?.hasError('required') && myForm.get('lastName')?.touched">
         Los apellidos son un campo requerido
       </div>
   </div>
   <br>
   <div class="form-group">
-    <label>Correo Electrónico</label>
-    <input type="email" id="email" class="form-control"
-      [(ngModel)] = "user.email" name = "email" formControlName="email" placeholder="Introduce tu correo electrónico">
+    <label for="email">Correo Electrónico</label>
+    <input type="email"
+           id="email"
+           class="form-control"
+           formControlName="email"
+           placeholder="Introduce tu correo electrónico">
       <div *ngIf="myForm.get('email')?.hasError('required') && myForm.get('email')?.touched">
         El correo es un campo requerido
       </div>

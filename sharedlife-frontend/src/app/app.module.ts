@@ -7,17 +7,20 @@ import { UserRegisterComponent } from './components/user/user-register/user-regi
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
+import { HomeCreateComponent } from './components/home/home-create/home-create.component';
 @NgModule({
   declarations: [
     AppComponent,
     UserRegisterComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    HomeCreateComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
