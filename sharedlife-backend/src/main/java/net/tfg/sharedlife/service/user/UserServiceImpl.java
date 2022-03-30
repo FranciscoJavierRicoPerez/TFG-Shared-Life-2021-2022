@@ -2,8 +2,8 @@ package net.tfg.sharedlife.service.user;
 
 import java.util.List;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import net.tfg.sharedlife.common.ErrorMessages;
@@ -11,7 +11,6 @@ import net.tfg.sharedlife.exception.DataIncorrectException;
 import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.repository.UserRepository;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserServiceImpl.
  */
@@ -22,6 +21,8 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	/**
 	 * Creates the user.
@@ -31,12 +32,11 @@ public class UserServiceImpl implements UserService{
 	 * @throws DataIncorrectException the data incorrect exception
 	 */
 	@Override
-	public User createUser(User user) throws DataIncorrectException{
-		if(user.getFirstName().equals(Strings.EMPTY) 
-				|| user.getLastName().equals(Strings.EMPTY) 
-				|| user.getEmail().equals(Strings.EMPTY)) {
+	public User createUser(User user) throws DataIncorrectException {
+		if(null == user) {
 			throw new DataIncorrectException(ErrorMessages.USER_INFORMATION_ERR);
 		}
+		user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
 	}
 
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService{
 		if(null == id) {
 			throw new DataIncorrectException(ErrorMessages.ID_NULL);
 		}
-		var user = userRepository.findById(id).orElse(null);
+		User user = userRepository.findById(id).orElse(null);
 		if(null == user) {
 			throw new DataIncorrectException(ErrorMessages.USER_NOT_FOUND);
 		}

@@ -2,10 +2,12 @@ package net.tfg.sharedlife.controller.user;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import net.tfg.sharedlife.model.User;
 
 /**
@@ -19,8 +21,8 @@ public interface UserController {
 	 * @param user the user
 	 * @return the user
 	 */
-	@PostMapping("/users")
-	User createUser(@RequestBody User user);
+	@PostMapping("/register")
+	ResponseEntity<User> createUser(@RequestBody User user);
 
 	/**
 	 * Gets the all users.

@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class User.
  */
@@ -31,6 +32,13 @@ public class User {
 	@Column(name = "email")
 	private String email;
 	
+	/** The password. */
+	@Column(name = "password")
+	private String password;
+	
+	/** The username. */
+	@Column(name = "username")
+	private String username;
 	/**
 	 * Instantiates a new user.
 	 */
@@ -42,12 +50,16 @@ public class User {
 	 * @param firstName the first name
 	 * @param lastName the last name
 	 * @param email the email
+	 * @param password the password
+	 * @param username the username
 	 */
-	public User(String firstName, String lastName, String email) {
+	public User(String firstName, String lastName, String email, String password, String username) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.password = password;
+		this.username = username;
 	}
 
 	/**
@@ -121,6 +133,43 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	/**
+	 * Gets the password.
+	 *
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * Sets the password.
+	 *
+	 * @param password the new password
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * Gets the username.
+	 *
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * Sets the username.
+	 *
+	 * @param username the new username
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 	
 	
 }

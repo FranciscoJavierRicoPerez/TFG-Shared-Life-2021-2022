@@ -3,6 +3,8 @@ package net.tfg.sharedlife.controller.user;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,16 +36,17 @@ public class UserControllerImpl implements UserController{
 	 * @return the user
 	 */
 	@Override
-	@PostMapping("/users")
-	public User createUser(@RequestBody User user) {
+	@PostMapping("/register")
+	public ResponseEntity<User> createUser(@RequestBody User user) {
 		System.out.println("Starting register user proccess...");
 		var newUser = new User();
 		try {
 			newUser = userService.createUser(user);
 		}catch(DataIncorrectException e) {
 			System.err.println(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		return newUser;
+		return new ResponseEntity<>(newUser, HttpStatus.OK);
 	}
 
 	/**
