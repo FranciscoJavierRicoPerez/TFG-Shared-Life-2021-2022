@@ -1,4 +1,3 @@
-import { HomeGuardService } from './guards/home-guard.service';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
@@ -6,6 +5,7 @@ import { UserRegisterComponent } from './components/user/user-register/user-regi
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeCreateComponent } from './components/home/home-create/home-create.component';
+import { HomeGuardService } from './guards/home-guard.service';
 
 const routes: Routes = [
   { path: 'register', component: UserRegisterComponent },
