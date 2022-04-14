@@ -2,17 +2,20 @@ package net.tfg.sharedlife.controller.user;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.tfg.sharedlife.common.ErrorMessages;
+import net.tfg.sharedlife.dto.AuthUserDto;
 import net.tfg.sharedlife.exception.DataIncorrectException;
 import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.service.user.UserService;
@@ -22,32 +25,14 @@ import net.tfg.sharedlife.service.user.UserService;
  */
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/users")
 public class UserControllerImpl implements UserController{
+	
+	private final static Logger Log = LoggerFactory.getLogger(UserControllerImpl.class);
 	
 	/** The user service. */
 	@Autowired
 	private UserService userService;
-	
-	/**
-	 * Creates the user.
-	 *
-	 * @param user the user
-	 * @return the user
-	 */
-	@Override
-	@PostMapping("/register")
-	public ResponseEntity<User> createUser(@RequestBody User user) {
-		System.out.println("Starting register user proccess...");
-		var newUser = new User();
-		try {
-			newUser = userService.createUser(user);
-		}catch(DataIncorrectException e) {
-			System.err.println(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<>(newUser, HttpStatus.OK);
-	}
 
 	/**
 	 * Gets the all users.
@@ -55,7 +40,7 @@ public class UserControllerImpl implements UserController{
 	 * @return the all users
 	 */
 	@Override
-	@GetMapping("/users")
+	@GetMapping("/")
 	public List<User> getAllUsers() {
 		return userService.getAllUsers();
 	}
@@ -67,15 +52,31 @@ public class UserControllerImpl implements UserController{
 	 * @return the user by id
 	 */
 	@Override
-	@GetMapping("/users/{idUser}")
-	public User getUserById(@PathVariable("idUser") Long idUser) {
-		System.out.println("Searching user with id: " + idUser);
+	@GetMapping("/{idUser}")
+	public ResponseEntity<AuthUserDto> getUserById(@PathVariable("idUser") Long idUser) {
+		Log.info("Searching user with id: {}", idUser);
 		var user = new User();
 		try {
 			user = userService.findUserById(idUser);
 		}catch(DataIncorrectException e) {
 			System.err.println(e.getMessage());
 		}
-		return user;
+		return new ResponseEntity<>(new AuthUserDto(user.getFirstName(), user.getLastName(), user.getEmail(), user.getUsername()),
+				HttpStatus.OK);
 	}
+	
+	//@PreAuthorize("hasRole('ROLE_USER')")
+	@Override
+	@GetMapping("/username")
+	public ResponseEntity<AuthUserDto> getAuthUserByUserName(@RequestParam("username") String username) {
+		Log.info("Searching user with username: {}", username);
+		User user = userService.getByUsername(username)
+				.orElseThrow(() -> new DataIncorrectException(ErrorMessages.USER_NOT_FOUND));
+		return new ResponseEntity<>(
+				new AuthUserDto(user.getFirstName(), user.getLastName(), user.getEmail(), user.getUsername()),
+				HttpStatus.OK);
+	}
+	
+	
+	
 }

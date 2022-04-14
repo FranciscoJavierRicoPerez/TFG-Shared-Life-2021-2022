@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HomeService } from './../../../services/home/home.service';
 import { Component, OnInit } from '@angular/core';
@@ -21,15 +22,22 @@ export class HomeCreateComponent implements OnInit {
     rooms: new FormControl('', Validators.required)
   });
 
-  constructor(private HomeService: HomeService) {}
+  constructor(
+    private HomeService: HomeService,
+    private Router: Router) {}
 
   ngOnInit(): void {
   }
 
   saveHome(){
-    this.HomeService.createHouse(this.myForm.value).subscribe(data => {
+    this.HomeService.createHouse(this.myForm.value).subscribe(
+    data => {
       console.log(data);
-    }, error => console.log(error));
+    }, error => {
+      console.log(error)
+    });
+    this.Router.navigate(['/']);
+
   }
 
   onSubmit(){

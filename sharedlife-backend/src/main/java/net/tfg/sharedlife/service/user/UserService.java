@@ -1,6 +1,8 @@
 package net.tfg.sharedlife.service.user;
 
 import java.util.List;
+import java.util.Optional;
+
 import net.tfg.sharedlife.exception.DataIncorrectException;
 import net.tfg.sharedlife.model.User;
 
@@ -33,5 +35,11 @@ public interface UserService {
 	 * @return the user
 	 */
 	User findUserById(Long id);
+	
+	Optional<User> getByUsername(String userName);
+	
+	boolean existsByUsername(String userName);
+	
+	boolean existsByEmail(String email);
 	
 }

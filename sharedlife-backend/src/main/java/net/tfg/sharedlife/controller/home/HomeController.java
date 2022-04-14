@@ -17,7 +17,7 @@ public interface HomeController {
 	 * @param home the home
 	 * @return the home
 	 */
-	@PostMapping("/home")
+	@PostMapping("/")
 	Home createHome(@RequestBody Home home);
 	
 }

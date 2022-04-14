@@ -1,9 +1,9 @@
 package net.tfg.sharedlife.service.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import net.tfg.sharedlife.common.ErrorMessages;
@@ -21,9 +21,6 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserRepository userRepository;
 	
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
 	/**
 	 * Creates the user.
 	 *
@@ -32,11 +29,10 @@ public class UserServiceImpl implements UserService{
 	 * @throws DataIncorrectException the data incorrect exception
 	 */
 	@Override
-	public User createUser(User user) throws DataIncorrectException {
+	public User createUser(User user) throws DataIncorrectException { // PUEDE QUE NECESITE CAMBIARLO A UN VOID
 		if(null == user) {
 			throw new DataIncorrectException(ErrorMessages.USER_INFORMATION_ERR);
 		}
-		user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
 	}
 
@@ -68,6 +64,18 @@ public class UserServiceImpl implements UserService{
 			throw new DataIncorrectException(ErrorMessages.USER_NOT_FOUND);
 		}
 		return user;
+	}
+	
+	public Optional<User> getByUsername(String userName){
+		return userRepository.getByUsername(userName);
+	}
+	
+	public boolean existsByUsername(String userName) {
+		return userRepository.existsByUsername(userName);
+	}
+	
+	public boolean existsByEmail(String email) {
+		return userRepository.existsByEmail(email);
 	}
 
 }

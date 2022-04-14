@@ -1,1 +1,43 @@
-<p>login works!</p>
+<app-menu></app-menu>
+<div class="text-center" *ngIf="isLogged; else loggedOut">
+  <h2>Ya has iniciado sesion</h2>
+</div>
+<ng-template #loggedOut>
+  <div class="container justify-content-center">
+    <div class="card">
+      <div class="card-header">
+        <h5>Inicia sesión</h5>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="myForm" (ngSubmit)="onLogin()" novalidate>
+          <div class="form-group" style="margin: 5px">
+            <label for="username">Nombre usuario</label>
+            <input type="text"
+                   name="username"
+                   id="username"
+                   class="form-control"
+                   formControlName="username" required>
+            <div *ngIf="myForm.get('username')?.hasError('required') && myForm.get('username')?.touched">
+              El nombre de usuario es un campo requerido
+            </div>
+          </div>
+          <div class="form-group" style="margin: 5px">
+            <label for="password">Contraseña</label>
+            <input type="password"
+                   name="password"
+                   id="password"
+                   class="form-control"
+                   formControlName="password" required>
+            <div *ngIf="myForm.get('password')?.hasError('password') && myForm.get('password')?.touched">
+              La contraseña es un campo requerido
+            </div>
+          </div>
+          <div class="form-group" style="margin: 5px">
+            <button class="btn btn-success btn-lg btn-block" [disabled]="!myForm.valid">Iniciar Sesión</button>
+            <button type="button" class="btn btn-danger btn-lg btn-block" style="margin: 13px;" routerLink="/inicio">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

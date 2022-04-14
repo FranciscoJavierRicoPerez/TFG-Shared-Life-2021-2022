@@ -5,31 +5,21 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import net.tfg.sharedlife.dto.AuthUserDto;
 import net.tfg.sharedlife.model.User;
 
 /**
  * The Interface UserController.
  */
 public interface UserController {
-
-	/**
-	 * Creates the user.
-	 *
-	 * @param user the user
-	 * @return the user
-	 */
-	@PostMapping("/register")
-	ResponseEntity<User> createUser(@RequestBody User user);
-
 	/**
 	 * Gets the all users.
 	 *
 	 * @return the all users
 	 */
-	@GetMapping("/users")
+	@GetMapping("/")
 	List<User> getAllUsers();
 	
 	/**
@@ -38,8 +28,12 @@ public interface UserController {
 	 * @param idUser the id user
 	 * @return the user by id
 	 */
-	@GetMapping("/users/{idUser}")
-	User getUserById(@PathVariable("idUser") Long idUser);
+	@GetMapping("/{idUser}")
+	ResponseEntity<AuthUserDto> getUserById(@PathVariable("idUser") Long idUser);
+	
+	
+	@GetMapping("/email")
+	ResponseEntity<AuthUserDto> getAuthUserByUserName(@RequestParam("username") String username);
 	
 	
 }

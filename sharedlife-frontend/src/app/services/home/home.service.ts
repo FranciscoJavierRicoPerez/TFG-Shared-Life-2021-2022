@@ -8,7 +8,7 @@ import { Home } from 'src/app/models/home/home';
 })
 export class HomeService {
 
-  private baseURL = "http://localhost:8080/api/v1/home";
+  private baseURL = "http://localhost:8080/home";
 
   constructor(private httpClient: HttpClient) { }
 
