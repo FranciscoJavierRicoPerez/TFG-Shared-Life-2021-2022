@@ -1,8 +1,8 @@
 package net.tfg.sharedlife.service.user;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,6 @@ import net.tfg.sharedlife.exception.DataIncorrectException;
 import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.repository.UserRepository;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserServiceImpl.
  */
@@ -22,7 +21,6 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserRepository userRepository;
 	
-	
 	/**
 	 * Creates the user.
 	 *
@@ -31,10 +29,8 @@ public class UserServiceImpl implements UserService{
 	 * @throws DataIncorrectException the data incorrect exception
 	 */
 	@Override
-	public User createUser(User user) throws DataIncorrectException{
-		if(user.getFirstName().equals(Strings.EMPTY) 
-				|| user.getLastName().equals(Strings.EMPTY) 
-				|| user.getEmail().equals(Strings.EMPTY)) {
+	public User createUser(User user) throws DataIncorrectException { // PUEDE QUE NECESITE CAMBIARLO A UN VOID
+		if(null == user) {
 			throw new DataIncorrectException(ErrorMessages.USER_INFORMATION_ERR);
 		}
 		return userRepository.save(user);
@@ -63,11 +59,23 @@ public class UserServiceImpl implements UserService{
 		if(null == id) {
 			throw new DataIncorrectException(ErrorMessages.ID_NULL);
 		}
-		var user = userRepository.findById(id).orElse(null);
+		User user = userRepository.findById(id).orElse(null);
 		if(null == user) {
 			throw new DataIncorrectException(ErrorMessages.USER_NOT_FOUND);
 		}
 		return user;
+	}
+	
+	public Optional<User> getByUsername(String userName){
+		return userRepository.getByUsername(userName);
+	}
+	
+	public boolean existsByUsername(String userName) {
+		return userRepository.existsByUsername(userName);
+	}
+	
+	public boolean existsByEmail(String email) {
+		return userRepository.existsByEmail(email);
 	}
 
 }

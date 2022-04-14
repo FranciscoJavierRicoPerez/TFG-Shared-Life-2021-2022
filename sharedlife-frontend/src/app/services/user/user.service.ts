@@ -8,12 +8,12 @@ import { User } from 'src/app/models/user/user';
 })
 export class UserService {
 
-  private baseURL = "http://localhost:8080/api/v1/users";
+  private baseURL = "http://localhost:8080/users";
 
   constructor(private httpClient: HttpClient) { }
 
   createUser(user: User): Observable<Object>{
-    return this.httpClient.post(`${this.baseURL}`, user);
+    return this.httpClient.post(`${this.baseURL}`+"register", user);
   }
 
   getUserById(id: number): Observable<User>{

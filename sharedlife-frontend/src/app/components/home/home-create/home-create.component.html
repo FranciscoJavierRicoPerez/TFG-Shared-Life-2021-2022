@@ -1,79 +1,89 @@
-<div class="container text-center">
-  <h1>Crea tu casa</h1>
+<app-menu></app-menu>
+<div class="container justify-content-center">
+  <div class="card">
+    <div class="card-header">
+      <div class="container text-center">
+        <h1>Crea tu casa</h1>
+      </div>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="address">Direccion</label>
+          <input type="text"
+                 id="address"
+                 formControlName="address"
+                 class="form-control"
+                 placeholder="¿Cual es la dirección?">
+          <div *ngIf="myForm.get('address')?.hasError('required') && myForm.get('address')?.touched">
+            La direccion es un campo requerido
+          </div>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="floor">Piso</label>
+          <input type="text"
+                 id="floor"
+                 formControlName="floor"
+                 class="form-control"
+                 placeholder="¿Cual es el piso?">
+          <div *ngIf="myForm.get('floor')?.hasError('required') && myForm.get('floor')?.touched">
+            El piso es un campo requerido
+          </div>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="number">Numero</label>
+          <input type="text"
+                 id="number"
+                 formControlName="number"
+                 class="form-control"
+                 placeholder="¿Cual es el número?">
+          <div *ngIf="myForm.get('floor')?.hasError('required') && myForm.get('floor')?.touched">
+            El piso es un campo requerido
+          </div>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="country">Pais</label>
+          <input type="text"
+                 id="country"
+                 formControlName="country"
+                 class="form-control"
+                 placeholder="Indica el pais">
+          <div *ngIf="myForm.get('country')?.hasError('required') && myForm.get('country')?.touched">
+            El pais es un campo requerido
+          </div>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="city">Ciudad</label>
+          <input type="text"
+                 id="city"
+                 formControlName="city"
+                 class="form-control"
+                 placeholder="Indica la ciudad">
+          <div *ngIf="myForm.get('city')?.hasError('required') && myForm.get('city')?.touched">
+            La ciudad es un campo requerido
+          </div>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="rooms">Habitaciones</label>
+          <input type="text"
+                 id="rooms"
+                 formControlName="rooms"
+                 class="form-control"
+                 placeholder="¿Cuantas habitaciones?">
+          <div *ngIf="myForm.get('rooms')?.hasError('required') && myForm.get('rooms')?.touched">
+            La cantidad de habitaciones es un campo requerido
+          </div>
+        </div>
+        <br>
+        <!-- EL [disabled]="!myForm.valid" desactiva el boton hasta que no se cumplan las validaciones -->
+        <button type="submit" [disabled]="!myForm.valid" class="btn btn-primary">Añadir vivienda</button>
+      </form>
+
+    </div>
+  </div>
 </div>
-<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-  <div class="form-group">
-    <label for="address">Direccion</label>
-    <input type="text"
-           id="address"
-           formControlName="address"
-           class="form-control"
-           placeholder="¿Cual es la dirección?">
-    <div *ngIf="myForm.get('address')?.hasError('required') && myForm.get('address')?.touched">
-      La direccion es un campo requerido
-    </div>
-  </div>
-  <br>
-  <div class="form-group">
-    <label for="floor">Piso</label>
-    <input type="text"
-           id="floor"
-           formControlName="floor"
-           class="form-control"
-           placeholder="¿Cual es el piso?">
-    <div *ngIf="myForm.get('floor')?.hasError('required') && myForm.get('floor')?.touched">
-      El piso es un campo requerido
-    </div>
-  </div>
-  <br>
-  <div class="form-group">
-    <label for="number">Numero</label>
-    <input type="text"
-           id="number"
-           formControlName="number"
-           class="form-control"
-           placeholder="¿Cual es el número?">
-    <div *ngIf="myForm.get('floor')?.hasError('required') && myForm.get('floor')?.touched">
-      El piso es un campo requerido
-    </div>
-  </div>
-  <br>
-  <div class="form-group">
-    <label for="country">Pais</label>
-    <input type="text"
-           id="country"
-           formControlName="country"
-           class="form-control"
-           placeholder="Indica el pais">
-    <div *ngIf="myForm.get('country')?.hasError('required') && myForm.get('country')?.touched">
-      El pais es un campo requerido
-    </div>
-  </div>
-  <br>
-  <div class="form-group">
-    <label for="city">Ciudad</label>
-    <input type="text"
-           id="city"
-           formControlName="city"
-           class="form-control"
-           placeholder="Indica la ciudad">
-    <div *ngIf="myForm.get('city')?.hasError('required') && myForm.get('city')?.touched">
-      La ciudad es un campo requerido
-    </div>
-  </div>
-  <br>
-  <div class="form-group">
-    <label for="rooms">Habitaciones</label>
-    <input type="text"
-           id="rooms"
-           formControlName="rooms"
-           class="form-control"
-           placeholder="¿Cuantas habitaciones?">
-    <div *ngIf="myForm.get('rooms')?.hasError('required') && myForm.get('rooms')?.touched">
-      La cantidad de habitaciones es un campo requerido
-    </div>
-  </div>
-  <br>
-  <!-- EL [disabled]="!myForm.valid" desactiva el boton hasta que no se cumplan las validaciones -->
-  <button type="submit" [disabled]="!myForm.valid" class="btn btn-primary">Añadir vivienda</button>
-</form>
