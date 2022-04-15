@@ -1,3 +1,4 @@
+import { HomeCreateDTO } from 'src/app/models/home/home-create-dto/home-create-dto';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -12,7 +13,7 @@ export class HomeService {
 
   constructor(private httpClient: HttpClient) { }
 
-  createHouse(home: Home): Observable<Object>{
+  createHouse(home: HomeCreateDTO): Observable<Object>{
     return this.httpClient.post(`${this.baseURL}`, home);
   }
 }

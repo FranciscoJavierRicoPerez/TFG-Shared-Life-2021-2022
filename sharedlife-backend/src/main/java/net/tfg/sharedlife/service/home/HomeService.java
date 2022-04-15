@@ -1,6 +1,6 @@
 package net.tfg.sharedlife.service.home;
 
-import net.tfg.sharedlife.model.Home;
+import net.tfg.sharedlife.dto.HomeDTO;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -8,12 +8,6 @@ import net.tfg.sharedlife.model.Home;
  */
 public interface HomeService {
 	
-	/**
-	 * Creates the home.
-	 *
-	 * @param home the home
-	 * @return the home
-	 */
-	Home createHome(Home home);
+	void createHome(HomeDTO home);
 	
 }

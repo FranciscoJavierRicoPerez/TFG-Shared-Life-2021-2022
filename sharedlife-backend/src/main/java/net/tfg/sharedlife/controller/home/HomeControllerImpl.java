@@ -3,14 +3,16 @@ package net.tfg.sharedlife.controller.home;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.tfg.sharedlife.dto.HomeDTO;
 import net.tfg.sharedlife.exception.DataIncorrectException;
-import net.tfg.sharedlife.model.Home;
 import net.tfg.sharedlife.service.home.HomeService;
 
 /**
@@ -36,15 +38,14 @@ public class HomeControllerImpl implements HomeController{
 	@PreAuthorize("hasRole('ADMIN')")
 	@Override
 	@PostMapping
-	public Home createHome(Home home) {
+	public ResponseEntity<?> createHome(HomeDTO home) {
 		logger.info("Starting creating house process...");
-		Home newHome = null;
 		try {
-			newHome = homeService.createHome(home);
+			homeService.createHome(home);
 		}catch(DataIncorrectException e) {
-			System.err.println(e.getMessage());
+			logger.error("Error creating home");
 		}
-		return newHome;
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

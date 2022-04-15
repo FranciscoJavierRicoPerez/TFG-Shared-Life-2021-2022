@@ -1,8 +1,10 @@
+import { TokenService } from './../../../services/token/token.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HomeService } from './../../../services/home/home.service';
 import { Component, OnInit } from '@angular/core';
 import { Home } from 'src/app/models/home/home';
+import { HomeCreateDTO } from 'src/app/models/home/home-create-dto/home-create-dto';
 
 @Component({
   selector: 'app-home-create',
@@ -11,7 +13,8 @@ import { Home } from 'src/app/models/home/home';
 })
 export class HomeCreateComponent implements OnInit {
 
-  home: Home = new Home();
+  token: string;
+  home: HomeCreateDTO;
 
   myForm = new FormGroup({
     address: new FormControl('', Validators.required),
@@ -24,13 +27,28 @@ export class HomeCreateComponent implements OnInit {
 
   constructor(
     private HomeService: HomeService,
-    private Router: Router) {}
+    private Router: Router,
+    private TokenService: TokenService) {}
 
   ngOnInit(): void {
+    if(this.TokenService.getToken()){
+      this.token = this.TokenService.getToken();
+    }
+    else{
+      this.token = "";
+    }
   }
 
   saveHome(){
-    this.HomeService.createHouse(this.myForm.value).subscribe(
+    this.home = new HomeCreateDTO(
+      this.myForm.value.address,
+      this.myForm.value.floor,
+      this.myForm.value.number,
+      this.myForm.value.city,
+      this.myForm.value.country,
+      this.myForm.value.rooms,
+      this.token);
+    this.HomeService.createHouse(this.home).subscribe(
     data => {
       console.log(data);
     }, error => {

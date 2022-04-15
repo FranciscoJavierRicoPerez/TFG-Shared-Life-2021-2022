@@ -1,9 +1,10 @@
 package net.tfg.sharedlife.controller.home;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import net.tfg.sharedlife.model.Home;
+import net.tfg.sharedlife.dto.HomeDTO;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -18,6 +19,6 @@ public interface HomeController {
 	 * @return the home
 	 */
 	@PostMapping("/")
-	Home createHome(@RequestBody Home home);
+	ResponseEntity<?> createHome(@RequestBody HomeDTO home);
 	
 }
