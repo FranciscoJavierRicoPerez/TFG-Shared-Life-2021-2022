@@ -20,4 +20,10 @@ export class UserService {
     return this.httpClient.get<User>(`${this.baseURL}/${id}`);
   }
 
+  getUserByUsername(username: string): Observable<User>{
+    return this.httpClient.get<User>(`${this.baseURL}/username?username=${username}`);
+  }
+
+
+
 }

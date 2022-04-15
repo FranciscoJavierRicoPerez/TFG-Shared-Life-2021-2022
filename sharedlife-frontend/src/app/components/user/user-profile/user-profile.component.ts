@@ -1,3 +1,4 @@
+import { TokenService } from './../../../services/token/token.service';
 import { UserService } from './../../../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -10,23 +11,27 @@ import { User } from 'src/app/models/user/user';
 })
 export class UserProfileComponent implements OnInit {
 
-  id!: number;
-  user!: User;
-
+  username: string;
+  user: User;
   constructor(
-    private userService: UserService,
-    private route: ActivatedRoute) { }
+    private TokenService: TokenService,
+    private UserService: UserService) { }
 
   ngOnInit(): void {
-    this.getUser();
-  }
-
-  getUser(){
-    this.id = this.route.snapshot.params['id']; // Obtengo de la ruta la informacion del id
-    this.user = new User("", "", "", "", "");
-    this.userService.getUserById(this.id).subscribe( data => {
-      this.user = data;
-    });
+    if(this.TokenService.getToken()){
+      this.username = this.TokenService.getUserName();
+      this.UserService.getUserByUsername(this.username).subscribe(
+        data => {
+          this.user = data;
+        },
+        error => {
+          console.log("Error user can't not found");
+        });
+    }
+    else{
+      this.username = "";
+      console.log("Error token doesn't exists");
+    }
   }
 
 

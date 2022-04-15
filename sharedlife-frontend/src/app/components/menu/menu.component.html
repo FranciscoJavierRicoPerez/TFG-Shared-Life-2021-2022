@@ -22,7 +22,7 @@
         <a routerLink="/register" routerLinkActive="active" class="nav-link bi bi-person-plus"> Registro</a>
       </li>
       <li class="nav-item" *ngIf="isLogged">
-        <a class="nav-link" routerLink="/user/{{11}}">{{username}}</a> <!-- MOCKEADO VER COMO OBTENER LA INFORMACION DEL ID DEL USUARIO -->
+        <a class="nav-link" routerLink="/perfil">{{username}}</a> <!-- MOCKEADO VER COMO OBTENER LA INFORMACION DEL ID DEL USUARIO -->
       </li>
       <li class = "nav-item" *ngIf="isLogged" >
         <a routerLink="/inicio" class="nav-link bi bi-box-arrow-left" (click)="onLogOut()"> Cerrar Sesion</a>
