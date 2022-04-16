@@ -12,6 +12,7 @@ import { LoginComponent } from './components/user/login/login.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { interceptorProvider } from './interceptors/home-interceptor.service';
+import { HomeInfoPageComponent } from './components/home/home-info-page/home-info-page.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { interceptorProvider } from './interceptors/home-interceptor.service';
     LoginComponent,
     MenuComponent,
     HomePageComponent,
+    HomeInfoPageComponent,
   ],
   imports: [
     BrowserModule,

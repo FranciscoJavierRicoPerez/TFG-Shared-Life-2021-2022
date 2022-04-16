@@ -1,3 +1,4 @@
+import { HomeInfoPageComponent } from './components/home/home-info-page/home-info-page.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'perfil', component: UserProfileComponent },
   { path: 'home/create', component: HomeCreateComponent, canActivate: [HomeGuardService], data: { expectRole: ['admin'] } },
   { path: 'login', component: LoginComponent },
-  { path: 'inicio', component: HomePageComponent } // PAGINA PRINCIPAL DE LA APLICACION
+  { path: 'inicio', component: HomePageComponent }, // PAGINA PRINCIPAL DE LA APLICACION
+  { path: 'vivienda/:id', component: HomeInfoPageComponent }
 ];
 
 @NgModule({

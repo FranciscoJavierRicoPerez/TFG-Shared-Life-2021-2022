@@ -1,4 +1,5 @@
 export class HomeCreateDTO {
+  id: string;
   address!: string;
   floor!: string;
   number!: string;
