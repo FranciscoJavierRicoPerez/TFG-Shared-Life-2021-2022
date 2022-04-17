@@ -1,3 +1,5 @@
+import { User } from './../../models/user/user';
+import { UserService } from './../../services/user/user.service';
 import { TokenService } from './../../services/token/token.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -11,7 +13,8 @@ export class HomePageComponent implements OnInit {
   isLogged: boolean = false;
   username: string;
   constructor(
-    private TokenService: TokenService) { }
+    private TokenService: TokenService,
+    private UserService: UserService) { }
 
   ngOnInit(): void {
     if(this.TokenService.getToken()){

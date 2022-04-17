@@ -1,19 +1,26 @@
 package net.tfg.sharedlife.service.home;
 
-import net.tfg.sharedlife.model.Home;
+import java.util.List;
 
-// TODO: Auto-generated Javadoc
+import net.tfg.sharedlife.dto.HomeDTO;
+import net.tfg.sharedlife.dto.InvitationDTO;
+import net.tfg.sharedlife.dto.NewUserDto;
+
 /**
  * The Interface HomeService.
  */
 public interface HomeService {
 	
-	/**
-	 * Creates the home.
-	 *
-	 * @param home the home
-	 * @return the home
-	 */
-	Home createHome(Home home);
+	void createHome(HomeDTO home);
+	
+	List<HomeDTO> getHomesByUser(String username);
+	
+	HomeDTO getHomeById(Long id);
+	
+	void createInvitation(InvitationDTO invitation);
+	
+	void acceptInvitation(InvitationDTO invitation);
+	
+	List<NewUserDto> getMembers(Long idHome);
 	
 }

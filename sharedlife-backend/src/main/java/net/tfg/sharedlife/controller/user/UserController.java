@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import net.tfg.sharedlife.dto.AuthUserDto;
+import net.tfg.sharedlife.dto.InvitationDTO;
 import net.tfg.sharedlife.model.User;
 
 /**
@@ -34,6 +35,9 @@ public interface UserController {
 	
 	@GetMapping("/email")
 	ResponseEntity<AuthUserDto> getAuthUserByUserName(@RequestParam("username") String username);
+	
+	@GetMapping("/invitation")
+	ResponseEntity<List<InvitationDTO>> getInvitationByUsername(@RequestParam("username") String username);
 	
 	
 }

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Invitation } from 'src/app/models/invitation/invitation';
 import { User } from 'src/app/models/user/user';
 
 @Injectable({
@@ -19,5 +20,14 @@ export class UserService {
   getUserById(id: number): Observable<User>{
     return this.httpClient.get<User>(`${this.baseURL}/${id}`);
   }
+
+  getUserByUsername(username: string): Observable<User>{
+    return this.httpClient.get<User>(`${this.baseURL}/username?username=${username}`);
+  }
+
+  getInvitationsByUsername(username: string): Observable<any>{
+    return this.httpClient.get<any>(`${this.baseURL}/invitation?username=${username}`);
+  }
+
 
 }

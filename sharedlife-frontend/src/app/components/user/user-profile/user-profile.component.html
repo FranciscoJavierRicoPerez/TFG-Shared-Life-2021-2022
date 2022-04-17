@@ -1,23 +1,123 @@
 <app-menu></app-menu>
 <div class="container justify-content-center">
-  <h1>Perfil del usuario</h1>
-<div class="container">
-  <table>
-    <tr>
-      <td>
-        <div class="card" style="width: 18rem;">
-          <img src="./assets/perfil.png" class="card-img-top" alt="...">
+  <div class="card">
+    <div class="card-header">
+      <h1>Perfil del usuario</h1>
+    </div>
+    <div class="card-body">
+      <div class="container">
+        <div>
+          <table>
+            <tr>
+              <td>
+                <div class="card" style="width: 18rem;">
+                  <img src="./assets/perfil.png" class="card-img-top" alt="...">
+                </div>
+              </td>
+              <td>
+                <div class="card-body">
+                  <h3 class="card-title">{{ user.firstName }}</h3>
+                  <h4><p class="card-text">{{ user.lastName }}</p></h4>
+                  <h4><p class="card-text">{{ user.email }}</p></h4>
+                </div>
+              </td>
+            </tr>
+          </table>
         </div>
-      </td>
-      <td>
-        <div class="card-body">
-          <h3 class="card-title">{{ user.firstName }}</h3>
-          <h4><p class="card-text">{{ user.lastName }}</p></h4>
-          <h4><p class="card-text">{{ user.email }}</p></h4>
+        <div *ngIf="isAdmin">
+          <h1>Viviendas</h1>
+          <table class="table">
+            <thead class="table-dark">
+              <tr>
+                <th>Dirección</th>
+                <th>Ciudad</th>
+                <th>Información</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let home of homes">
+                <td>{{ home.address }}</td>
+                <td>{{ home.city }}</td>
+                <td><button class="btn btn-outline-warning" routerLink="/vivienda/{{home.id}}">Ver</button></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </td>
-    </tr>
-  </table>
+        <div *ngIf="!isAdmin && invitations.length !== 0">
+          <h1>Invitaciones</h1>
+          <table class="table">
+            <thead class="table-dark">
+              <tr>
+                <th>Identificador de la vivienda</th>
+                <th>Codigo de la vivienda</th>
+                <th>Aceptar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let invitation of invitations">
+                <td>{{ invitation.idHome }}</td>
+                <td>{{ invitation.homeCode }}</td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="openPopup()">Aceptar </button>
+                </td>
+                <!-- INTEROR DEL MODAL -->
+                <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">¿Quieres unirte a esta vivienda?</h4>
+                    </div>
+                    <div class="modal-body">
+                      <p>Si aceptas tendras acceso a la informacion de la vivienda y los demas inquilinos y el propietario tambien podran acceder a tus datos</p>
+                      <div>
+                        <form [formGroup]="acceptInvitationForm" (ngSubmit)="sendConfirmationInvitation(invitation.idHome)" novalidate>
+                          <div class="form-group" style="margin: 5px">
+                            <label for="homeCode">Código de la vivienda</label>
+                            <input type="text"
+                                  name="homeCode"
+                                  id="homeCode"
+                                  class="form-control"
+                                  formControlName="homeCode" required>
+                            <div *ngIf="acceptInvitationForm.get('homeCode')?.hasError('homeCode') && acceptInvitationForm.get('homeCode')?.touched">
+                              El nombre de usuario es un campo requerido
+                            </div>
+                          </div>
+                          <!--CREAR FORMULARIO PARA INTRODUCIR EL CÓDIGO DE LA VIVIENDA -->
+                          <div class="form-group" style="margin: 5px">
+                            <button class="btn btn-success" [disabled]="!acceptInvitationForm.valid">Confirmar</button>
+                            <button type="button" class="btn btn-danger" (click)="closePopup()"> Cerrar</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="!isAdmin && invitations.length == 0 && homes.length > 0">
+          <h1>Mi vivienda</h1>
+          <table class="table">
+            <thead class="table-dark">
+              <tr>
+                <th>Dirección</th>
+                <th>Ver vivienda</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let home of homes">
+                <td>{{ home.address }}</td>
+                <td><button class="btn btn-outline-warning" routerLink="/vivienda/{{home.id}}">Ver</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
+
+
 
