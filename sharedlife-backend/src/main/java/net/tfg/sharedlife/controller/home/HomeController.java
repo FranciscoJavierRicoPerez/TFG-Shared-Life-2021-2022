@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import net.tfg.sharedlife.dto.HomeDTO;
 import net.tfg.sharedlife.dto.InvitationDTO;
+import net.tfg.sharedlife.dto.NewUserDto;
 
 /**
  * The Interface HomeController.
@@ -34,4 +35,10 @@ public interface HomeController {
 	
 	@PostMapping("/invitation")
 	ResponseEntity<?> createInvitationToHome(@RequestBody InvitationDTO invitation);
+	
+	@PostMapping("/invitation/accept")
+	ResponseEntity<?> acceptInvitationToHome(@RequestBody InvitationDTO invitation);
+	
+	@GetMapping("/id/{id}/members")
+	ResponseEntity<List<NewUserDto>> getMembers(@PathVariable("id") Long id);
 }

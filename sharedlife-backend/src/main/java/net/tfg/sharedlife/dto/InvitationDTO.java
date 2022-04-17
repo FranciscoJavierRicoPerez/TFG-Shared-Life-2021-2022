@@ -7,4 +7,5 @@ public class InvitationDTO {
 	private String username;
 	private String idHome;
 	private String homeCode;
+	private String address;
 }

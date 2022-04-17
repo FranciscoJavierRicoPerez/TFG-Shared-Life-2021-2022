@@ -1,5 +1,6 @@
 package net.tfg.sharedlife.controller.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.tfg.sharedlife.common.ErrorMessages;
 import net.tfg.sharedlife.dto.AuthUserDto;
+import net.tfg.sharedlife.dto.InvitationDTO;
 import net.tfg.sharedlife.exception.DataIncorrectException;
 import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.service.user.UserService;
@@ -77,6 +79,17 @@ public class UserControllerImpl implements UserController{
 				new AuthUserDto(user.getFirstName(), user.getLastName(), user.getEmail(), user.getUsername()),
 				HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasRole('USER')")
+	@Override
+	@GetMapping("/invitation")
+	public ResponseEntity<List<InvitationDTO>> getInvitationByUsername(@RequestParam("username") String username){
+		Log.info("Searching invitations for user with username: {}", username);
+		List<InvitationDTO> invitations = new ArrayList<>();
+		invitations = userService.getInvitationsByUsername(username);
+		return new ResponseEntity<>(invitations, HttpStatus.OK);
+	}
+	
 	
 	
 	

@@ -9,7 +9,8 @@
         <h3>Datos de la vivienda</h3>
         {{home.address}} {{home.city}} {{home.number}}
       </div>
-      <div>
+      <!--esto no esta apareciendo cuandon debe-->
+      <div *ngIf="isAdmin">
         <h3>Invitaciones a la vivienda</h3>
         <form [formGroup]="invitationForm" (ngSubmit)="sendInvitation()" novalidate>
           <div class="form-group" style="margin: 5px">
@@ -23,11 +24,30 @@
               El nombre de usuario es un campo requerido
             </div>
             <div class="form-group" style="margin: 5px">
-              <button class="btn btn-success btn-lg btn-block" [disabled]="!invitationForm.valid">Iniciar Sesión</button>
+              <button class="btn btn-success btn-lg btn-block" [disabled]="!invitationForm.valid">Enviar</button>
             </div>
           </div>
         </form>
       </div>
+
+      <div>
+        <h3>Miembros de la vivienda</h3>
+        <table class="table">
+          <thead class="table-dark">
+            <tr>
+              <th>Nombre</th>
+              <th>Nombre de usuario</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td>{{ user.firstName }} {{ user.lastName}}</td>
+              <td>{{ user.username }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 </div>

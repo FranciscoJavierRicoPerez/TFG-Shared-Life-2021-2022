@@ -29,4 +29,12 @@ export class HomeService {
   sendInvitation(invitation: Invitation): Observable<Object>{
     return this.httpClient.post(`${this.baseURL}/invitation`, invitation);
   }
+
+  acceptInvitation(invitation: Invitation): Observable<Object>{
+    return this.httpClient.post(`${this.baseURL}/invitation/accept`, invitation);
+  }
+
+  getAllHomeMembers(idHome: string): Observable<any>{
+    return this.httpClient.get<any>(`${this.baseURL}/id/${idHome}/members`);
+  }
 }
