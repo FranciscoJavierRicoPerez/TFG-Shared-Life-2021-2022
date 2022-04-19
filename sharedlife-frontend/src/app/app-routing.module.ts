@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeCreateComponent } from './components/home/home-create/home-create.component';
 import { HomeGuardService } from './guards/home-guard.service';
+import { TaskCreateComponent } from './components/task/task-create/task-create.component';
 
 const routes: Routes = [
   { path: 'register', component: UserRegisterComponent },
@@ -15,7 +16,8 @@ const routes: Routes = [
   { path: 'home/create', component: HomeCreateComponent, canActivate: [HomeGuardService], data: { expectRole: ['admin'] } },
   { path: 'login', component: LoginComponent },
   { path: 'inicio', component: HomePageComponent }, // PAGINA PRINCIPAL DE LA APLICACION
-  { path: 'vivienda/:id', component: HomeInfoPageComponent }
+  { path: 'vivienda/:id', component: HomeInfoPageComponent },
+  { path: 'tareas', component: TaskCreateComponent }
 ];
 
 @NgModule({

@@ -1,0 +1,42 @@
+<app-menu></app-menu>
+<div class="container justify-content-center">
+  <div class="card">
+    <div class="card-header">
+      <h3>Gestión de tareas</h3>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="createTaskForm" (ngSubmit)="createTask()">
+        <div class="form-group" style="margin: 5px;">
+          <label for="title">Título</label>
+          <input type="text"
+                 id="title"
+                 formControlName="title"
+                 class="form-control">
+          <div *ngIf="createTaskForm.get('title')?.hasError('required') && createTaskForm.get('title')?.touched">
+            El titulo es un campo necesario
+          </div>
+        </div>
+        <div class="form-group" style="margin: 5px;">
+          <label for="description">Descripción</label>
+          <input type="text"
+                 id="description"
+                 formControlName="description"
+                 class="form-control">
+          <div *ngIf="createTaskForm.get('description')?.hasError('required') && createTaskForm.get('description')?.touched">
+            La descripcion es un campo necesario
+          </div>
+        </div>
+        <div class="form-group" style="margin: 5px;">
+          <label for="user">Compañeros</label>
+          <select id="user" formControlName="user" class="form-select" aria-label="Default select example">
+            <option *ngFor="let user of users" [ngValue]="user.username">{{ user.username }}</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin: 5px;">
+          <button type="submit" [disabled]="!createTaskForm.valid"  class="btn btn-primary btn-lg btn-block">Crear Tarea</button>
+          <button type="button" class="btn btn-danger btn-lg btn-block" style="margin: 13px;" routerLink="/inicio">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
