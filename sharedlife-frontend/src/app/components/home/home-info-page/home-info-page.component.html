@@ -50,6 +50,32 @@
 
       <div>
         <h3>Tareas pendientes</h3>
+        <table class="table">
+          <thead class="table-dark">
+            <tr>
+              <th>Titulo</th>
+              <th>Descripción</th>
+              <th>Fecha de inicio</th>
+              <th>Finalizada</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let task of tasks">
+              <td>{{ task.title }}</td>
+              <td>{{ task.description }}</td>
+              <td>{{ task.startDate }}</td>
+              <td *ngIf="!task.finished">
+                Sin terminar
+              </td>
+              <td *ngIf="task.finished">
+                Terminada
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          <button type="button" routerLink="/tareas" class="btn btn-primary btn-lg btn-block">Información de las tareas</button>
+        </div>
       </div>
 
     </div>
