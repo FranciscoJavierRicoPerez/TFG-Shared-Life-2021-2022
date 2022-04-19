@@ -1,6 +1,8 @@
 package net.tfg.sharedlife.service.task;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,31 @@ public class TaskServiceImpl implements TaskService{
 		task.setFinished(false);
 		taskRepository.save(task);
 		Log.info("New task created succesfully");
+	}
+
+	@Override
+	public List<TaskDTO> getTasksByUsername(String username) {
+		Log.info("Getting all tasks for user with username: {}", username);
+		List<TaskDTO> tasksdto = new ArrayList<>();
+		List<User> users = userRepository.findAll();
+		User user = new User();
+		for(User u : users) {
+			if(u.getUsername().equals(username)) {
+				user = u;
+			}
+		}
+		List<Task> tasks = user.getTasks();
+		for(Task t : tasks) {
+			TaskDTO taskdto = new TaskDTO();
+			taskdto.setTitle(t.getTitle());
+			taskdto.setDescription(t.getDescription());
+			taskdto.setStartDate(t.getStartDate());
+			taskdto.setEndDate(t.getEndDate());
+			taskdto.setUser(t.getUser().getUsername());
+			taskdto.setFinished(t.isFinished());
+			tasksdto.add(taskdto);
+		}
+		return tasksdto;
 	}
 
 }

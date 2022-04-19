@@ -1,5 +1,8 @@
 package net.tfg.sharedlife.controller.task;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.tfg.sharedlife.dto.TaskDTO;
@@ -25,13 +30,26 @@ public class TaskControllerImpl implements TaskController{
 	@Autowired
 	private TaskService taskService;
 	
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	@PostMapping("/create")
+	@Override
 	public ResponseEntity<?> createTask(@RequestBody TaskDTO task){
 		Log.info("Creatring a new task for user with username: {}", task.getUser());
 		if(null != task) {
 			taskService.createTask(task);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@GetMapping("/byUsername")
+	@Override
+	public ResponseEntity<List<TaskDTO>> getTasksByUsername(@RequestParam("username") String username) {
+		Log.info("Searching all tasks for user with username: {}", username);
+		List<TaskDTO> tasks = new ArrayList<>();
+		if(null != username) {
+			tasks = taskService.getTasksByUsername(username);
+		}
+		return new ResponseEntity<>(tasks, HttpStatus.OK);
 	}
 }

@@ -1,3 +1,4 @@
+import { TaskService } from './../../../services/task/task.service';
 import { TokenService } from './../../../services/token/token.service';
 import { Invitation } from './../../../models/invitation/invitation';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -21,6 +22,8 @@ export class HomeInfoPageComponent implements OnInit {
   idHome: string;
   authorities: string[] = [];
   users: User[] = [];
+  tasks: Task[] = [];
+
   invitationForm = new FormGroup({
     username: new FormControl('', [Validators.required])
   })
@@ -29,7 +32,9 @@ export class HomeInfoPageComponent implements OnInit {
     private HomeService: HomeService,
     private Router: Router,
     private ActivatedRoute: ActivatedRoute,
-    private TokenService: TokenService) { }
+    private TokenService: TokenService,
+    private TaskService: TaskService
+  ) { }
 
   ngOnInit(): void {
     if(this.TokenService.getToken()){
@@ -50,6 +55,18 @@ export class HomeInfoPageComponent implements OnInit {
         data => {
           this.users = data;
           console.log(this.users);
+        }
+      );
+
+      // OBTENCION DE LAS TODAS LAS TAREAS DE UN USUARIO
+      this.TaskService.getAllTaskByUsername(this.username).subscribe(
+        data => {
+          this.tasks = data;
+          console.log(this.tasks);
+          console.log("OK getting all tasks by username");
+        },
+        error => {
+          console.log("ERROR getting all tasks by username");
         }
       );
     }
