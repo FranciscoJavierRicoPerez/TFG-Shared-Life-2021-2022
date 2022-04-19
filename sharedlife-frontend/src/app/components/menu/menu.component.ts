@@ -1,3 +1,4 @@
+import { HomeService } from './../../services/home/home.service';
 import { TokenService } from './../../services/token/token.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -21,6 +22,7 @@ export class MenuComponent implements OnInit {
       this.username = this.TokenService.getUserName();
       this.authorities = this.TokenService.getAuthorities();
       console.log(this.authorities);
+      this.isAdmin = false;
       this.authorities.forEach(role => {
         if(role.indexOf('ROLE_ADMIN') === 0){
           this.isAdmin = true;

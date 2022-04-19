@@ -1,6 +1,7 @@
 package net.tfg.sharedlife.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -53,10 +55,9 @@ public class User {
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private List<Task> tasks;
 	
-	/*@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_home", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "home_id"))
-	private Set<Home> homes = new HashSet<>();*/
 	
 	public User() {
 		super();

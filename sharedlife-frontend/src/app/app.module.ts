@@ -13,6 +13,8 @@ import { MenuComponent } from './components/menu/menu.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { interceptorProvider } from './interceptors/home-interceptor.service';
 import { HomeInfoPageComponent } from './components/home/home-info-page/home-info-page.component';
+import { TaskCreateComponent } from './components/task/task-create/task-create.component';
+
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { HomeInfoPageComponent } from './components/home/home-info-page/home-inf
     MenuComponent,
     HomePageComponent,
     HomeInfoPageComponent,
+    TaskCreateComponent,
   ],
   imports: [
     BrowserModule,
