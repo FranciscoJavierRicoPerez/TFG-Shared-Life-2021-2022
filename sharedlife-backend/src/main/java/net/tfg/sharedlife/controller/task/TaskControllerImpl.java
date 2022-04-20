@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,5 +63,14 @@ public class TaskControllerImpl implements TaskController{
 		List<TaskDTO> tasks = new ArrayList<>();
 		tasks = taskService.getTasksByHomeIdAndUsername(id, username);
 		return new ResponseEntity<>(tasks, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@PutMapping("/{id}/finished")
+	@Override
+	public ResponseEntity<?> updateFinishedStatus(Long id, @RequestBody boolean finished){
+		Log.info("Updating the finished status value for task with id: {}", id);
+		taskService.updateTaskFinished(id, finished);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

@@ -92,4 +92,17 @@ export class HomeInfoPageComponent implements OnInit {
     window.location.reload();
   }
 
+  updateFinishedStatus(id: string){
+    console.log("Update the task with id: " + id);
+    this.TaskService.updateFinishedStatus(id, true).subscribe(
+      data => {
+        console.log("Update finished task OK");
+      },
+      error => {
+        console.log("Update finished task ERROR");
+      }
+    );
+    window.location.reload();
+  }
+
 }
