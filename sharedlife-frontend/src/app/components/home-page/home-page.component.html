@@ -1,0 +1,44 @@
+<app-menu></app-menu>
+<div class="container justify-content-center">
+  <div *ngIf="!isLogged; else logged">
+    <h3>Bienvenido a Shared Life</h3>
+  </div>
+  <p>Compartir es vivir, pero con tus amigos es disfrutarlo</p>
+
+  <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img class="d-block w-75" src="./assets/compas1.png" alt="First slide">
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3>Descripción</h3>
+    <p>
+      Shared Life es una aplicacion que tiene como objetivo facilitar la comunicacion entre compañeros de piso
+      y con el propietario de la vivienda.
+    </p>
+  </div>
+  <div>
+    <h3>Información del desarrollador</h3>
+    <p>
+      La aplicación esta siendo desarrollada por Francisco Javier Rico Pérez, estudiante del Grado en Ingenería
+      Informática en la Universidad de Alicante, como Trabajo de Final de Grado.
+    </p>
+  </div>
+  <div>
+    <h3>Redes Sociales</h3>
+    <table>
+      <td>Twitter</td>
+      <td>Instragram</td>
+      <td>TikTok</td>
+    </table>
+  </div>
+</div>
+<!-- templates -->
+<ng-template #logged>
+  <div>
+    <h3>Bienvenido a Shared Life, {{ username }}</h3>
+  </div>
+</ng-template>

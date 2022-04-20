@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="navbar-collapse collapse" id="navbarSupportedContent">
+    <ul class="nav navbar-nav navbar-left">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/inicio">
+          <h5>
+            <em>Shared Life</em>
+          </h5>
+        </a>
+      </li>
+      <li class = "nav-item" *ngIf="isLogged && isAdmin">
+        <a routerLink="/home/create" routerLinkActive="active" class="nav-link">Añadir casa</a>
+      </li>
+      <li class = "nav-item" *ngIf="isLogged">
+        <a routerLink="/tareas" routerLinkActive="active" class="nav-link">Tareas</a>
+      </li>
+    </ul>
+    <div class="col-md">
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="nav-item" *ngIf="!isLogged">
+        <a routerLink="/login" routerLinkActive="active" class="nav-link bi bi-box-arrow-in-left"> Inicio de sesión</a>
+      </li>
+      <li class = "nav-item" *ngIf="!isLogged">
+        <a routerLink="/register" routerLinkActive="active" class="nav-link bi bi-person-plus"> Registro</a>
+      </li>
+      <li class="nav-item" *ngIf="isLogged">
+        <a class="nav-link" routerLink="/perfil">{{username}}</a> <!-- MOCKEADO VER COMO OBTENER LA INFORMACION DEL ID DEL USUARIO -->
+      </li>
+      <li class = "nav-item" *ngIf="isLogged" >
+        <a routerLink="/inicio" class="nav-link bi bi-box-arrow-left" (click)="onLogOut()"> Cerrar Sesion</a>
+      </li>
+    </ul>
+  </div>
+</nav>
