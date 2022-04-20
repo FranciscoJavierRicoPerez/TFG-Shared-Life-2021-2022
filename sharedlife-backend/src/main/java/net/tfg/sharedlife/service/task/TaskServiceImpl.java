@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import net.tfg.sharedlife.dto.TaskDTO;
 import net.tfg.sharedlife.model.Task;
 import net.tfg.sharedlife.model.User;
+import net.tfg.sharedlife.repository.HomeRepository;
 import net.tfg.sharedlife.repository.TaskRepository;
 import net.tfg.sharedlife.repository.UserRepository;
 
@@ -27,6 +28,9 @@ public class TaskServiceImpl implements TaskService{
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private HomeRepository homeRepository;
+	
 	@Override
 	public void createTask(TaskDTO taskdto) {
 		Task task = new Task();
@@ -36,6 +40,7 @@ public class TaskServiceImpl implements TaskService{
 		User user = userRepository.getByUsername(taskdto.getUser()).get();
 		task.setUser(user);
 		task.setFinished(false);
+		task.setHome(homeRepository.getById(Long.parseLong(taskdto.getIdHome())));
 		taskRepository.save(task);
 		Log.info("New task created succesfully");
 	}
@@ -60,9 +65,30 @@ public class TaskServiceImpl implements TaskService{
 			taskdto.setEndDate(t.getEndDate());
 			taskdto.setUser(t.getUser().getUsername());
 			taskdto.setFinished(t.isFinished());
+			taskdto.setIdHome(t.getHome().getId().toString());
 			tasksdto.add(taskdto);
 		}
 		return tasksdto;
 	}
 
+	@Override
+	public List<TaskDTO> getTasksByHomeIdAndUsername(Long id, String username) {
+		Log.info("Getting all tasks for home with id: {}", id);
+		List<TaskDTO> tasksdto = new ArrayList<>();
+		List<Task> tasks = taskRepository.findAll();
+		for(Task t : tasks) {
+			if(t.getHome().getId().equals(id) && !t.getUser().getUsername().equals(username)) {
+				TaskDTO taskdto = new TaskDTO();
+				taskdto.setTitle(t.getTitle());
+				taskdto.setDescription(t.getDescription());
+				taskdto.setStartDate(t.getStartDate());
+				taskdto.setEndDate(t.getEndDate());					
+				taskdto.setUser(t.getUser().getUsername());
+				taskdto.setFinished(t.isFinished());
+				taskdto.setIdHome(t.getHome().getId().toString());
+				tasksdto.add(taskdto);
+			}
+		}
+		return tasksdto;
+	}
 }

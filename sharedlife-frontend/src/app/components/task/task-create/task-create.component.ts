@@ -22,6 +22,8 @@ export class TaskCreateComponent implements OnInit {
   isAdmin: boolean = false;
   userSelect: User;
   newTask: Task;
+  idHome: string;
+  allHomeTasks: Task[] = [];
   createTaskForm = new FormGroup({
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
@@ -44,32 +46,41 @@ export class TaskCreateComponent implements OnInit {
           this.isAdmin = true;
         }
       });
-      if(this.isAdmin == false){
-        // Obtencion de la información de los miembros de la vivienda del usuario logeado
-        this.HomeService.getHouseByUsername(this.username).subscribe(
-          data => {
-            this.homes = data;
-            console.log(this.homes[0]);
-            console.log(this.homes);
-            this.HomeService.getAllHomeMembers(this.homes[0].id.toString()).subscribe(
-              data => {
-                this.users = data;
-                console.log(this.users);
-              },
-              error => {
-                console.log("ERROR getting the home members");
-              }
-            )
-          },
-          error => {
-            console.log("ERROR getting the house of the user");
-          }
-        );
-      }
+      // Obtencion de la información de los miembros de la vivienda del usuario logeado
+      this.HomeService.getHouseByUsername(this.username).subscribe(
+        data => {
+          this.homes = data;
+          console.log(this.homes[0]);
+          console.log(this.homes);
+          this.idHome = this.homes[0].id.toString();
+          this.HomeService.getAllHomeMembers(this.homes[0].id.toString()).subscribe(
+            data => {
+              this.users = data;
+              console.log(this.users);
+            },
+            error => {
+              console.log("ERROR getting the home members");
+            }
+          );
+          this.TaskService.getAllTaskByHomeId(this.idHome, this.username).subscribe(
+            data => {
+              this.allHomeTasks = data;
+              console.log(this.allHomeTasks);
+              console.log("Getting all task home OK");
+            },
+            error => {
+              console.log("Getting al task home ERROR");
+            }
+          )
+        },
+        error => {
+          console.log("ERROR getting the house of the user");
+        }
+      );
     }
   }
 
-  createTask(){
+  createTask(idHome: string){
     console.log(this.createTaskForm.value);
     this.newTask = new Task(
       this.createTaskForm.value['title'],
@@ -78,6 +89,7 @@ export class TaskCreateComponent implements OnInit {
       '',
       false,
       this.createTaskForm.value['user'],
+      idHome
       );
       this.TaskService.createTask(this.newTask).subscribe(
         data => {

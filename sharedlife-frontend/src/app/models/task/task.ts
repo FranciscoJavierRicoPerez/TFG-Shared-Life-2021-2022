@@ -5,13 +5,15 @@ export class Task {
   endDate: string;
   finished: boolean;
   user: string;
+  idHome: string;
 
-  constructor(t: string, d: string, sd: string, ed: string, f:boolean, u:string){
+  constructor(t: string, d: string, sd: string, ed: string, f:boolean, u:string, idHome:string){
     this.title = t;
     this.description = d;
     this.startDate = sd;
     this.endDate = ed;
     this.finished = f;
     this.user = u;
+    this.idHome = idHome;
   }
 }

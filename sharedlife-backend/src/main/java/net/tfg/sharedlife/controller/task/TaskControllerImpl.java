@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +51,16 @@ public class TaskControllerImpl implements TaskController{
 		if(null != username) {
 			tasks = taskService.getTasksByUsername(username);
 		}
+		return new ResponseEntity<>(tasks, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@GetMapping("/byHomeId/{id}")
+	@Override
+	public ResponseEntity<List<TaskDTO>> getTasksByHomeIdAndUsername(@PathVariable("id") Long id, @RequestParam("username") String username) {
+		Log.info("Searching all task from house with id: {}", id);
+		List<TaskDTO> tasks = new ArrayList<>();
+		tasks = taskService.getTasksByHomeIdAndUsername(id, username);
 		return new ResponseEntity<>(tasks, HttpStatus.OK);
 	}
 }
