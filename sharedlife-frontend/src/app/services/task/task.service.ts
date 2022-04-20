@@ -18,4 +18,8 @@ export class TaskService {
   getAllTaskByUsername(username: string): Observable<any>{
     return this.HttpClient.get<any>(`${this.baseURL}/byUsername?username=${username}`);
   }
+
+  getAllTaskByHomeId(id: string, username:string): Observable<any>{
+    return this.HttpClient.get<any>(`${this.baseURL}/byHomeId/${id}?username=${username}`);
+  }
 }

@@ -39,4 +39,8 @@ public class Task {
 	@ManyToOne
 	@JoinColumn(name = "id_user")
 	private User user;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_home")
+	private Home home;
 }

@@ -13,4 +13,5 @@ public class TaskDTO {
 	private Date endDate;
 	private boolean finished;
 	private String user;
+	private String idHome;
 }
