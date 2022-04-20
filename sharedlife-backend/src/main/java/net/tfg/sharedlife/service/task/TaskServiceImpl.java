@@ -59,6 +59,7 @@ public class TaskServiceImpl implements TaskService{
 		List<Task> tasks = user.getTasks();
 		for(Task t : tasks) {
 			TaskDTO taskdto = new TaskDTO();
+			taskdto.setId(t.getId());
 			taskdto.setTitle(t.getTitle());
 			taskdto.setDescription(t.getDescription());
 			taskdto.setStartDate(t.getStartDate());
@@ -90,5 +91,14 @@ public class TaskServiceImpl implements TaskService{
 			}
 		}
 		return tasksdto;
+	}
+
+	@Override
+	public void updateTaskFinished(Long id, boolean finished) {
+		Log.info("Update of the finished status of the task with id: {}", id);
+		Task t = taskRepository.findById(id).get();
+		t.setFinished(finished);
+		t.setEndDate(new Date());
+		taskRepository.save(t);
 	}
 }

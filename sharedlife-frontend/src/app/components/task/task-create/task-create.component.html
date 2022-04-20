@@ -2,7 +2,7 @@
 <div class="container justify-content-center">
   <div class="card">
     <div class="card-header">
-      <h3>Nueva tarea, molaria poner la direccion</h3>
+      <h3>Gestion de tareas para {{ homes[0].address }}</h3>
     </div>
     <div class="card-body">
       <form [formGroup]="createTaskForm" (ngSubmit)="createTask(idHome)">
@@ -51,6 +51,7 @@
             <th>Titulo</th>
             <th>Descripción</th>
             <th>Fecha de inicio</th>
+            <th>Fecha finalizacion</th>
             <th>Finalizada</th>
           </tr>
         </thead>
@@ -59,6 +60,8 @@
             <td>{{ task.title }}</td>
             <td>{{ task.description }}</td>
             <td>{{ task.startDate }}</td>
+            <td *ngIf="task.finished">{{ task.endDate }}</td>
+            <td *ngIf="!task.finished"> ---- </td>
             <td *ngIf="!task.finished">
               Sin terminar
             </td>

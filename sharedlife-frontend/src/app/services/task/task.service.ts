@@ -22,4 +22,8 @@ export class TaskService {
   getAllTaskByHomeId(id: string, username:string): Observable<any>{
     return this.HttpClient.get<any>(`${this.baseURL}/byHomeId/${id}?username=${username}`);
   }
+
+  updateFinishedStatus(id: string, finished: boolean){
+    return this.HttpClient.put(`${this.baseURL}/${id}/finished`, finished);
+  }
 }

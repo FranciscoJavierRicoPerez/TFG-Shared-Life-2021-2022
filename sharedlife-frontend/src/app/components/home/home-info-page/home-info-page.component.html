@@ -56,7 +56,9 @@
               <th>Titulo</th>
               <th>Descripción</th>
               <th>Fecha de inicio</th>
+              <th>Fecha finalizacion</th>
               <th>Finalizada</th>
+              <th>Terminar</th>
             </tr>
           </thead>
           <tbody>
@@ -64,11 +66,15 @@
               <td>{{ task.title }}</td>
               <td>{{ task.description }}</td>
               <td>{{ task.startDate }}</td>
+              <td *ngIf="task.finished">{{ task.endDate }}</td>
+              <td *ngIf="!task.finished"> ---- </td>
+              <td *ngIf="!task.finished"> Sin terminar </td>
+              <td *ngIf="task.finished"> Terminada </td>
               <td *ngIf="!task.finished">
-                Sin terminar
+                <button type="button" (click)="updateFinishedStatus(task.id)" class="btn btn-outline-success">Terminar</button>
               </td>
               <td *ngIf="task.finished">
-                Terminada
+                <button type="button" class="btn btn-outline-success" disabled>Terminar</button>
               </td>
             </tr>
           </tbody>
@@ -77,7 +83,6 @@
           <button type="button" routerLink="/tareas" class="btn btn-primary btn-lg btn-block">Información de las tareas</button>
         </div>
       </div>
-
     </div>
   </div>
 </div>
