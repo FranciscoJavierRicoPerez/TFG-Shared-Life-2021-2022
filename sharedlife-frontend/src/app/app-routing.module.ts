@@ -1,3 +1,4 @@
+import { SpentCreateComponent } from './components/spent/spent-create/spent-create.component';
 import { HomeInfoPageComponent } from './components/home/home-info-page/home-info-page.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { LoginComponent } from './components/user/login/login.component';
@@ -17,7 +18,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'inicio', component: HomePageComponent }, // PAGINA PRINCIPAL DE LA APLICACION
   { path: 'vivienda/:id', component: HomeInfoPageComponent },
-  { path: 'tareas', component: TaskCreateComponent }
+  { path: 'tareas', component: TaskCreateComponent },
+  { path: 'gastos', component: SpentCreateComponent }
 ];
 
 @NgModule({
