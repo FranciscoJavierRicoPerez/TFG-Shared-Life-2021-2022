@@ -1,3 +1,4 @@
+import { UserService } from './../../../services/user/user.service';
 import { Spent } from './../../../models/spent/spent';
 import { SpentService } from './../../../services/spent/spent.service';
 import { Debt } from './../../../models/Debt/debt';
@@ -29,7 +30,11 @@ export class HomeInfoPageComponent implements OnInit {
   debts: Debt[] = [];
   spent: Spent;
   displayStyle = "none";
-
+  displayStyleA = "none";
+  spents: Spent[] = [];
+  debtsA: Debt[] = [];
+  debtsUsers: User[] = [];
+  debtUser: User;
   invitationForm = new FormGroup({
     username: new FormControl('', [Validators.required])
   })
@@ -40,7 +45,8 @@ export class HomeInfoPageComponent implements OnInit {
     private ActivatedRoute: ActivatedRoute,
     private TokenService: TokenService,
     private TaskService: TaskService,
-    private SpentService: SpentService
+    private SpentService: SpentService,
+    private UserService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -91,6 +97,19 @@ export class HomeInfoPageComponent implements OnInit {
 
       // INICIALIZAMOS EL SPENT PARA QUE NO DE ERROR???
       this.spent = new Spent('','','','','','');
+
+      // OBTENEMOS TODOS LOS  GASTOS PUBLICADOS POR EL USUARIO
+      this.SpentService.getSpentsByUsername(this.username).subscribe(
+        data => {
+          this.spents = data;
+          console.log(this.spents);
+          console.log("OK getting the spents of the user");
+        },
+        error => {
+          console.log("ERROR getting the spents of the user");
+        }
+      );
+
     }
   }
 
@@ -142,8 +161,41 @@ export class HomeInfoPageComponent implements OnInit {
     );
   }
 
+  getDebtsById(id: string){
+    this.displayStyleA = "block";
+    this.SpentService.getDebtsBySpentId(id).subscribe(
+      data => {
+        this.debtsA = data;
+        console.log(this.debtsA);
+        console.log("OK Getting the debts");
+        // AQUI AHORA TENGO QUE OBTENER TODOS LOS USUARIO DE CADA UNO DE LOS DEBTS
+        this.debtsA.forEach(debt => {
+          this.UserService.getUserById(Number(debt['idUser'])).subscribe(
+            data => {
+              this.debtUser = data;
+              this.debtsUsers.push(this.debtUser);
+              console.log(this.debtsUsers);
+            },
+            error => {
+              console.log("ERR Getting de users debters");
+            }
+          );
+        });
+      },
+      error => {
+        console.log("ERR getting the debts");
+      }
+    );
+    this.debtsA = [];
+    this.debtsUsers = [];
+  }
+
   closePopup() {
     this.displayStyle = "none";
+  }
+
+  closePopupA() {
+    this.displayStyleA = "none";
   }
 
 }
