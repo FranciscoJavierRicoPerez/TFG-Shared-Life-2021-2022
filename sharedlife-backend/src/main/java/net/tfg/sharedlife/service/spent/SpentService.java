@@ -16,5 +16,7 @@ public interface SpentService {
 	List<SpentDTO> getSpentsByUsername(String username);
 	
 	List<DebtDTO> getDebtsBySpentId(Long id);
+	
+	List<SpentDTO> getAllSpentsByHomeId(Long id);
 
 }

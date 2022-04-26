@@ -74,6 +74,13 @@ public class SpentControllerImpl implements SpentController {
 		return new ResponseEntity<>(debts, HttpStatus.OK);
 	}
 
-	
+	@GetMapping("/byHomeId/{id}")
+	@Override
+	public ResponseEntity<List<SpentDTO>> getAllSpentsByHomeId(@PathVariable("id") Long id){
+		logger.info("Getting spents of the home with id: {}", id);
+		List<SpentDTO> spents = new ArrayList<>();
+		spents = spentService.getAllSpentsByHomeId(id);
+		return new ResponseEntity<>(spents, HttpStatus.OK);
+	}
 	
 }

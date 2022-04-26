@@ -12,28 +12,10 @@ import net.tfg.sharedlife.model.User;
  */
 public interface UserService {
 
-	/**
-	 * Creates the user.
-	 *
-	 * @param user the user
-	 * @return the user
-	 * @throws DataIncorrectException the data incorrect exception
-	 */
 	User createUser(User user) throws DataIncorrectException;
 	
-	/**
-	 * Gets the all users.
-	 *
-	 * @return the all users
-	 */
 	List<User> getAllUsers();
 	
-	/**
-	 * Find user by id.
-	 *
-	 * @param id the id
-	 * @return the user
-	 */
 	User findUserById(Long id);
 	
 	Optional<User> getByUsername(String userName);

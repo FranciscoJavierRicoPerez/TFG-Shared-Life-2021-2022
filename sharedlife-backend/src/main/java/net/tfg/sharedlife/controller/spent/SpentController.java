@@ -29,4 +29,7 @@ public interface SpentController {
 	@GetMapping("/debts/id/{id}")
 	ResponseEntity<List<DebtDTO>> getDebtsBySpentId(@PathVariable("id") Long id);
 	
+	@GetMapping("/byHomeId/{id}")
+	ResponseEntity<List<SpentDTO>> getAllSpentsByHomeId(@PathVariable("id") Long id);
+	
 }

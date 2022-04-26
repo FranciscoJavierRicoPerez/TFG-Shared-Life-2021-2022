@@ -27,6 +27,7 @@ export class SpentCreateComponent implements OnInit {
   idHome: string;
   users: User[] = [];
   spent: Spent;
+  spents: Spent[] = [];
   constructor(
     private TokenService: TokenService,
     private HomeService: HomeService,
@@ -58,6 +59,19 @@ export class SpentCreateComponent implements OnInit {
               console.log("ERROR getting the home members");
             }
           );
+
+          // OBTENDCION DE TODOS LOS GASTOS DE LA VIVIENDA
+          this.SpentService.getAllSpentByHomeId(this.homes[0].id.toString()).subscribe(
+            data => {
+              this.spents = data;
+              console.log(this.spents);
+              console.log("OK Getting all spent of the home");
+            },
+            error =>{
+              console.log("ERR Getting all spents of the home");
+            }
+          );
+
         },
         error => {
           console.log("ERROR getting the house of the user");

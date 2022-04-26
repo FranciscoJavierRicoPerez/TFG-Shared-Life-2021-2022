@@ -32,4 +32,8 @@ export class SpentService {
     return this.HttpClient.get<any>(`${this.baseURL}/debts/id/${id}`);
   }
 
+  getAllSpentByHomeId(id: string){
+    return this.HttpClient.get<any>(`${this.baseURL}/byHomeId/${id}`);
+  }
+
 }

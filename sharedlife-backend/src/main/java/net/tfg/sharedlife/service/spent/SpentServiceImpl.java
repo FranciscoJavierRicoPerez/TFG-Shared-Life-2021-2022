@@ -173,6 +173,30 @@ public class SpentServiceImpl implements SpentService {
 		}
 		return debtsdto;
 	}
+
+	@Override
+	public List<SpentDTO> getAllSpentsByHomeId(Long id) {
+		List<SpentDTO> spentsDTO = new ArrayList<>();
+		List<Spent> spents = spentRepository.findAll();
+		for(Spent s: spents) {
+			if(s.getHome().getId().equals(id)) {
+				SpentDTO spentdto = new SpentDTO();
+				spentdto.setId(s.getId());
+				spentdto.setTitle(s.getTitle());
+				spentdto.setDescription(s.getDescription());
+				spentdto.setTotalPrice(s.getTotalPrice());
+				List<Debt> debts = debtRepository.findAll();
+				for(Debt d : debts) {
+					if(d.getIdHome().equals(id)) {
+						spentdto.setUserToPay(d.getUserToPay());
+						break;
+					}
+				}
+				spentsDTO.add(spentdto);
+			}
+		}
+		return spentsDTO;
+	}
 	
 	
 	
