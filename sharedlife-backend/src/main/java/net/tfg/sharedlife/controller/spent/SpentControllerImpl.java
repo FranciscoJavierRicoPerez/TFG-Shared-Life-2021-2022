@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,6 +83,14 @@ public class SpentControllerImpl implements SpentController {
 		List<SpentDTO> spents = new ArrayList<>();
 		spents = spentService.getAllSpentsByHomeId(id);
 		return new ResponseEntity<>(spents, HttpStatus.OK);
+	}
+	
+	@PutMapping("/debt/{id}/paid")
+	@Override
+	public ResponseEntity<?> updatePaidStatus(@PathVariable("id") Long id, @RequestBody boolean paid){
+		logger.info("Changing the value of the paid");
+		spentService.updatePaidStatus(id, paid);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

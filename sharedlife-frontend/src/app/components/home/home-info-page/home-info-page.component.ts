@@ -198,4 +198,18 @@ export class HomeInfoPageComponent implements OnInit {
     this.displayStyleA = "none";
   }
 
+  paidDebt(id: string, paid: boolean){
+    console.log(id)
+    console.log(paid);
+    this.SpentService.paidDebt(id, paid).subscribe(
+      data => {
+        console.log("OK change paid")
+      },
+      error => {
+        console.log("ERR change paid")
+      }
+    );
+    window.location.reload();
+  }
+
 }

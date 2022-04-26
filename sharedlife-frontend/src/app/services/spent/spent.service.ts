@@ -35,5 +35,9 @@ export class SpentService {
   getAllSpentByHomeId(id: string){
     return this.HttpClient.get<any>(`${this.baseURL}/byHomeId/${id}`);
   }
+  // @PutMapping("/debt/{id}/paid")
+  paidDebt(id: string, paid: boolean){
+    return this.HttpClient.put(`${this.baseURL}/debt/${id}/paid`, paid);
+  }
 
 }

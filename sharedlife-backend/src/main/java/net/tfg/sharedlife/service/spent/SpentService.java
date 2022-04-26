@@ -18,5 +18,7 @@ public interface SpentService {
 	List<DebtDTO> getDebtsBySpentId(Long id);
 	
 	List<SpentDTO> getAllSpentsByHomeId(Long id);
+	
+	void updatePaidStatus(Long id, boolean paid);
 
 }
