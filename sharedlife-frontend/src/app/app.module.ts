@@ -14,6 +14,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 import { interceptorProvider } from './interceptors/home-interceptor.service';
 import { HomeInfoPageComponent } from './components/home/home-info-page/home-info-page.component';
 import { TaskCreateComponent } from './components/task/task-create/task-create.component';
+import { SpentCreateComponent } from './components/spent/spent-create/spent-create.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { TaskCreateComponent } from './components/task/task-create/task-create.c
     HomePageComponent,
     HomeInfoPageComponent,
     TaskCreateComponent,
+    SpentCreateComponent,
   ],
   imports: [
     BrowserModule,

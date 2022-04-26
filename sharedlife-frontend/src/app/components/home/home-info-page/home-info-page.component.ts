@@ -1,3 +1,7 @@
+import { UserService } from './../../../services/user/user.service';
+import { Spent } from './../../../models/spent/spent';
+import { SpentService } from './../../../services/spent/spent.service';
+import { Debt } from './../../../models/Debt/debt';
 import { TaskService } from './../../../services/task/task.service';
 import { TokenService } from './../../../services/token/token.service';
 import { Invitation } from './../../../models/invitation/invitation';
@@ -23,7 +27,14 @@ export class HomeInfoPageComponent implements OnInit {
   authorities: string[] = [];
   users: User[] = [];
   tasks: Task[] = [];
-
+  debts: Debt[] = [];
+  spent: Spent;
+  displayStyle = "none";
+  displayStyleA = "none";
+  spents: Spent[] = [];
+  debtsA: Debt[] = [];
+  debtsUsers: User[] = [];
+  debtUser: User;
   invitationForm = new FormGroup({
     username: new FormControl('', [Validators.required])
   })
@@ -33,7 +44,9 @@ export class HomeInfoPageComponent implements OnInit {
     private Router: Router,
     private ActivatedRoute: ActivatedRoute,
     private TokenService: TokenService,
-    private TaskService: TaskService
+    private TaskService: TaskService,
+    private SpentService: SpentService,
+    private UserService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -69,6 +82,34 @@ export class HomeInfoPageComponent implements OnInit {
           console.log("ERROR getting all tasks by username");
         }
       );
+
+      // OBTENER LAS DEUDAS QUE TIENE PENDIENTE EL USUARIO
+      this.SpentService.getAllDebtsByUsername(this.username).subscribe(
+        data => {
+          this.debts = data;
+          console.log(this.debts);
+          console.log("OK getting the debts of the user");
+        },
+        error => {
+          console.log("ERROR getting the debts of the user");
+        }
+      );
+
+      // INICIALIZAMOS EL SPENT PARA QUE NO DE ERROR???
+      this.spent = new Spent('','','','','','');
+
+      // OBTENEMOS TODOS LOS  GASTOS PUBLICADOS POR EL USUARIO
+      this.SpentService.getSpentsByUsername(this.username).subscribe(
+        data => {
+          this.spents = data;
+          console.log(this.spents);
+          console.log("OK getting the spents of the user");
+        },
+        error => {
+          console.log("ERROR getting the spents of the user");
+        }
+      );
+
     }
   }
 
@@ -100,6 +141,72 @@ export class HomeInfoPageComponent implements OnInit {
       },
       error => {
         console.log("Update finished task ERROR");
+      }
+    );
+    window.location.reload();
+  }
+
+  getSpentById(id: string){
+    this.displayStyle = "block";
+    //this.spent = new Spent('','','','','','');
+    this.SpentService.getSpentById(id).subscribe(
+      data => {
+        this.spent = data;
+        console.log(this.spent);
+        console.log("OK Getting the spent with id " + id);
+      },
+      error =>{
+        console.log("ERR getting the spent with id " + id);
+      }
+    );
+  }
+
+  getDebtsById(id: string){
+    this.displayStyleA = "block";
+    this.SpentService.getDebtsBySpentId(id).subscribe(
+      data => {
+        this.debtsA = data;
+        console.log(this.debtsA);
+        console.log("OK Getting the debts");
+        // AQUI AHORA TENGO QUE OBTENER TODOS LOS USUARIO DE CADA UNO DE LOS DEBTS
+        this.debtsA.forEach(debt => {
+          this.UserService.getUserById(Number(debt['idUser'])).subscribe(
+            data => {
+              this.debtUser = data;
+              this.debtsUsers.push(this.debtUser);
+              console.log(this.debtsUsers);
+            },
+            error => {
+              console.log("ERR Getting de users debters");
+            }
+          );
+        });
+      },
+      error => {
+        console.log("ERR getting the debts");
+      }
+    );
+    this.debtsA = [];
+    this.debtsUsers = [];
+  }
+
+  closePopup() {
+    this.displayStyle = "none";
+  }
+
+  closePopupA() {
+    this.displayStyleA = "none";
+  }
+
+  paidDebt(id: string, paid: boolean){
+    console.log(id)
+    console.log(paid);
+    this.SpentService.paidDebt(id, paid).subscribe(
+      data => {
+        console.log("OK change paid")
+      },
+      error => {
+        console.log("ERR change paid")
       }
     );
     window.location.reload();

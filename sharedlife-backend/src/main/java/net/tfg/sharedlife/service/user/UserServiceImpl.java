@@ -66,9 +66,13 @@ public class UserServiceImpl implements UserService{
 		if(null == id) {
 			throw new DataIncorrectException(ErrorMessages.ID_NULL);
 		}
-		User user = userRepository.findById(id).orElse(null);
-		if(null == user) {
-			throw new DataIncorrectException(ErrorMessages.USER_NOT_FOUND);
+		//User user = userRepository.findById(id).orElse(null);
+		List<User> users = userRepository.findAll();
+		User user = new User();
+		for(User u : users) {
+			if(u.getId().equals(id)) {
+				user = u;
+			}
 		}
 		return user;
 	}

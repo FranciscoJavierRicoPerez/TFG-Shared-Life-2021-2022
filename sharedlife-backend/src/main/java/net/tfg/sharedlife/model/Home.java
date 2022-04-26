@@ -63,6 +63,9 @@ public class Home {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "home")
 	private List<Task> tasks;
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "home")
+	private List<Spent> spents;
+	
 
 	/**
 	 * Instantiates a new home.

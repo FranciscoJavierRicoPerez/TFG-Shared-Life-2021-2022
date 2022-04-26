@@ -76,9 +76,10 @@ public class HomeServiceImpl implements HomeService {
 	
 	@Override
 	public List<HomeDTO> getHomesByUser(String username){
+		logger.info("Getting the homes of the user: {}", username);
 		List<HomeDTO> homes = new ArrayList<>();
 		User user = userService.getByUsername(username).get();
-		List<Home> aux = homeRepository.findAll();
+		List<Home> aux = homeRepository.findAll(); // ESTA LINEA EXPLOTA
 		for(Home home : aux) {
 			for(User u : home.getUsers()) {
 				if(u.equals(user)) {

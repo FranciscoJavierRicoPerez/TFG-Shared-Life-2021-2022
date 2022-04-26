@@ -1,17 +1,18 @@
 <app-menu></app-menu>
 <div class="container justify-content-center">
+
   <div class="card">
-    <div class="card-header">
-      <h3>Información de la vivienda</h3>
-    </div>
+    <div class="card-header"><h3>Información de la vivienda</h3></div>
     <div class="card-body">
-      <div>
-        <h3>Datos de la vivienda</h3>
-        {{home.address}} {{home.city}} {{home.number}}
-      </div>
-      <!--esto no esta apareciendo cuandon debe-->
-      <div *ngIf="isAdmin">
-        <h3>Invitaciones a la vivienda</h3>
+      <h3>Datos de la vivienda</h3>
+        {{home.address}}<br> {{home.city}}<br> {{home.number}}<br>
+    </div>
+  </div>
+  <p></p>
+  <div *ngIf="isAdmin">
+    <div class="card">
+      <div class="card-header"><h3>Invitaciones a la vivienda</h3></div>
+      <div class="card-body">
         <form [formGroup]="invitationForm" (ngSubmit)="sendInvitation()" novalidate>
           <div class="form-group" style="margin: 5px">
             <label for="username">Nombre usuario</label>
@@ -29,60 +30,163 @@
           </div>
         </form>
       </div>
-
+    </div>
+    <p></p>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Miembros de la vivienda</h3></div>
+    <div class="card-body">
+      <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Nombre de usuario</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.firstName }} {{ user.lastName}}</td>
+            <td>{{ user.username }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p></p>
+  <div class="card">
+    <div class="card-header"><h3>Mis tareas</h3></div>
+    <div class="card-body">
+      <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th>Titulo</th>
+            <th>Descripción</th>
+            <th>Fecha de inicio</th>
+            <th>Fecha finalizacion</th>
+            <th>Finalizada</th>
+            <th>Terminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks">
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.startDate }}</td>
+            <td *ngIf="task.finished">{{ task.endDate }}</td>
+            <td *ngIf="!task.finished"> ---- </td>
+            <td *ngIf="!task.finished"> Sin terminar </td>
+            <td *ngIf="task.finished"> Terminada </td>
+            <td *ngIf="!task.finished">
+              <button type="button" (click)="updateFinishedStatus(task.id)" class="btn btn-outline-success">Terminar</button>
+            </td>
+            <td *ngIf="task.finished">
+              <button type="button" class="btn btn-outline-success" disabled>Terminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <div>
-        <h3>Miembros de la vivienda</h3>
+        <button type="button" routerLink="/tareas" class="btn btn-primary btn-lg btn-block">Información de las tareas</button>
+      </div>
+    </div>
+  </div>
+  <p></p>
+  <div *ngIf="!isAdmin">
+    <div class="card">
+      <div class="card-header"><h3>Información de las deudas que tengo</h3></div>
+      <div class="card-body">
         <table class="table">
           <thead class="table-dark">
             <tr>
-              <th>Nombre</th>
-              <th>Nombre de usuario</th>
+              <th>Cantidad a pagar</th>
+              <th>Usuario al que pagar</th>
+              <th>Información del gasto</th>
+              <th>Pagar</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let user of users">
-              <td>{{ user.firstName }} {{ user.lastName}}</td>
-              <td>{{ user.username }}</td>
+            <tr *ngFor="let debt of debts">
+              <td>{{ debt.pricePerPerson }}</td>
+              <td>{{ debt.userToPay }}</td>
+              <td>
+                <button type="button" (click)="getSpentById(debt.idSpent)" class="btn btn-warning">Gasto</button>
+              </td>
+              <!-- INTEROR DEL MODAL -->
+              <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Información del gasto</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      Titulo: {{ spent.title}}<br>
+                      Descripcion: {{ spent.description }}<br>
+                      Total a pagar: {{ spent.totalPrice }}<br>
+                      ¿Cuanto debo?: {{ debt.pricePerPerson }}<br>
+                    </p>
+                    <div>
+                      <button type="button" class="btn btn-danger" (click)="closePopup()"> Cerrar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <td>
+              <button type="button" class="btn btn-primary" (click)="paidDebt(debt.id, true)">Pagar</button>
+            </td>
             </tr>
           </tbody>
         </table>
       </div>
-
-      <div>
-        <h3>Mis tareas</h3>
-        <table class="table">
-          <thead class="table-dark">
-            <tr>
-              <th>Titulo</th>
-              <th>Descripción</th>
-              <th>Fecha de inicio</th>
-              <th>Fecha finalizacion</th>
-              <th>Finalizada</th>
-              <th>Terminar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let task of tasks">
-              <td>{{ task.title }}</td>
-              <td>{{ task.description }}</td>
-              <td>{{ task.startDate }}</td>
-              <td *ngIf="task.finished">{{ task.endDate }}</td>
-              <td *ngIf="!task.finished"> ---- </td>
-              <td *ngIf="!task.finished"> Sin terminar </td>
-              <td *ngIf="task.finished"> Terminada </td>
-              <td *ngIf="!task.finished">
-                <button type="button" (click)="updateFinishedStatus(task.id)" class="btn btn-outline-success">Terminar</button>
-              </td>
-              <td *ngIf="task.finished">
-                <button type="button" class="btn btn-outline-success" disabled>Terminar</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div>
-          <button type="button" routerLink="/tareas" class="btn btn-primary btn-lg btn-block">Información de las tareas</button>
-        </div>
-      </div>
+    </div>
+  </div>
+  <p></p>
+  <div class="card">
+    <div class="card-header"><h3>Gastos creados por mi</h3></div>
+    <div class="card-body">
+      <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th>Titulo</th>
+            <th>Descripcion</th>
+            <th>Total a pagar</th>
+            <th>Informacion de la deuda</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let spent of spents">
+            <td>{{ spent.title }}</td>
+            <td>{{ spent.description }}</td>
+            <td>{{ spent.totalPrice}}</td>
+            <td>
+              <button type="button" (click)="getDebtsById(spent.id)" class="btn btn-success">Deuda</button>
+            </td>
+            <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyleA}">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Información de los deudores</h4>
+                </div>
+                <div class="modal-body">
+                    <div *ngFor="let user of debtsUsers">
+                      <p>
+                        --------------------------------------- <br>
+                        Nombre: {{ user.firstName}}<br>
+                        Apellidos: {{ user.lastName }}<br>
+                        --------------------------------------- <br>
+                      </p>
+                    </div>
+                  <div>
+                    <button type="button" class="btn btn-danger" (click)="closePopupA()"> Cerrar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
