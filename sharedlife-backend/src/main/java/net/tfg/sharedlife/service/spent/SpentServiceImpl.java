@@ -1,5 +1,6 @@
 package net.tfg.sharedlife.service.spent;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.tfg.sharedlife.dto.DebtDTO;
 import net.tfg.sharedlife.dto.NewUserDto;
 import net.tfg.sharedlife.dto.SpentDTO;
 import net.tfg.sharedlife.model.Debt;
@@ -99,5 +101,39 @@ public class SpentServiceImpl implements SpentService {
 			}
 		}
 	}
+
+	@Override
+	public List<DebtDTO> getDebtsByUsername(String username) {
+		List<DebtDTO> debtsdto = new ArrayList<>();
+		User user = userService.getByUsername(username).get();
+		List<Debt> debts = debtRepository.findAll();
+		for(Debt debt: debts) {
+			if(debt.getIdUser().equals(user.getId())) {
+				DebtDTO debtdto = new DebtDTO();
+				debtdto.setId(debt.getId());
+				debtdto.setIdHome(debt.getIdHome());
+				debtdto.setIdSpent(debt.getIdSpent());;
+				debtdto.setIdUser(debt.getIdUser());
+				debtdto.setPricePerPerson(debt.getPricePerPerson());
+				debtdto.setUserToPay(debt.getUserToPay());
+				debtsdto.add(debtdto);
+			}
+		}
+		return debtsdto;
+	}
+
+	@Override
+	public SpentDTO getSpentById(Long id) {
+		SpentDTO spentdto = new SpentDTO();
+		Spent spent = spentRepository.findById(id).get();
+		spentdto.setId(spent.getId());
+		spentdto.setTitle(spent.getTitle());
+		spentdto.setDescription(spent.getDescription());
+		spentdto.setIdHome(spent.getHome().getId().toString());
+		spentdto.setTotalPrice(spent.getTotalPrice());
+		return spentdto;
+	}
+	
+	
 	
 }

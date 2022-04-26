@@ -1,3 +1,6 @@
+import { Spent } from './../../../models/spent/spent';
+import { SpentService } from './../../../services/spent/spent.service';
+import { Debt } from './../../../models/Debt/debt';
 import { TaskService } from './../../../services/task/task.service';
 import { TokenService } from './../../../services/token/token.service';
 import { Invitation } from './../../../models/invitation/invitation';
@@ -23,6 +26,9 @@ export class HomeInfoPageComponent implements OnInit {
   authorities: string[] = [];
   users: User[] = [];
   tasks: Task[] = [];
+  debts: Debt[] = [];
+  spent: Spent;
+  displayStyle = "none";
 
   invitationForm = new FormGroup({
     username: new FormControl('', [Validators.required])
@@ -33,7 +39,8 @@ export class HomeInfoPageComponent implements OnInit {
     private Router: Router,
     private ActivatedRoute: ActivatedRoute,
     private TokenService: TokenService,
-    private TaskService: TaskService
+    private TaskService: TaskService,
+    private SpentService: SpentService
   ) { }
 
   ngOnInit(): void {
@@ -69,6 +76,21 @@ export class HomeInfoPageComponent implements OnInit {
           console.log("ERROR getting all tasks by username");
         }
       );
+
+      // OBTENER LAS DEUDAS QUE TIENE PENDIENTE EL USUARIO
+      this.SpentService.getAllDebtsByUsername(this.username).subscribe(
+        data => {
+          this.debts = data;
+          console.log(this.debts);
+          console.log("OK getting the debts of the user");
+        },
+        error => {
+          console.log("ERROR getting the debts of the user");
+        }
+      );
+
+      // INICIALIZAMOS EL SPENT PARA QUE NO DE ERROR???
+      this.spent = new Spent('','','','','','');
     }
   }
 
@@ -103,6 +125,25 @@ export class HomeInfoPageComponent implements OnInit {
       }
     );
     window.location.reload();
+  }
+
+  getSpentById(id: string){
+    this.displayStyle = "block";
+    //this.spent = new Spent('','','','','','');
+    this.SpentService.getSpentById(id).subscribe(
+      data => {
+        this.spent = data;
+        console.log(this.spent);
+        console.log("OK Getting the spent with id " + id);
+      },
+      error =>{
+        console.log("ERR getting the spent with id " + id);
+      }
+    );
+  }
+
+  closePopup() {
+    this.displayStyle = "none";
   }
 
 }
