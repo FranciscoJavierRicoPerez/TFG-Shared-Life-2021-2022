@@ -101,6 +101,7 @@
               <th>Cantidad a pagar</th>
               <th>Usuario al que pagar</th>
               <th>Información del gasto</th>
+              <th>Pagar</th>
             </tr>
           </thead>
           <tbody>
@@ -131,6 +132,9 @@
                 </div>
               </div>
             </div>
+            <td>
+              <button type="button" class="btn btn-primary" (click)="paidDebt(debt.id, true)">Pagar</button>
+            </td>
             </tr>
           </tbody>
         </table>
