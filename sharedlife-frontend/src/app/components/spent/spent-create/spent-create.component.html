@@ -43,4 +43,26 @@
       </form>
     </div>
   </div>
+  <p></p>
+  <div class="card">
+    <div class="card-header"><h3>Gastos de la vivienda</h3></div>
+    <div class="card-body">
+      <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th>Titulo</th>
+            <th>Descripcion</th>
+            <th>Precio Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let spent of spents">
+            <td>{{ spent.title }}</td>
+            <td>{{ spent.description }}</td>
+            <td>{{ spent.totalPrice}} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
