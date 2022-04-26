@@ -56,6 +56,24 @@ public class SpentControllerImpl implements SpentController {
 		return new ResponseEntity<>(spent, HttpStatus.OK);
 	}
 
+	@GetMapping("/byUsername")
+	@Override
+	public ResponseEntity<List<SpentDTO>> getSpentsByUsername(@RequestParam("username") String username) {
+		logger.info("Getting all the spents created by ther user with username {}", username);
+		List<SpentDTO> spents = new ArrayList<>();
+		spents = spentService.getSpentsByUsername(username);
+		return new ResponseEntity<>(spents, HttpStatus.OK);
+	}
+
+	@GetMapping("/debts/id/{id}")
+	@Override
+	public ResponseEntity<List<DebtDTO>> getDebtsBySpentId(@PathVariable("id") Long id) {
+		logger.info("Getting debts by the spent with the id: {}", id);
+		List<DebtDTO> debts = new ArrayList<>();
+		debts = spentService.getDebtsBySpentId(id);
+		return new ResponseEntity<>(debts, HttpStatus.OK);
+	}
+
 	
 	
 }

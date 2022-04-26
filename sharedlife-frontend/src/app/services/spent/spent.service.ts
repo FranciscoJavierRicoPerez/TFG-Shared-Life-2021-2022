@@ -24,4 +24,12 @@ export class SpentService {
     return this.HttpClient.get<any>(`${this.baseURL}/id/${id}`);
   }
 
+  getSpentsByUsername(username: string){
+    return this.HttpClient.get<any>(`${this.baseURL}/byUsername?username=${username}`);
+  }
+
+  getDebtsBySpentId(id: string){
+    return this.HttpClient.get<any>(`${this.baseURL}/debts/id/${id}`);
+  }
+
 }

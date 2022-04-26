@@ -133,6 +133,46 @@ public class SpentServiceImpl implements SpentService {
 		spentdto.setTotalPrice(spent.getTotalPrice());
 		return spentdto;
 	}
+
+	@Override
+	public List<SpentDTO> getSpentsByUsername(String username) {
+		List<SpentDTO> spentsdto = new ArrayList<>();
+		User user = userRepository.getByUsername(username).get();
+		List<Spent> spents = spentRepository.findAll();
+		for(Spent s : spents) {
+			for(User u: s.getUsers()) {
+				if(u.getId().equals(user.getId())) {
+					SpentDTO spentdto = new SpentDTO();
+					spentdto.setTitle(s.getTitle());
+					spentdto.setDescription(s.getDescription());
+					spentdto.setIdHome(s.getHome().getId().toString());
+					spentdto.setId(s.getId());
+					spentdto.setTotalPrice(s.getTotalPrice());
+					spentdto.setUserToPay(u.getUsername()); // esto es correctp????
+					spentsdto.add(spentdto);
+				}
+			}
+		}
+		return spentsdto;
+	}
+
+	@Override
+	public List<DebtDTO> getDebtsBySpentId(Long id) {
+		List<DebtDTO> debtsdto = new ArrayList<>();
+		List<Debt> debts = debtRepository.findAll();
+		for(Debt d : debts) {
+			if(d.getIdSpent().equals(id)) {
+				DebtDTO debtdto = new DebtDTO();
+				debtdto.setId(d.getId());
+				debtdto.setIdHome(d.getIdHome());
+				debtdto.setIdSpent(d.getIdSpent());
+				debtdto.setIdUser(d.getIdUser());
+				debtdto.setPricePerPerson(d.getPricePerPerson());
+				debtsdto.add(debtdto);
+			}
+		}
+		return debtsdto;
+	}
 	
 	
 	
