@@ -35,6 +35,7 @@ export class HomeInfoPageComponent implements OnInit {
   debtsA: Debt[] = [];
   debtsUsers: User[] = [];
   debtUser: User;
+  errorSendInvitation: boolean;
   invitationForm = new FormGroup({
     username: new FormControl('', [Validators.required])
   })
@@ -125,12 +126,13 @@ export class HomeInfoPageComponent implements OnInit {
     this.HomeService.sendInvitation(this.invitation).subscribe(
       data => {
         console.log("Invitation send ok");
+        window.location.reload();
       },
       err => {
         console.log("Invitation send err");
+        this.errorSendInvitation = true;
       }
     );
-    window.location.reload();
   }
 
   updateFinishedStatus(id: string){

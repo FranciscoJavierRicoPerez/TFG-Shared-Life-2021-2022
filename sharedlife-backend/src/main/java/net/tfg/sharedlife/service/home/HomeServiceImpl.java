@@ -113,7 +113,14 @@ public class HomeServiceImpl implements HomeService {
 	}
 
 	@Override
-	public void createInvitation(InvitationDTO invitation) {
+	public void createInvitation(InvitationDTO invitation) throws DataIncorrectException{
+		
+		// Comprobamos si el usuario ya existe en alguna vivienda
+		if(checkUserHaveHome(invitation.getUsername())) {
+			throw new DataIncorrectException(ErrorMessages.USER_ALREADY_HAVE_HOME_ERR);
+		}
+		
+		
 		Invitation i = new Invitation();
 		i.setIdHome(invitation.getIdHome());
 		i.setUsername(invitation.getUsername());
@@ -176,5 +183,18 @@ public class HomeServiceImpl implements HomeService {
 		return usersDTO;
 	}
 
+	
+	private boolean checkUserHaveHome(String username) {
+		boolean have = false;
+		List<Home> homes = homeRepository.findAll();
+		for(Home home : homes) {
+			for(User user: home.getUsers()) {
+				if(user.getUsername().equals(username)) {
+					have = true;
+				}
+			}
+		}
+		return have;
+	}
 
 }

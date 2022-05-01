@@ -17,6 +17,8 @@ public class ErrorMessages {
 	
 	/** The home information err. */
 	public static final String HOME_INFORMATION_ERR = "La información de la casa es incorrecta";
+	
+	public static final String USER_ALREADY_HAVE_HOME_ERR = "El usuario ya vive en una vivienda";
 
 	/**
 	 * Instantiates a new error messages.

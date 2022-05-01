@@ -24,6 +24,9 @@
             <div *ngIf="invitationForm.get('username')?.hasError('required') && invitationForm.get('username')?.touched">
               El nombre de usuario es un campo requerido
             </div>
+            <div *ngIf="errorSendInvitation">
+              Este usuario ya esta registrado en otra vivienda
+            </div>
             <div class="form-group" style="margin: 5px">
               <button class="btn btn-success btn-lg btn-block" [disabled]="!invitationForm.valid">Enviar</button>
             </div>
