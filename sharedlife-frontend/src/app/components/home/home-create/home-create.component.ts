@@ -47,7 +47,8 @@ export class HomeCreateComponent implements OnInit {
       this.myForm.value.city,
       this.myForm.value.country,
       this.myForm.value.rooms,
-      this.token);
+      this.token,
+      false);
     this.HomeService.createHouse(this.home).subscribe(
     data => {
       console.log(data);

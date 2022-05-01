@@ -109,6 +109,10 @@ public class HomeServiceImpl implements HomeService {
 		homedto.setCity(home.getCity());
 		homedto.setCountry(home.getCountry());
 		homedto.setRooms(home.getRooms());
+		homedto.setCompleted(false);
+		if(checkHomeIsCompleted(id)) {
+			homedto.setCompleted(true);
+		}
 		return homedto;
 	}
 
@@ -119,8 +123,9 @@ public class HomeServiceImpl implements HomeService {
 		if(checkUserHaveHome(invitation.getUsername())) {
 			throw new DataIncorrectException(ErrorMessages.USER_ALREADY_HAVE_HOME_ERR);
 		}
-		
-		
+		if(checkHomeIsCompleted(Long.parseLong(invitation.getIdHome()))) {
+			throw new DataIncorrectException(ErrorMessages.HOME_IS_COMPLETED);
+		}
 		Invitation i = new Invitation();
 		i.setIdHome(invitation.getIdHome());
 		i.setUsername(invitation.getUsername());
@@ -195,6 +200,20 @@ public class HomeServiceImpl implements HomeService {
 			}
 		}
 		return have;
+	}
+	
+	private boolean checkHomeIsCompleted(Long id) {
+		boolean completed = false;
+		List<Home> homes = homeRepository.findAll();
+		for(Home home : homes) {
+			if(home.getId().equals(id)) {
+				int rooms = Integer.parseInt(home.getRooms());
+				if((this.getMembers(id).size() - 1) == rooms) {
+					completed = true;
+				}
+			}
+		}
+		return completed;
 	}
 
 }
