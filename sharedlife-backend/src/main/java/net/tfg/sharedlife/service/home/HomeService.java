@@ -24,4 +24,6 @@ public interface HomeService {
 	
 	List<NewUserDto> getMembers(Long idHome);
 	
+	void leaveHome(Long idHome, String username);
+	
 }

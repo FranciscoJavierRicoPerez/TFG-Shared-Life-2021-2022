@@ -187,7 +187,14 @@ public class HomeServiceImpl implements HomeService {
 		logger.info("Members of the home with id: {} obtanied succesfully", idHome);
 		return usersDTO;
 	}
-
+	
+	@Override
+	public void leaveHome(Long idHome, String username) {
+		User user = userService.getByUsername(username).get();
+		Home home = homeRepository.findById(idHome).get();
+		home.getUsers().remove(user);
+		homeRepository.save(home);
+	}
 	
 	private boolean checkUserHaveHome(String username) {
 		boolean have = false;
@@ -215,5 +222,6 @@ public class HomeServiceImpl implements HomeService {
 		}
 		return completed;
 	}
+
 
 }
