@@ -214,4 +214,17 @@ export class HomeInfoPageComponent implements OnInit {
     window.location.reload();
   }
 
+  leaveHouse(){
+    console.log(this.idHome);
+    this.HomeService.leaveHome(this.idHome, this.username).subscribe(
+      data => {
+        console.log("User leave home sucessfully");
+        this.Router.navigate(['/']);
+      },
+      error => {
+        console.log("Error leaving home");
+      }
+    );
+  }
+
 }
