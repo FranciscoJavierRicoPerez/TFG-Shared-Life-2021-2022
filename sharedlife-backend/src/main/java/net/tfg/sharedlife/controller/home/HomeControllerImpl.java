@@ -82,7 +82,11 @@ public class HomeControllerImpl implements HomeController{
 	@PostMapping("/invitation")
 	public ResponseEntity<?> createInvitationToHome(@RequestBody InvitationDTO invitation){
 		logger.info("Sending a invitation to user with username: {}", invitation.getUsername());
-		homeService.createInvitation(invitation);
+		try {
+			homeService.createInvitation(invitation);
+		}catch(DataIncorrectException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
