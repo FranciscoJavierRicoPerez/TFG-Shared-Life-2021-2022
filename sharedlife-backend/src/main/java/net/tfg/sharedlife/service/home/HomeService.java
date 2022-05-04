@@ -26,4 +26,6 @@ public interface HomeService {
 	
 	void leaveHome(Long idHome, String username);
 	
+	void deleteHome(Long id);
+	
 }

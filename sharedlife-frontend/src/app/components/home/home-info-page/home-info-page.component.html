@@ -8,7 +8,12 @@
       {{home.city}}<br>  {{home.address}}<br> {{home.number}}<br> Habitaciones disponibles {{home.rooms}}
     </div>
     <div class="card-footer">
-      <button type="button" (click)="leaveHouse()" class="btn btn-primary btn-lg btn-block">Abandonar Vivienda</button>
+      <div *ngIf="!isAdmin">
+        <button type="button" (click)="leaveHouse()" class="btn btn-primary btn-lg btn-block">Abandonar Vivienda</button>
+      </div>
+      <div *ngIf="isAdmin">
+        <button type="button" (click)="deleteHouse()" class="btn btn-danger btn-lg btn-block">Eliminar Vivienda</button>
+      </div>
     </div>
   </div>
   <p></p>
