@@ -227,4 +227,17 @@ export class HomeInfoPageComponent implements OnInit {
     );
   }
 
+  deleteHouse(){
+    console.log(this.idHome);
+    this.HomeService.deleteHome(this.idHome).subscribe(
+      data => {
+        console.log("home delete successfully");
+        this.Router.navigate(['/']);
+      },
+      err => {
+        console.log("home delete error");
+      }
+    );
+  }
+
 }

@@ -39,4 +39,7 @@ public interface HomeController {
 	
 	@DeleteMapping("/id/{id}/leave")
 	ResponseEntity<?> leaveHome(@PathVariable("id") Long id, @RequestParam("username") String username);
+
+	@DeleteMapping("/id/{id}/delete")
+	ResponseEntity<?> deleteHome(@PathVariable("id") Long id);
 }

@@ -122,5 +122,14 @@ public class HomeControllerImpl implements HomeController{
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
+	@Override
+	@DeleteMapping("/id/{id}/delete")
+	public ResponseEntity<?> deleteHome(Long id) {
+		logger.info("Delete of the home with id: {}", id);
+		homeService.deleteHome(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 	
 }

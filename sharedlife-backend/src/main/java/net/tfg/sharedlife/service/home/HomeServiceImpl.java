@@ -196,6 +196,13 @@ public class HomeServiceImpl implements HomeService {
 		homeRepository.save(home);
 	}
 	
+	@Override
+	public void deleteHome(Long id) {
+		Home home = homeRepository.findById(id).get();
+		homeRepository.delete(home);
+	}
+
+	
 	private boolean checkUserHaveHome(String username) {
 		boolean have = false;
 		List<Home> homes = homeRepository.findAll();
@@ -222,6 +229,5 @@ public class HomeServiceImpl implements HomeService {
 		}
 		return completed;
 	}
-
 
 }
