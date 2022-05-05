@@ -40,4 +40,8 @@ export class SpentService {
     return this.HttpClient.put(`${this.baseURL}/debt/${id}/paid`, paid);
   }
 
+  deleteSpentAndDebts(id: string){
+    return this.HttpClient.delete(`${this.baseURL}/${id}/delete`);
+  }
+
 }

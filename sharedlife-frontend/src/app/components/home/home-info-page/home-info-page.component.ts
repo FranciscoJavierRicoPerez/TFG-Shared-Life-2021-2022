@@ -97,7 +97,7 @@ export class HomeInfoPageComponent implements OnInit {
       );
 
       // INICIALIZAMOS EL SPENT PARA QUE NO DE ERROR???
-      this.spent = new Spent('','','','','','');
+      this.spent = new Spent('','','','','','',false);
 
       // OBTENEMOS TODOS LOS  GASTOS PUBLICADOS POR EL USUARIO
       this.SpentService.getSpentsByUsername(this.username).subscribe(
@@ -236,6 +236,18 @@ export class HomeInfoPageComponent implements OnInit {
       },
       err => {
         console.log("home delete error");
+      }
+    );
+  }
+
+  deleteSpentAndDebts(idSpent: string){
+    console.log(idSpent);
+    this.SpentService.deleteSpentAndDebts(idSpent).subscribe(
+      data => {
+        console.log("spent delete successfully");
+      },
+      error => {
+        console.log("error deleting spents");
       }
     );
   }

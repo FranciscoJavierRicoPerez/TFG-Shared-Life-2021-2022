@@ -147,7 +147,12 @@
               </div>
             </div>
             <td>
-              <button type="button" class="btn btn-primary" (click)="paidDebt(debt.id, true)">Pagar</button>
+              <div *ngIf="!debt.paid">
+                <button type="button" class="btn btn-primary" (click)="paidDebt(debt.id, true)">Pagar</button>
+              </div>
+              <div *ngIf="debt.paid">
+                <button type="button" class="btn btn-success" disabled>Pagado</button>
+              </div>
             </td>
             </tr>
           </tbody>
@@ -166,6 +171,7 @@
             <th>Descripcion</th>
             <th>Total a pagar</th>
             <th>Informacion de la deuda</th>
+            <th>¿Deudas pagadas?</th>
           </tr>
         </thead>
         <tbody>
@@ -175,6 +181,14 @@
             <td>{{ spent.totalPrice}}</td>
             <td>
               <button type="button" (click)="getDebtsById(spent.id)" class="btn btn-success">Deuda</button>
+            </td>
+            <td>
+              <div *ngIf="!spent.paid">
+                <button type="button" class="btn btn-danger" disabled>Sin pagar</button>
+              </div>
+              <div *ngIf="spent.paid">
+                <button type="button" class="btn btn-warning" disabled>Todo pagado</button>
+              </div>
             </td>
             <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyleA}">
               <div class="modal-dialog" role="document">
