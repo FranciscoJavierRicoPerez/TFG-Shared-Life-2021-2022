@@ -109,7 +109,7 @@ public class SpentServiceImpl implements SpentService {
 		List<Debt> debts = debtRepository.findAll();
 		for(Debt debt: debts) {
 			if(debt.getIdUser().equals(user.getId())) {
-				if(!debt.isPaid()) {
+				//if(!debt.isPaid()) {
 					DebtDTO debtdto = new DebtDTO();
 					debtdto.setId(debt.getId());
 					debtdto.setIdHome(debt.getIdHome());
@@ -117,8 +117,9 @@ public class SpentServiceImpl implements SpentService {
 					debtdto.setIdUser(debt.getIdUser());
 					debtdto.setPricePerPerson(debt.getPricePerPerson());
 					debtdto.setUserToPay(debt.getUserToPay());
+					debtdto.setPaid(debt.isPaid());
 					debtsdto.add(debtdto);
-				}
+				//}
 			}
 		}
 		return debtsdto;
@@ -127,13 +128,14 @@ public class SpentServiceImpl implements SpentService {
 	@Override
 	public SpentDTO getSpentById(Long id) {
 		SpentDTO spentdto = new SpentDTO();
-		if(!this.checkSpentsPaid(id)) {/// */*/*/*/
-			Spent spent = spentRepository.findById(id).get();
-			spentdto.setId(spent.getId());
-			spentdto.setTitle(spent.getTitle());
-			spentdto.setDescription(spent.getDescription());
-			spentdto.setIdHome(spent.getHome().getId().toString());
-			spentdto.setTotalPrice(spent.getTotalPrice());
+		Spent spent = spentRepository.findById(id).get();
+		spentdto.setId(spent.getId());
+		spentdto.setTitle(spent.getTitle());
+		spentdto.setDescription(spent.getDescription());
+		spentdto.setIdHome(spent.getHome().getId().toString());
+		spentdto.setTotalPrice(spent.getTotalPrice());
+		if(this.checkSpentsPaid(id)) {
+			spentdto.setPaid(true);
 		}
 		return spentdto;
 	}
@@ -144,18 +146,19 @@ public class SpentServiceImpl implements SpentService {
 		User user = userRepository.getByUsername(username).get();
 		List<Spent> spents = spentRepository.findAll();
 		for(Spent s : spents) {
-			if(!this.checkSpentsPaid(s.getId())) { ///*/*/*/*/*
-				for(User u: s.getUsers()) {
-					if(u.getId().equals(user.getId())) {
-						SpentDTO spentdto = new SpentDTO();
-						spentdto.setTitle(s.getTitle());
-						spentdto.setDescription(s.getDescription());
-						spentdto.setIdHome(s.getHome().getId().toString());
-						spentdto.setId(s.getId());
-						spentdto.setTotalPrice(s.getTotalPrice());
-						spentdto.setUserToPay(u.getUsername()); // esto es correctp????
-						spentsdto.add(spentdto);
+			for(User u: s.getUsers()) {
+				if(u.getId().equals(user.getId())) {
+					SpentDTO spentdto = new SpentDTO();
+					spentdto.setTitle(s.getTitle());
+					spentdto.setDescription(s.getDescription());
+					spentdto.setIdHome(s.getHome().getId().toString());
+					spentdto.setId(s.getId());
+					spentdto.setTotalPrice(s.getTotalPrice());
+					spentdto.setUserToPay(u.getUsername()); // esto es correctp????
+					if(this.checkSpentsPaid(s.getId())) {
+						spentdto.setPaid(true);
 					}
+					spentsdto.add(spentdto);
 				}
 			}
 		}
@@ -186,22 +189,23 @@ public class SpentServiceImpl implements SpentService {
 		List<SpentDTO> spentsDTO = new ArrayList<>();
 		List<Spent> spents = spentRepository.findAll();
 		for(Spent s: spents) {
-			if(!this.checkSpentsPaid(s.getId())) {
-				if(s.getHome().getId().equals(id)) {
-					SpentDTO spentdto = new SpentDTO();
-					spentdto.setId(s.getId());
-					spentdto.setTitle(s.getTitle());
-					spentdto.setDescription(s.getDescription());
-					spentdto.setTotalPrice(s.getTotalPrice());
-					List<Debt> debts = debtRepository.findAll();
-					for(Debt d : debts) {
-						if(d.getIdHome().equals(id)) {
-							spentdto.setUserToPay(d.getUserToPay());
-							break;
-						}
+			if(s.getHome().getId().equals(id)) {
+				SpentDTO spentdto = new SpentDTO();
+				spentdto.setId(s.getId());
+				spentdto.setTitle(s.getTitle());
+				spentdto.setDescription(s.getDescription());
+				spentdto.setTotalPrice(s.getTotalPrice());
+				List<Debt> debts = debtRepository.findAll();
+				for(Debt d : debts) {
+					if(d.getIdHome().equals(id)) {
+						spentdto.setUserToPay(d.getUserToPay());
+						break;
 					}
-					spentsDTO.add(spentdto);
 				}
+				if(this.checkSpentsPaid(s.getId())) {
+					spentdto.setPaid(true);
+				}
+				spentsDTO.add(spentdto);
 			}
 		}
 		return spentsDTO;
@@ -215,7 +219,7 @@ public class SpentServiceImpl implements SpentService {
 	}
 	
 	private boolean checkSpentsPaid(Long id) { // id del spent
-		boolean borrado = false;
+		boolean paid = false;
 		int contador = 0;
 		List<Long> ids = new ArrayList<>();
 		List<DebtDTO> debtsDTO = getDebtsBySpentId(id);
@@ -226,14 +230,26 @@ public class SpentServiceImpl implements SpentService {
 			}
 		}
 		if(contador == debtsDTO.size()) {
-			for(int i = 0; i < ids.size(); i++) {
-				debtRepository.deleteById(ids.get(i));
-			}
-			spentRepository.deleteById(id);
-			borrado = true;
+			updateSpentPaid(id);
+			paid = true;
 		}
-		return borrado;
-		
+		return paid;
+	}
+	
+	private void updateSpentPaid(Long id) {
+		Spent s = spentRepository.getById(id);
+		s.setPaid(true);
+		spentRepository.save(s);
+	}
+
+	@Override
+	public void deleteSpentAndDebts(Long id) {
+		Spent spent = spentRepository.getById(id);
+		List<DebtDTO> debtsdto = getDebtsBySpentId(id);
+		for(DebtDTO d : debtsdto) {
+			Debt debt = debtRepository.findById(d.getId()).get();
+			debtRepository.delete(debt);
+		}
 	}
 	
 }

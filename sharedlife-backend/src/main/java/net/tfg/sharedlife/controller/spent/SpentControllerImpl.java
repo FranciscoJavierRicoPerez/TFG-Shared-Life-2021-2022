@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,6 +92,15 @@ public class SpentControllerImpl implements SpentController {
 	public ResponseEntity<?> updatePaidStatus(@PathVariable("id") Long id, @RequestBody boolean paid){
 		logger.info("Changing the value of the paid");
 		spentService.updatePaidStatus(id, paid);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@DeleteMapping("/{id}/delete")
+	@Override
+	public ResponseEntity<?> deleteSpentAndDebts(Long id) {
+		logger.info("Deleting the spent with id {} and his associated debts");
+		spentService.deleteSpentAndDebts(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
