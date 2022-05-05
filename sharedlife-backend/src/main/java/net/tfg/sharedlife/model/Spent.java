@@ -36,6 +36,9 @@ public class Spent {
 	@Column(name = "totalPrice")
 	private double totalPrice;
 	
+	@Column(name = "paid")
+	private boolean paid;
+	
 	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_home")
 	private Home home;

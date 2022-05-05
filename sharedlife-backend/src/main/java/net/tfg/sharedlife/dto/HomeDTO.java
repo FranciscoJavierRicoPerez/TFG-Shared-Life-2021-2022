@@ -12,4 +12,5 @@ public class HomeDTO {
 	private String country;
 	private String rooms;
 	private String token;
+	private boolean completed;
 }

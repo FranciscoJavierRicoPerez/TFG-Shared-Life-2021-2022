@@ -3,6 +3,7 @@ package net.tfg.sharedlife.controller.spent;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,4 +37,6 @@ public interface SpentController {
 	@PutMapping("/debt/{id}/paid")
 	ResponseEntity<?> updatePaidStatus(@PathVariable("id") Long id, @RequestBody boolean paid);
 	
+	@DeleteMapping("/{id}/delete")
+	ResponseEntity<?> deleteSpentAndDebts(@PathVariable("id") Long id);
 }

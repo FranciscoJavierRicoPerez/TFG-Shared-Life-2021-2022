@@ -10,4 +10,5 @@ public class SpentDTO {
 	private double totalPrice;
 	private String userToPay;
 	private String idHome;
+	private boolean paid;
 }

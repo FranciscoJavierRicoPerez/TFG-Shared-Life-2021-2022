@@ -35,6 +35,7 @@ export class HomeInfoPageComponent implements OnInit {
   debtsA: Debt[] = [];
   debtsUsers: User[] = [];
   debtUser: User;
+  errorSendInvitation: boolean;
   invitationForm = new FormGroup({
     username: new FormControl('', [Validators.required])
   })
@@ -96,7 +97,7 @@ export class HomeInfoPageComponent implements OnInit {
       );
 
       // INICIALIZAMOS EL SPENT PARA QUE NO DE ERROR???
-      this.spent = new Spent('','','','','','');
+      this.spent = new Spent('','','','','','',false);
 
       // OBTENEMOS TODOS LOS  GASTOS PUBLICADOS POR EL USUARIO
       this.SpentService.getSpentsByUsername(this.username).subscribe(
@@ -125,12 +126,13 @@ export class HomeInfoPageComponent implements OnInit {
     this.HomeService.sendInvitation(this.invitation).subscribe(
       data => {
         console.log("Invitation send ok");
+        window.location.reload();
       },
       err => {
         console.log("Invitation send err");
+        this.errorSendInvitation = true;
       }
     );
-    window.location.reload();
   }
 
   updateFinishedStatus(id: string){
@@ -210,6 +212,44 @@ export class HomeInfoPageComponent implements OnInit {
       }
     );
     window.location.reload();
+  }
+
+  leaveHouse(){
+    console.log(this.idHome);
+    this.HomeService.leaveHome(this.idHome, this.username).subscribe(
+      data => {
+        console.log("User leave home sucessfully");
+        this.Router.navigate(['/']);
+      },
+      error => {
+        console.log("Error leaving home");
+      }
+    );
+  }
+
+  deleteHouse(){
+    console.log(this.idHome);
+    this.HomeService.deleteHome(this.idHome).subscribe(
+      data => {
+        console.log("home delete successfully");
+        this.Router.navigate(['/']);
+      },
+      err => {
+        console.log("home delete error");
+      }
+    );
+  }
+
+  deleteSpentAndDebts(idSpent: string){
+    console.log(idSpent);
+    this.SpentService.deleteSpentAndDebts(idSpent).subscribe(
+      data => {
+        console.log("spent delete successfully");
+      },
+      error => {
+        console.log("error deleting spents");
+      }
+    );
   }
 
 }

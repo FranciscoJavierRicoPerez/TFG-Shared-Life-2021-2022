@@ -7,7 +7,8 @@ export class HomeCreateDTO {
   country!: string;
   rooms!: string;
   token: string;
-  constructor(a: string, f: string, n: string, ct: string, co: string, r: string, t: string){
+  completed: boolean;
+  constructor(a: string, f: string, n: string, ct: string, co: string, r: string, t: string, c:boolean){
     this.address=a;
     this.floor=f;
     this.number=n;
@@ -15,5 +16,6 @@ export class HomeCreateDTO {
     this.country=co;
     this.rooms=r;
     this.token=t;
+    this.completed=c;
   }
 }
