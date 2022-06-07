@@ -103,4 +103,9 @@ export class TaskCreateComponent implements OnInit {
     window.location.reload();
   }
 
+  correctDate(date : string){
+    var auxDate = date.split("T");
+    return auxDate[0];
+  }
+
 }

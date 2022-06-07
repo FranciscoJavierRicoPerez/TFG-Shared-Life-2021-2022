@@ -85,8 +85,10 @@
           <tr *ngFor="let task of tasks">
             <td>{{ task.title }}</td>
             <td>{{ task.description }}</td>
-            <td>{{ task.startDate }}</td>
-            <td *ngIf="task.finished">{{ task.endDate }}</td>
+            <td>
+              {{ correctDate(task.startDate) }}
+            </td>
+            <td *ngIf="task.finished">{{ correctDate(task.endDate) }}</td>
             <td *ngIf="!task.finished"> ---- </td>
             <td *ngIf="!task.finished"> Sin terminar </td>
             <td *ngIf="task.finished"> Terminada </td>

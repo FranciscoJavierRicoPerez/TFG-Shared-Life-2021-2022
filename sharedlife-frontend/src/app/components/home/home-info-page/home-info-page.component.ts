@@ -252,4 +252,9 @@ export class HomeInfoPageComponent implements OnInit {
     );
   }
 
+  correctDate(date : string){
+    var auxDate = date.split("T");
+    return auxDate[0];
+  }
+
 }
