@@ -1,3 +1,4 @@
+import { Home } from 'src/app/models/home/home';
 import { HomeService } from './../../services/home/home.service';
 import { TokenService } from './../../services/token/token.service';
 import { Component, OnInit } from '@angular/core';
@@ -13,8 +14,12 @@ export class MenuComponent implements OnInit {
   username = '';
   isAdmin = false;
   authorities: string[] = [];
+  homes: Home[] = [];
+  userHasHome = false;
+
   constructor(
-    private TokenService: TokenService) { }
+    private TokenService: TokenService,
+    private HomeService: HomeService) { }
 
   ngOnInit(): void {
     if(this.TokenService.getToken()){
@@ -28,6 +33,13 @@ export class MenuComponent implements OnInit {
           this.isAdmin = true;
         }
       })
+
+      this.HomeService.userHasHome(this.username).subscribe(
+        data => {
+          this.userHasHome = data;
+        }
+      )
+
     }
     else{
       this.isLogged = false;

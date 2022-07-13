@@ -130,6 +130,15 @@ public class HomeControllerImpl implements HomeController{
 		homeService.deleteHome(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+	@Override
+	@GetMapping("/hasHome")
+	public ResponseEntity<Boolean> hasHome(String username) {
+		Boolean hasHomes = false;
+		logger.info("Searching homes for user with username: {}", username);
+		hasHomes = homeService.hasHome(username);
+		return new ResponseEntity<>(hasHomes, HttpStatus.OK);
+	}
 	
 	
 }

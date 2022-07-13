@@ -230,4 +230,18 @@ public class HomeServiceImpl implements HomeService {
 		return completed;
 	}
 
+	@Override
+	public Boolean hasHome(String username) {
+		Boolean hasHome = false;
+		List<Home> homes = homeRepository.findAll();
+		for(Home h : homes) {
+			for(User u : h.getUsers()) {
+				if(username.equals(u.getUsername())) {
+					hasHome = true;
+				}
+			}
+		}
+		return hasHome;
+	}
+
 }
