@@ -28,4 +28,6 @@ public interface HomeService {
 	
 	void deleteHome(Long id);
 	
+	Boolean hasHome(String username);
+	
 }

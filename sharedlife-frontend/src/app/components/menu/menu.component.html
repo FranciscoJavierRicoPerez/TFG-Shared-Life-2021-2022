@@ -11,10 +11,10 @@
       <li class = "nav-item" *ngIf="isLogged && isAdmin">
         <a routerLink="/home/create" routerLinkActive="active" class="nav-link">Añadir casa</a>
       </li>
-      <li class = "nav-item" *ngIf="isLogged">
+      <li class = "nav-item" *ngIf="isLogged && userHasHome">
         <a routerLink="/tareas" routerLinkActive="active" class="nav-link">Tareas</a>
       </li>
-      <li class = "nav-item" *ngIf="isLogged">
+      <li class = "nav-item" *ngIf="isLogged && userHasHome">
         <a routerLink="/gastos" routerLinkActive="active" class="nav-link">Gastos</a>
       </li>
     </ul>
