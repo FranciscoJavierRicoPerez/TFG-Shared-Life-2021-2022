@@ -37,9 +37,19 @@ export class MenuComponent implements OnInit {
       this.HomeService.userHasHome(this.username).subscribe(
         data => {
           this.userHasHome = data;
+          if(this.userHasHome == true){
+            this.HomeService.getHouseByUsername(this.username).subscribe(
+              dataHomes => {
+                this.homes = dataHomes;
+                console.log(this.homes);
+              },
+              error => {
+                console.log("Error getting houses for user " + this.username);
+              }
+            )
+          }
         }
       )
-
     }
     else{
       this.isLogged = false;

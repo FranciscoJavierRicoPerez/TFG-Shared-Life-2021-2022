@@ -18,8 +18,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'inicio', component: HomePageComponent }, // PAGINA PRINCIPAL DE LA APLICACION
   { path: 'vivienda/:id', component: HomeInfoPageComponent },
-  { path: 'tareas', component: TaskCreateComponent },
-  { path: 'gastos', component: SpentCreateComponent }
+  { path: 'vivienda/:id/tareas', component: TaskCreateComponent },
+  { path: 'vivienda/:id/gastos', component: SpentCreateComponent }
 ];
 
 @NgModule({

@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { SpentService } from './../../../services/spent/spent.service';
 import { HomeService } from './../../../services/home/home.service';
 import { TokenService } from './../../../services/token/token.service';
@@ -28,10 +29,12 @@ export class SpentCreateComponent implements OnInit {
   users: User[] = [];
   spent: Spent;
   spents: Spent[] = [];
+  home: Home;
   constructor(
     private TokenService: TokenService,
     private HomeService: HomeService,
-    private SpentService: SpentService) { }
+    private SpentService: SpentService,
+    private ActivatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     if(this.TokenService.getToken()){
@@ -43,14 +46,12 @@ export class SpentCreateComponent implements OnInit {
           this.isAdmin = true;
         }
       });
-      this.HomeService.getHouseByUsername(this.username).subscribe(
+
+      this.idHome = this.ActivatedRoute.snapshot.params['id'];
+      this.HomeService.getHomeById(this.idHome).subscribe(
         data => {
-          this.homes = data;
-          console.log(this.homes[0]);
-          console.log(this.homes);
-          this.idHome = this.homes[0].id.toString();
-          // CREO QUE ESTA LLAMADA NO ME HACE FALTA :)()()
-          this.HomeService.getAllHomeMembers(this.homes[0].id.toString()).subscribe(
+          this.home = data;
+          this.HomeService.getAllHomeMembers(this.idHome).subscribe(
             data => {
               this.users = data;
               console.log(this.users);
@@ -59,9 +60,8 @@ export class SpentCreateComponent implements OnInit {
               console.log("ERROR getting the home members");
             }
           );
-
           // OBTENDCION DE TODOS LOS GASTOS DE LA VIVIENDA
-          this.SpentService.getAllSpentByHomeId(this.homes[0].id.toString()).subscribe(
+          this.SpentService.getAllSpentByHomeId(this.idHome).subscribe(
             data => {
               this.spents = data;
               console.log(this.spents);
@@ -71,10 +71,9 @@ export class SpentCreateComponent implements OnInit {
               console.log("ERR Getting all spents of the home");
             }
           );
-
         },
         error => {
-          console.log("ERROR getting the house of the user");
+          console.log("Error getting the information of the home with id: " + this.idHome);
         }
       );
     }
