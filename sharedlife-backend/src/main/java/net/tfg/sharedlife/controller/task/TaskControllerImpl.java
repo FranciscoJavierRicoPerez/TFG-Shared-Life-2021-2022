@@ -58,10 +58,10 @@ public class TaskControllerImpl implements TaskController{
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	@GetMapping("/byHomeId/{id}")
 	@Override
-	public ResponseEntity<List<TaskDTO>> getTasksByHomeIdAndUsername(@PathVariable("id") Long id, @RequestParam("username") String username) {
+	public ResponseEntity<List<TaskDTO>> getTasksByHomeId(@PathVariable("id") Long id) {
 		Log.info("Searching all task from house with id: {}", id);
 		List<TaskDTO> tasks = new ArrayList<>();
-		tasks = taskService.getTasksByHomeIdAndUsername(id, username);
+		tasks = taskService.getTasksByHomeId(id);
 		return new ResponseEntity<>(tasks, HttpStatus.OK);
 	}
 

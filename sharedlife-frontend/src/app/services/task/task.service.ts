@@ -20,7 +20,7 @@ export class TaskService {
   }
 
   getAllTaskByHomeId(id: string, username:string): Observable<any>{
-    return this.HttpClient.get<any>(`${this.baseURL}/byHomeId/${id}?username=${username}`);
+    return this.HttpClient.get<any>(`${this.baseURL}/byHomeId/${id}`);
   }
 
   updateFinishedStatus(id: string, finished: boolean){

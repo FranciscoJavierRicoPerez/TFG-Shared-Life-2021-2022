@@ -11,7 +11,7 @@ public interface TaskService {
 	
 	List<TaskDTO> getTasksByUsername(String username);
 	
-	List<TaskDTO> getTasksByHomeIdAndUsername(Long id, String username);
+	List<TaskDTO> getTasksByHomeId(Long id);
 	
 	void updateTaskFinished(Long id, boolean finished);
 }

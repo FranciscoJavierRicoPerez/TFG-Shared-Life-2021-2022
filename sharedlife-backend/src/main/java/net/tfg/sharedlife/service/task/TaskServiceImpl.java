@@ -73,22 +73,20 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public List<TaskDTO> getTasksByHomeIdAndUsername(Long id, String username) {
+	public List<TaskDTO> getTasksByHomeId(Long id) {
 		Log.info("Getting all tasks for home with id: {}", id);
 		List<TaskDTO> tasksdto = new ArrayList<>();
 		List<Task> tasks = taskRepository.findAll();
 		for(Task t : tasks) {
-			if(t.getHome().getId().equals(id) && !t.getUser().getUsername().equals(username)) {
-				TaskDTO taskdto = new TaskDTO();
-				taskdto.setTitle(t.getTitle());
-				taskdto.setDescription(t.getDescription());
-				taskdto.setStartDate(t.getStartDate());
-				taskdto.setEndDate(t.getEndDate());					
-				taskdto.setUser(t.getUser().getUsername());
-				taskdto.setFinished(t.isFinished());
-				taskdto.setIdHome(t.getHome().getId().toString());
-				tasksdto.add(taskdto);
-			}
+			TaskDTO taskdto = new TaskDTO();
+			taskdto.setTitle(t.getTitle());
+			taskdto.setDescription(t.getDescription());
+			taskdto.setStartDate(t.getStartDate());
+			taskdto.setEndDate(t.getEndDate());					
+			taskdto.setUser(t.getUser().getUsername());
+			taskdto.setFinished(t.isFinished());
+			taskdto.setIdHome(t.getHome().getId().toString());
+			tasksdto.add(taskdto);
 		}
 		return tasksdto;
 	}

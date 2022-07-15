@@ -21,7 +21,7 @@ public interface TaskController {
 	ResponseEntity<List<TaskDTO>> getTasksByUsername(@RequestParam("username") String username);
 	
 	@GetMapping("/byHomeId/{id}")
-	ResponseEntity<List<TaskDTO>> getTasksByHomeIdAndUsername(@PathVariable("id") Long id, @RequestParam("username") String username);
+	ResponseEntity<List<TaskDTO>> getTasksByHomeId(@PathVariable("id") Long id);
 	
 	@PutMapping("/{id}/finished")
 	ResponseEntity<?> updateFinishedStatus(@PathVariable("id") Long id, @RequestBody boolean finished);
