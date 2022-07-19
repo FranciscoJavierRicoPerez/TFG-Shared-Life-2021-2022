@@ -15,8 +15,8 @@ export class TaskService {
     return this.HttpClient.post(`${this.baseURL}/create`, task);
   }
 
-  getAllTaskByUsername(username: string): Observable<any>{
-    return this.HttpClient.get<any>(`${this.baseURL}/byUsername?username=${username}`);
+  getAllTaskByUsernameAndHomeId(username: string, id: string): Observable<any>{
+    return this.HttpClient.get<any>(`${this.baseURL}/byHomeId/${id}/byUsername?username=${username}`);
   }
 
   getAllTaskByHomeId(id: string, username:string): Observable<any>{

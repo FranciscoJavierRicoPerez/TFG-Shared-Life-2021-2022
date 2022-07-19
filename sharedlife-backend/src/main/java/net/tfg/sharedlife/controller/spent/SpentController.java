@@ -25,8 +25,8 @@ public interface SpentController {
 	@GetMapping("/id/{id}")
 	ResponseEntity<SpentDTO> getSpentById(@PathVariable("id") Long id);
 	
-	@GetMapping("/byUsername")
-	ResponseEntity<List<SpentDTO>> getSpentsByUsername(@RequestParam("username") String username);
+	@GetMapping("/home/{id}/username")
+	ResponseEntity<List<SpentDTO>> getSpentsByUsernameAndHomeId(@RequestParam("username") String username, @PathVariable("id") Long id);
 	
 	@GetMapping("/debts/id/{id}")
 	ResponseEntity<List<DebtDTO>> getDebtsBySpentId(@PathVariable("id") Long id);

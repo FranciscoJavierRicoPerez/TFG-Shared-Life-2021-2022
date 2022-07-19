@@ -141,13 +141,13 @@ public class SpentServiceImpl implements SpentService {
 	}
 
 	@Override
-	public List<SpentDTO> getSpentsByUsername(String username) {
+	public List<SpentDTO> getSpentsByUsernameAndHomeId(String username, Long id) {
 		List<SpentDTO> spentsdto = new ArrayList<>();
 		User user = userRepository.getByUsername(username).get();
 		List<Spent> spents = spentRepository.findAll();
 		for(Spent s : spents) {
 			for(User u: s.getUsers()) {
-				if(u.getId().equals(user.getId())) {
+				if(u.getId().equals(user.getId()) && s.getHome().getId().equals(id)) {
 					SpentDTO spentdto = new SpentDTO();
 					spentdto.setTitle(s.getTitle());
 					spentdto.setDescription(s.getDescription());

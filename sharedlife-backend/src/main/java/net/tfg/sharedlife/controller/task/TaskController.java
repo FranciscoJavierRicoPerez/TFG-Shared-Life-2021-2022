@@ -17,8 +17,8 @@ public interface TaskController {
 	@PostMapping("/create")
 	ResponseEntity<?> createTask(@RequestBody TaskDTO task);
 	
-	@GetMapping("/byUsername")
-	ResponseEntity<List<TaskDTO>> getTasksByUsername(@RequestParam("username") String username);
+	@GetMapping("/byHomeId/{id}/byUsername")
+	ResponseEntity<List<TaskDTO>> getTasksByUsernameAndHomeId(@RequestParam("username") String username, @PathVariable("id") Long id);
 	
 	@GetMapping("/byHomeId/{id}")
 	ResponseEntity<List<TaskDTO>> getTasksByHomeId(@PathVariable("id") Long id);

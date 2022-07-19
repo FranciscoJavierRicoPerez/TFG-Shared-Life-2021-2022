@@ -9,7 +9,7 @@ import net.tfg.sharedlife.dto.TaskDTO;
 public interface TaskService {
 	void createTask(@RequestBody TaskDTO task);
 	
-	List<TaskDTO> getTasksByUsername(String username);
+	List<TaskDTO> getTasksByUsernameAndHomeId(String username, Long id);
 	
 	List<TaskDTO> getTasksByHomeId(Long id);
 	

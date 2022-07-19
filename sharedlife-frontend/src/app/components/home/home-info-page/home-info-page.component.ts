@@ -73,7 +73,7 @@ export class HomeInfoPageComponent implements OnInit {
       );
 
       // OBTENCION DE LAS TODAS LAS TAREAS DE UN USUARIO
-      this.TaskService.getAllTaskByUsername(this.username).subscribe(
+      this.TaskService.getAllTaskByUsernameAndHomeId(this.username, this.idHome).subscribe(
         data => {
           this.tasks = data;
           console.log(this.tasks);
@@ -100,7 +100,7 @@ export class HomeInfoPageComponent implements OnInit {
       this.spent = new Spent('','','','','','',false);
 
       // OBTENEMOS TODOS LOS  GASTOS PUBLICADOS POR EL USUARIO
-      this.SpentService.getSpentsByUsername(this.username).subscribe(
+      this.SpentService.getSpentsByUsernameAndHomeId(this.username, this.idHome).subscribe(
         data => {
           this.spents = data;
           console.log(this.spents);

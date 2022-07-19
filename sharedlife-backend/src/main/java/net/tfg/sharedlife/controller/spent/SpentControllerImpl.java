@@ -60,12 +60,12 @@ public class SpentControllerImpl implements SpentController {
 		return new ResponseEntity<>(spent, HttpStatus.OK);
 	}
 
-	@GetMapping("/byUsername")
+	@GetMapping("/home/{id}/username")
 	@Override
-	public ResponseEntity<List<SpentDTO>> getSpentsByUsername(@RequestParam("username") String username) {
+	public ResponseEntity<List<SpentDTO>> getSpentsByUsernameAndHomeId(@RequestParam("username") String username, @PathVariable("id") Long id) {
 		logger.info("Getting all the spents created by ther user with username {}", username);
 		List<SpentDTO> spents = new ArrayList<>();
-		spents = spentService.getSpentsByUsername(username);
+		spents = spentService.getSpentsByUsernameAndHomeId(username, id);
 		return new ResponseEntity<>(spents, HttpStatus.OK);
 	}
 
