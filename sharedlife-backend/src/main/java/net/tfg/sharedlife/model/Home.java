@@ -56,6 +56,9 @@ public class Home {
 	@Column(name = "rooms")
 	private String rooms;
 	
+	@Column(name = "actualMemberCount")
+	private Integer actualMemberCount;
+	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "home_user", joinColumns = @JoinColumn(name = "home_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> users = new HashSet<>();

@@ -38,7 +38,7 @@ public class SpentControllerImpl implements SpentController {
 	@Override
 	public ResponseEntity<?> createSpent(SpentDTO spent, boolean admin) {
 		logger.info("Creating a new spent...");
-		spentService.createTask(spent, admin);
+		spentService.createSpent(spent, admin);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

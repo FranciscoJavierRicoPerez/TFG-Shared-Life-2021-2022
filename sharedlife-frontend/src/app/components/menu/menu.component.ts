@@ -2,6 +2,7 @@ import { Home } from 'src/app/models/home/home';
 import { HomeService } from './../../services/home/home.service';
 import { TokenService } from './../../services/token/token.service';
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/models/user/user';
 
 @Component({
   selector: 'app-menu',
@@ -16,7 +17,8 @@ export class MenuComponent implements OnInit {
   authorities: string[] = [];
   homes: Home[] = [];
   userHasHome = false;
-
+  mapHomeMembers = new Map();
+  members: User[] = [];
   constructor(
     private TokenService: TokenService,
     private HomeService: HomeService) { }
@@ -63,6 +65,19 @@ export class MenuComponent implements OnInit {
     window.location.reload();
     window.location.href='/inicio'; // SOLUCIÓN BUG: AL HACER LOGOUT SE PERMANECIA EN LA
                                     // EN LA PAGINA QUE ESTABA EN VEZ DE REDIRIGIN A LA PRINCIPAL
+  }
+
+  countHomeMembers(idHome: string){
+    this.HomeService.getAllHomeMembers(idHome).subscribe(
+      data => {
+        this.members = data;
+        console.log("Cantidad de miembros => " + this.members.length + " en la vivienda " + idHome);
+        return this.members.length;
+      },
+      error => {
+        console.log('Error getting the members of the home');
+      }
+    );
   }
 
 }

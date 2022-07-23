@@ -71,6 +71,7 @@ public class HomeServiceImpl implements HomeService {
 		Set<User> users = new HashSet<>();
 		users.add(user);
 		newHome.setUsers(users);
+		newHome.setActualMemberCount(1); // Por defecto 1 que sera el administrador
 		homeRepository.save(newHome);
 	}
 	
@@ -91,6 +92,7 @@ public class HomeServiceImpl implements HomeService {
 					homedto.setCity(home.getCity());
 					homedto.setCountry(home.getCountry());
 					homedto.setRooms(home.getRooms());
+					homedto.setActualMemberCount(home.getActualMemberCount().toString());
 					homes.add(homedto);
 				}
 			}
@@ -110,6 +112,7 @@ public class HomeServiceImpl implements HomeService {
 		homedto.setCountry(home.getCountry());
 		homedto.setRooms(home.getRooms());
 		homedto.setCompleted(false);
+		homedto.setActualMemberCount(home.getActualMemberCount().toString());
 		if(checkHomeIsCompleted(id)) {
 			homedto.setCompleted(true);
 		}
@@ -144,6 +147,7 @@ public class HomeServiceImpl implements HomeService {
 		Set<User> users = home.getUsers();
 		users.add(user);
 		home.setUsers(users);
+		home.setActualMemberCount(home.getActualMemberCount()+1); // Añadimos a un nuevo inquilino
 		
 		List<Invitation> invitations = invitationRepository.findAll();
 		Invitation invitation = new Invitation();

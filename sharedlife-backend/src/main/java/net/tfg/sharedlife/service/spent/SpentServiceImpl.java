@@ -48,7 +48,7 @@ public class SpentServiceImpl implements SpentService {
 	private UserService userService;
 
 	@Override
-	public void createTask(SpentDTO spentDto, boolean admin) {
+	public void createSpent(SpentDTO spentDto, boolean admin) {
 		logger.info("Creating a new spent with values: {}", spentDto);
 		User user = userRepository.getByUsername(spentDto.getUserToPay()).get();
 		Spent spent = new Spent();

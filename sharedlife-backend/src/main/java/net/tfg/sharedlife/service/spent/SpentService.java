@@ -7,7 +7,7 @@ import net.tfg.sharedlife.dto.SpentDTO;
 
 public interface SpentService {
 	
-	void createTask(SpentDTO spentDto, boolean admin);
+	void createSpent(SpentDTO spentDto, boolean admin);
 	
 	List<DebtDTO> getDebtsByUsername(String username);
 	
