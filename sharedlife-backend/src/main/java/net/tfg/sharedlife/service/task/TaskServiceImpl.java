@@ -80,15 +80,17 @@ public class TaskServiceImpl implements TaskService{
 		List<TaskDTO> tasksdto = new ArrayList<>();
 		List<Task> tasks = taskRepository.findAll();
 		for(Task t : tasks) {
-			TaskDTO taskdto = new TaskDTO();
-			taskdto.setTitle(t.getTitle());
-			taskdto.setDescription(t.getDescription());
-			taskdto.setStartDate(t.getStartDate());
-			taskdto.setEndDate(t.getEndDate());					
-			taskdto.setUser(t.getUser().getUsername());
-			taskdto.setFinished(t.isFinished());
-			taskdto.setIdHome(t.getHome().getId().toString());
-			tasksdto.add(taskdto);
+			if(t.getHome().getId().equals(id)) {
+				TaskDTO taskdto = new TaskDTO();
+				taskdto.setTitle(t.getTitle());
+				taskdto.setDescription(t.getDescription());
+				taskdto.setStartDate(t.getStartDate());
+				taskdto.setEndDate(t.getEndDate());					
+				taskdto.setUser(t.getUser().getUsername());
+				taskdto.setFinished(t.isFinished());
+				taskdto.setIdHome(t.getHome().getId().toString());
+				tasksdto.add(taskdto);
+			}
 		}
 		return tasksdto;
 	}
