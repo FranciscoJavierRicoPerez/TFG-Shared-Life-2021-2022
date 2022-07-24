@@ -21,6 +21,8 @@ public class ErrorMessages {
 	public static final String USER_ALREADY_HAVE_HOME_ERR = "El usuario ya vive en una vivienda";
 	
 	public static final String HOME_IS_COMPLETED = "La vivienda esta completa";
+	
+	public static final String USER_ALREADY_INVITED = "El usuario ya ha sido invitado a la vivienda";
 
 	/**
 	 * Instantiates a new error messages.

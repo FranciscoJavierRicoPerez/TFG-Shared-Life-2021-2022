@@ -38,6 +38,9 @@
             <div *ngIf="home.completed">
               La vivienda ya esta completa no se pueden enviar mas invitaciones
             </div>
+            <div *ngIf="alreadyInvited">
+              El usuario ya tiene una invitación pendiente
+            </div>
             <div class="form-group" style="margin: 5px">
               <button class="btn btn-success btn-lg btn-block" [disabled]="!invitationForm.valid || home.completed">Enviar</button>
             </div>

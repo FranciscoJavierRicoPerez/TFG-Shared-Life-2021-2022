@@ -36,6 +36,7 @@ export class HomeInfoPageComponent implements OnInit {
   debtsUsers: User[] = [];
   debtUser: User;
   errorSendInvitation: boolean;
+  alreadyInvited: boolean;
   invitationForm = new FormGroup({
     username: new FormControl('', [Validators.required])
   })
@@ -130,7 +131,12 @@ export class HomeInfoPageComponent implements OnInit {
       },
       err => {
         console.log("Invitation send err");
-        this.errorSendInvitation = true;
+        if(err.status == 401){
+          this.alreadyInvited = true;
+        }
+        else{
+          this.errorSendInvitation = true;
+        }
       }
     );
   }

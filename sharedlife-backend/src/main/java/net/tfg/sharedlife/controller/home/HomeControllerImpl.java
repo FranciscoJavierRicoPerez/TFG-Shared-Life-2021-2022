@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.tfg.sharedlife.common.ErrorMessages;
 import net.tfg.sharedlife.dto.HomeDTO;
 import net.tfg.sharedlife.dto.InvitationDTO;
 import net.tfg.sharedlife.dto.NewUserDto;
@@ -86,7 +87,12 @@ public class HomeControllerImpl implements HomeController{
 		try {
 			homeService.createInvitation(invitation);
 		}catch(DataIncorrectException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			if(e.getMessage().equals(ErrorMessages.USER_ALREADY_HAVE_HOME_ERR)) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			if(e.getMessage().endsWith(ErrorMessages.USER_ALREADY_INVITED)) {
+				return new ResponseEntity<>(HttpStatus.valueOf(401));
+			}
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
