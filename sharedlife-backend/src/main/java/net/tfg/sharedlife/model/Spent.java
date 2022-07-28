@@ -14,11 +14,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode
 @Entity
 @Table(name = "spents")
 public class Spent {
@@ -39,12 +42,15 @@ public class Spent {
 	@Column(name = "paid")
 	private boolean paid;
 	
-	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_home")
 	private Home home;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "spent_user", joinColumns = @JoinColumn(name = "spent_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> users = new HashSet<>();
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "spent", orphanRemoval = true)
+	private Set<Debt> debts;
 	
 }

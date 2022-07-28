@@ -14,8 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode
 @Entity
 @Table(name = "tasks")
 public class Task {
@@ -38,11 +40,11 @@ public class Task {
 	@Column(name = "finished")
 	private boolean finished;
 	
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_user")
 	private User user;
 	
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_home")
 	private Home home;
 }

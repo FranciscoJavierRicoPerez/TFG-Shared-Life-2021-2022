@@ -7,22 +7,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.tfg.sharedlife.dto.*;
+import net.tfg.sharedlife.model.*;
+import net.tfg.sharedlife.repository.SpentRepository;
+import net.tfg.sharedlife.service.spent.SpentService;
+import net.tfg.sharedlife.service.task.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import net.tfg.sharedlife.common.ErrorMessages;
-import net.tfg.sharedlife.dto.HomeDTO;
-import net.tfg.sharedlife.dto.InvitationDTO;
-import net.tfg.sharedlife.dto.NewUserDto;
 import net.tfg.sharedlife.enums.RoleEnum;
 import net.tfg.sharedlife.exception.DataIncorrectException;
-import net.tfg.sharedlife.model.Home;
-import net.tfg.sharedlife.model.Invitation;
-import net.tfg.sharedlife.model.Role;
-import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.repository.HomeRepository;
 import net.tfg.sharedlife.repository.InvitationRepository;
 import net.tfg.sharedlife.security.jwt.JwtProvider;
@@ -43,7 +42,14 @@ public class HomeServiceImpl implements HomeService {
 	
 	@Autowired
 	private InvitationRepository invitationRepository;
-	
+
+	@Autowired
+	@Lazy
+	private SpentService spentService;
+
+	@Autowired
+	private TaskService taskService;
+
 	@Autowired
 	JwtProvider jwtProvider;
 	
@@ -199,13 +205,28 @@ public class HomeServiceImpl implements HomeService {
 	public void leaveHome(Long idHome, String username) {
 		User user = userService.getByUsername(username).get();
 		Home home = homeRepository.findById(idHome).get();
+		logger.info("Deleting the tasks of the user {} for home {}", username, idHome);
+		for(TaskDTO t : taskService.getTasksByUsernameAndHomeId(username, idHome)){
+			taskService.deleteTask(t.getId());
+		}
+		logger.info("Deleting the spents of the user {} for home {}", username, idHome);
+		for(SpentDTO s : spentService.getSpentsByUsernameAndHomeId(username, idHome)){
+			spentService.deleteSpent(s.getId());
+		}
 		home.getUsers().remove(user);
 		homeRepository.save(home);
 	}
 	
 	@Override
 	public void deleteHome(Long id) {
+		logger.info("Deleting the home with id: {}", id);
 		Home home = homeRepository.findById(id).get();
+		for(Spent s : home.getSpents()){
+			spentService.deleteSpent(s.getId());
+		}
+		for(Task t : home.getTasks()){
+			taskService.deleteTask(t.getId());
+		}
 		homeRepository.delete(home);
 	}
 

@@ -59,11 +59,13 @@ public class SpentServiceImpl implements SpentService {
 		users.add(user);
 		spent.setUsers(users);
 		spent.setHome(homeRepository.findById(Long.parseLong(spentDto.getIdHome())).get());
+
 		spentRepository.save(spent);
-		createDebt(admin, spentDto, spent);
+		spent.setDebts(createDebt(admin, spentDto, spent));
+	
 	}
 	
-	private void createDebt(boolean admin, SpentDTO spentDto, Spent spent) {
+	private Set<Debt> createDebt(boolean admin, SpentDTO spentDto, Spent spent) {
 		// CAUSISTICA
 		// 1 - SI EL GASTO LO CREA EL ADMIN
 			// => LAS DEUDAS ES PARA CADA UNO DE LOS MIEMBROS DE LA VIVIENDA (HECHA)
@@ -71,35 +73,43 @@ public class SpentServiceImpl implements SpentService {
 			// => LAS DEUDAS DEL PISO SE CREAN PARA TODOS MENOS PARA EL QUE LA HA CREADO Y PARA EL ADMIN
 			// => ES DECIR EL USUARIO QUE TENGA EL NOMBRE Y EL QUE CONTENGA EL ROL DE USUARIO
 		logger.info("Creating de debts for the member users");
+		Set<Debt> debts = new HashSet<>();
 		List<NewUserDto> members = homeService.getMembers(Long.parseLong(spentDto.getIdHome()));
 		for(NewUserDto u : members) {
 			if(!spentDto.getUserToPay().equals(u.getUsername()) && !admin && !u.getRoles().contains("ROLE_ADMIN")) { // En este caso no crea si es ADMIN
+				logger.info("Debts in the case the spent is creating by the user");
 				User member = userService.getByUsername(u.getUsername()).get();
 				Debt debt = new Debt();
 				debt.setIdHome(spent.getHome().getId());
 				debt.setIdUser(member.getId());
-				debt.setIdSpent(spent.getId());
+				//debt.setIdSpent(spent.getId());
 				System.out.println("CANTIDAD DE MIEMBROS => " + members.size());
 				System.out.println("CANTIDAD A PAGAR => " + spent.getTotalPrice());
 				debt.setPricePerPerson(spent.getTotalPrice() / (members.size() - 2)); // Resto al admin y al usuario que crea el gasto
 				debt.setPaid(false);
 				debt.setUserToPay(spentDto.getUserToPay());
+				debt.setSpent(spent);
 				debtRepository.save(debt);
+				debts.add(debt);
 			}
 			else {
 				if(admin && !spentDto.getUserToPay().equals(u.getUsername())) {
+					logger.info("Debts in the case the spent is creating by the admin");
 					User member = userService.getByUsername(u.getUsername()).get();
 					Debt debt = new Debt();
 					debt.setIdHome(spent.getHome().getId());
 					debt.setIdUser(member.getId());
-					debt.setIdSpent(spent.getId());
+					//debt.setIdSpent(spent.getId());
 					debt.setPricePerPerson(spent.getTotalPrice() / (members.size() - 1)); // Resto al admin
 					debt.setPaid(false);
 					debt.setUserToPay(spentDto.getUserToPay());
+					debt.setSpent(spent);
 					debtRepository.save(debt);
+					debts.add(debt);
 				}
 			}
 		}
+		return debts;
 	}
 
 	@Override
@@ -113,7 +123,7 @@ public class SpentServiceImpl implements SpentService {
 					DebtDTO debtdto = new DebtDTO();
 					debtdto.setId(debt.getId());
 					debtdto.setIdHome(debt.getIdHome());
-					debtdto.setIdSpent(debt.getIdSpent());;
+					//debtdto.setIdSpent(debt.getIdSpent());;
 					debtdto.setIdUser(debt.getIdUser());
 					debtdto.setPricePerPerson(debt.getPricePerPerson());
 					debtdto.setUserToPay(debt.getUserToPay());
@@ -170,11 +180,11 @@ public class SpentServiceImpl implements SpentService {
 		List<DebtDTO> debtsdto = new ArrayList<>();
 		List<Debt> debts = debtRepository.findAll();
 		for(Debt d : debts) {
-			if(d.getIdSpent().equals(id)) {
+			if(d.getSpent().getId().equals(id)) {
 				DebtDTO debtdto = new DebtDTO();
 				debtdto.setId(d.getId());
 				debtdto.setIdHome(d.getIdHome());
-				debtdto.setIdSpent(d.getIdSpent());
+				//debtdto.setIdSpent(d.getIdSpent());
 				debtdto.setIdUser(d.getIdUser());
 				debtdto.setPricePerPerson(d.getPricePerPerson());
 				debtdto.setPaid(d.isPaid());
@@ -249,6 +259,28 @@ public class SpentServiceImpl implements SpentService {
 		for(DebtDTO d : debtsdto) {
 			Debt debt = debtRepository.findById(d.getId()).get();
 			debtRepository.delete(debt);
+		}
+	}
+
+	@Override
+	public void deleteDebt(Long id) {
+		logger.info("Deleting the debt with id: {}", id);
+		if(id != null) {
+			debtRepository.deleteById(id);
+		}
+	}
+
+	@Override
+	public void deleteSpent(Long id) {
+		logger.info("Deleting the spent with id: {}",id);
+		if(id != null) {
+			Spent s = spentRepository.findById(id).get();
+			List<Debt> debts = debtRepository.findDebtsBySpentId(s.getId());
+			System.out.print("TAMAÑO DE LA LISTA " + debts.size());
+			for(Debt d : debts){
+				deleteDebt(d.getId());
+			}
+			spentRepository.deleteById(id);
 		}
 	}
 	

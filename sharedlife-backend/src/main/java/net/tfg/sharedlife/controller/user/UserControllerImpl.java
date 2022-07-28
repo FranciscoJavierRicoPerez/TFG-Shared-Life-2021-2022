@@ -9,12 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import net.tfg.sharedlife.common.ErrorMessages;
 import net.tfg.sharedlife.dto.AuthUserDto;
@@ -90,7 +85,14 @@ public class UserControllerImpl implements UserController{
 		return new ResponseEntity<>(invitations, HttpStatus.OK);
 	}
 	
-	
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@Override
+	@DeleteMapping("/{id}/delete")
+	public ResponseEntity<?> deleteUser(@PathVariable("id") Long id){
+		Log.info("Deleting the information of the user: {}", id);
+		userService.deleteUser(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 	
 	
 }

@@ -14,4 +14,6 @@ public interface TaskService {
 	List<TaskDTO> getTasksByHomeId(Long id);
 	
 	void updateTaskFinished(Long id, boolean finished);
+
+	void deleteTask(Long id);
 }

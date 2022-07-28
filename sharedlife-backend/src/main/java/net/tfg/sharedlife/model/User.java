@@ -17,11 +17,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * The Class User.
  */
 @Data
+@EqualsAndHashCode
 @Entity
 @Table(name = "users")
 public class User {

@@ -4,7 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import net.tfg.sharedlife.controller.user.UserControllerImpl;
+import net.tfg.sharedlife.dto.HomeDTO;
+import net.tfg.sharedlife.enums.RoleEnum;
+import net.tfg.sharedlife.model.Home;
+import net.tfg.sharedlife.service.home.HomeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import net.tfg.sharedlife.common.ErrorMessages;
@@ -21,9 +29,14 @@ import net.tfg.sharedlife.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService{
 
+	private final static Logger Log = LoggerFactory.getLogger(UserServiceImpl.class);
 	/** The user repository. */
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	@Lazy
+	private HomeService homeService;
 	
 	@Autowired
 	private InvitationRepository invitationRepository;
@@ -101,6 +114,26 @@ public class UserServiceImpl implements UserService{
 			invitationsDTO.add(idto);
 		}
 		return invitationsDTO;
+	}
+
+	@Override
+	public void deleteUser(Long id){
+		Log.info("Deleting the user with id: {}", id);
+		User user = userRepository.getById(id);
+		List<HomeDTO> homes = homeService.getHomesByUser(user.getUsername());
+		// Comprobamos el tipo de usuario
+		if(user.getRoles().size() > 1){ // ES ADMIN
+			// Como es el administrador tenemos que borrar la vivienda
+			for(HomeDTO home : homes){
+				homeService.deleteHome(home.getId());
+			}
+		} else {
+			// Como es el inquilino no tenemos que borrar la vivienda solo abandonarla
+			for(HomeDTO home : homes){
+				homeService.leaveHome(home.getId(), user.getUsername());
+			}
+		}
+		userRepository.deleteById(id);
 	}
 
 

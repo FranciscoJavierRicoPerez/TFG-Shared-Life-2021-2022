@@ -103,5 +103,23 @@ public class SpentControllerImpl implements SpentController {
 		spentService.deleteSpentAndDebts(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@DeleteMapping("/debt/{idDebt}")
+	@Override
+	public ResponseEntity<?> deleteDebt(Long debtId) {
+		logger.info("Deleting the debt {}", debtId);
+		spentService.deleteDebt(debtId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@DeleteMapping("/{idSpent}")
+	@Override
+	public ResponseEntity<?> deleteSpent(Long idSpent) {
+		logger.info("Deleting the spent {}", idSpent);
+		spentService.deleteSpent(idSpent);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 	
 }

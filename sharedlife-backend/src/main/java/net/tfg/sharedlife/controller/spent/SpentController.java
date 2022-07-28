@@ -39,4 +39,10 @@ public interface SpentController {
 	
 	@DeleteMapping("/{id}/delete")
 	ResponseEntity<?> deleteSpentAndDebts(@PathVariable("id") Long id);
+	
+	@DeleteMapping("debt/{idDebt}")
+	ResponseEntity<?> deleteDebt(@PathVariable("idDebt") Long debtId);
+	
+	@DeleteMapping("/{idSpent}")
+	ResponseEntity<?> deleteSpent(@PathVariable("idSpent") Long idSpent);
 }

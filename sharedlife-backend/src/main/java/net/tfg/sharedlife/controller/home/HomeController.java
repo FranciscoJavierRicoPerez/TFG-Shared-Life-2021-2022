@@ -45,4 +45,5 @@ public interface HomeController {
 	
 	@GetMapping("/hasHome")
 	ResponseEntity<Boolean> hasHome(@RequestParam("username") String username);
+
 }

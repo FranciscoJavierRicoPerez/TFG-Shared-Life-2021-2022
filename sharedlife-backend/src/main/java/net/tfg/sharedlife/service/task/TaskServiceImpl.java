@@ -103,4 +103,10 @@ public class TaskServiceImpl implements TaskService{
 		t.setEndDate(new Date());
 		taskRepository.save(t);
 	}
+
+	@Override
+	public void deleteTask(Long id){
+		Log.info("Deleting the task with id: {}", id);
+		taskRepository.deleteById(id);
+	}
 }

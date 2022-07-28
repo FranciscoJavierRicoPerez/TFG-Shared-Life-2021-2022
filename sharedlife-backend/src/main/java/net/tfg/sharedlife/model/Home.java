@@ -17,12 +17,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class Home.
  */
 @Data
+@EqualsAndHashCode
 @Entity
 @Table(name = "homes")
 public class Home {

@@ -3,6 +3,7 @@ package net.tfg.sharedlife.controller.user;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +39,7 @@ public interface UserController {
 	
 	@GetMapping("/invitation")
 	ResponseEntity<List<InvitationDTO>> getInvitationByUsername(@RequestParam("username") String username);
-	
-	
+
+	@DeleteMapping("/{id}/delete")
+	ResponseEntity<?> deleteUser(@PathVariable("id") Long id);
 }

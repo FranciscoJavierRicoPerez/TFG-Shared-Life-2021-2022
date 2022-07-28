@@ -22,5 +22,9 @@ public interface SpentService {
 	void updatePaidStatus(Long id, boolean paid);
 	
 	void deleteSpentAndDebts(Long id);
+	
+	void deleteDebt(Long id);
 
+	void deleteSpent(Long id);
+	
 }

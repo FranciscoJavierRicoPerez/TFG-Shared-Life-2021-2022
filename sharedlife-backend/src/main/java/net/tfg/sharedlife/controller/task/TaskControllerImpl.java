@@ -9,15 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import net.tfg.sharedlife.dto.TaskDTO;
 import net.tfg.sharedlife.service.task.TaskService;
@@ -71,6 +63,15 @@ public class TaskControllerImpl implements TaskController{
 	public ResponseEntity<?> updateFinishedStatus(Long id, @RequestBody boolean finished){
 		Log.info("Updating the finished status value for task with id: {}", id);
 		taskService.updateTaskFinished(id, finished);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@DeleteMapping("/{id}")
+	@Override
+	public ResponseEntity<?> deleteTask(@PathVariable("id") Long id){
+		Log.info("Deleting the task with id: {}", id);
+		taskService.deleteTask(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
