@@ -7,13 +7,13 @@ import net.tfg.sharedlife.dto.SpentDTO;
 
 public interface SpentService {
 	
-	void createTask(SpentDTO spentDto, boolean admin);
+	void createSpent(SpentDTO spentDto, boolean admin);
 	
 	List<DebtDTO> getDebtsByUsername(String username);
 	
 	SpentDTO getSpentById(Long id);
 	
-	List<SpentDTO> getSpentsByUsername(String username);
+	List<SpentDTO> getSpentsByUsernameAndHomeId(String username, Long id);
 	
 	List<DebtDTO> getDebtsBySpentId(Long id);
 	
@@ -22,5 +22,9 @@ public interface SpentService {
 	void updatePaidStatus(Long id, boolean paid);
 	
 	void deleteSpentAndDebts(Long id);
+	
+	void deleteDebt(Long id);
 
+	void deleteSpent(Long id);
+	
 }

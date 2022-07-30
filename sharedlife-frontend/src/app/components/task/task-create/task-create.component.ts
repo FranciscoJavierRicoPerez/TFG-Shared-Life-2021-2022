@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { UserService } from './../../../services/user/user.service';
 import { TaskService } from './../../../services/task/task.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -24,6 +25,7 @@ export class TaskCreateComponent implements OnInit {
   newTask: Task;
   idHome: string;
   allHomeTasks: Task[] = [];
+  home: Home;
   createTaskForm = new FormGroup({
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
@@ -34,6 +36,7 @@ export class TaskCreateComponent implements OnInit {
     private HomeService: HomeService,
     private TaskService: TaskService,
     private UserService: UserService,
+    private ActivatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -46,14 +49,11 @@ export class TaskCreateComponent implements OnInit {
           this.isAdmin = true;
         }
       });
-      // Obtencion de la información de los miembros de la vivienda del usuario logeado
-      this.HomeService.getHouseByUsername(this.username).subscribe(
+      this.idHome = this.ActivatedRoute.snapshot.params['id'];
+      this.HomeService.getHomeById(this.idHome).subscribe(
         data => {
-          this.homes = data;
-          console.log(this.homes[0]);
-          console.log(this.homes);
-          this.idHome = this.homes[0].id.toString();
-          this.HomeService.getAllHomeMembers(this.homes[0].id.toString()).subscribe(
+          this.home = data;
+          this.HomeService.getAllHomeMembers(this.idHome).subscribe(
             data => {
               this.users = data;
               console.log(this.users);
@@ -74,7 +74,7 @@ export class TaskCreateComponent implements OnInit {
           )
         },
         error => {
-          console.log("ERROR getting the house of the user");
+          console.log("ERROR getting the house with id: " + this.idHome);
         }
       );
     }

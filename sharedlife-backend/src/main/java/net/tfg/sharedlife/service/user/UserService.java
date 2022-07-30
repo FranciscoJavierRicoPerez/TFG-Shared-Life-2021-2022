@@ -25,5 +25,7 @@ public interface UserService {
 	boolean existsByEmail(String email);
 	
 	List<InvitationDTO> getInvitationsByUsername(String username);
+
+	void deleteUser(Long id);
 	
 }

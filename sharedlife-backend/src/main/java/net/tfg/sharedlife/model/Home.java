@@ -17,12 +17,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class Home.
  */
 @Data
+@EqualsAndHashCode
 @Entity
 @Table(name = "homes")
 public class Home {
@@ -55,6 +57,9 @@ public class Home {
 	/** The rooms. */
 	@Column(name = "rooms")
 	private String rooms;
+	
+	@Column(name = "actualMemberCount")
+	private Integer actualMemberCount;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "home_user", joinColumns = @JoinColumn(name = "home_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))

@@ -24,8 +24,8 @@ export class SpentService {
     return this.HttpClient.get<any>(`${this.baseURL}/id/${id}`);
   }
 
-  getSpentsByUsername(username: string){
-    return this.HttpClient.get<any>(`${this.baseURL}/byUsername?username=${username}`);
+  getSpentsByUsernameAndHomeId(username: string, id: string){
+    return this.HttpClient.get<any>(`${this.baseURL}/home/${id}/username?username=${username}`);
   }
 
   getDebtsBySpentId(id: string){
