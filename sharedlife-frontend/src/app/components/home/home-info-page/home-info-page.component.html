@@ -105,7 +105,7 @@
         </tbody>
       </table>
       <div>
-        <button type="button" routerLink="/tareas" class="btn btn-primary btn-lg btn-block">Información de las tareas</button>
+        <button type="button" routerLink="/vivienda/{{home.id}}/tareas" class="btn btn-primary btn-lg btn-block">Información de las tareas</button>
       </div>
     </div>
   </div>
@@ -138,12 +138,16 @@
                     <h4 class="modal-title">Información del gasto</h4>
                   </div>
                   <div class="modal-body">
-                    <p>
-                      Titulo: {{ spent.title}}<br>
-                      Descripcion: {{ spent.description }}<br>
-                      Total a pagar: {{ spent.totalPrice }}<br>
-                      ¿Cuanto debo?: {{ debt.pricePerPerson }}<br>
-                    </p>
+                    <div class="card bg-light mb-3">
+                      <div class="card-body">
+                        <p class="card-text">
+                          Título: {{ spent.title}}<br>
+                          Descripción: {{ spent.description }}<br>
+                          Total a pagar: {{ spent.totalPrice }}<br>
+                          ¿Cuanto debo?: {{ debt.pricePerPerson }}<br>
+                        </p>
+                      </div>
+                    </div>
                     <div>
                       <button type="button" class="btn btn-danger" (click)="closePopup()"> Cerrar</button>
                     </div>
@@ -203,12 +207,11 @@
                 </div>
                 <div class="modal-body">
                     <div *ngFor="let user of debtsUsers">
-                      <p>
-                        --------------------------------------- <br>
-                        Nombre: {{ user.firstName}}<br>
-                        Apellidos: {{ user.lastName }}<br>
-                        --------------------------------------- <br>
-                      </p>
+                      <div class="card bg-light mb-3">
+                        <div class="card-body">
+                          <p class="card-text">{{ user.firstName }} {{ user.lastName }}</p>
+                        </div>
+                      </div>
                     </div>
                   <div>
                     <button type="button" class="btn btn-danger" (click)="closePopupA()"> Cerrar</button>

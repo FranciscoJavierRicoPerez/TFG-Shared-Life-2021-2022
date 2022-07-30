@@ -89,6 +89,7 @@ export class HomeInfoPageComponent implements OnInit {
       this.SpentService.getAllDebtsByUsername(this.username).subscribe(
         data => {
           this.debts = data;
+          console.log("ESTOY MUY LOCO")
           console.log(this.debts);
           console.log("OK getting the debts of the user");
         },

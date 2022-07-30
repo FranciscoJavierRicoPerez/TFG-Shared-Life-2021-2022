@@ -119,17 +119,15 @@ public class SpentServiceImpl implements SpentService {
 		List<Debt> debts = debtRepository.findAll();
 		for(Debt debt: debts) {
 			if(debt.getIdUser().equals(user.getId())) {
-				//if(!debt.isPaid()) {
-					DebtDTO debtdto = new DebtDTO();
-					debtdto.setId(debt.getId());
-					debtdto.setIdHome(debt.getIdHome());
-					//debtdto.setIdSpent(debt.getIdSpent());;
-					debtdto.setIdUser(debt.getIdUser());
-					debtdto.setPricePerPerson(debt.getPricePerPerson());
-					debtdto.setUserToPay(debt.getUserToPay());
-					debtdto.setPaid(debt.isPaid());
-					debtsdto.add(debtdto);
-				//}
+				DebtDTO debtdto = new DebtDTO();
+				debtdto.setId(debt.getId());
+				debtdto.setIdHome(debt.getIdHome());
+				debtdto.setIdSpent(debt.getSpent().getId());
+				debtdto.setIdUser(debt.getIdUser());
+				debtdto.setPricePerPerson(debt.getPricePerPerson());
+				debtdto.setUserToPay(debt.getUserToPay());
+				debtdto.setPaid(debt.isPaid());
+				debtsdto.add(debtdto);
 			}
 		}
 		return debtsdto;
