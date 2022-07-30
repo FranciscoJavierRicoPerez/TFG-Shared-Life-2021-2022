@@ -9,9 +9,11 @@ import net.tfg.sharedlife.dto.TaskDTO;
 public interface TaskService {
 	void createTask(@RequestBody TaskDTO task);
 	
-	List<TaskDTO> getTasksByUsername(String username);
+	List<TaskDTO> getTasksByUsernameAndHomeId(String username, Long id);
 	
-	List<TaskDTO> getTasksByHomeIdAndUsername(Long id, String username);
+	List<TaskDTO> getTasksByHomeId(Long id);
 	
 	void updateTaskFinished(Long id, boolean finished);
+
+	void deleteTask(Long id);
 }

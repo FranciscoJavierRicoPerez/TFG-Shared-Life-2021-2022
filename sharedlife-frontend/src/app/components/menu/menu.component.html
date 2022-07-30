@@ -11,12 +11,62 @@
       <li class = "nav-item" *ngIf="isLogged && isAdmin">
         <a routerLink="/home/create" routerLinkActive="active" class="nav-link">Añadir casa</a>
       </li>
-      <li class = "nav-item" *ngIf="isLogged">
-        <a routerLink="/tareas" routerLinkActive="active" class="nav-link">Tareas</a>
+      <!-- Acceso al formulario de creación de tareas para el inquilino -->
+      <li class = "nav-item" *ngIf="isLogged && userHasHome && !isAdmin">
+        <div *ngFor="let home of homes">
+          <a routerLink="/vivienda/{{home.id}}/tareas" routerLinkActive="active" class="nav-link bi bi-list-task"> Gestión de Tareas</a>
+        </div>
       </li>
-      <li class = "nav-item" *ngIf="isLogged">
-        <a routerLink="/gastos" routerLinkActive="active" class="nav-link">Gastos</a>
+
+      <!-- Acceso al formulario de creación de tareas para el propietario -->
+      <li class="nav-item dropdown" *ngIf="isLogged && userHasHome && isAdmin">
+        <a class="nav-link dropdown-toggl bi bi-list-task" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Gestión de Tareas
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div *ngFor="let home of homes">
+            <a class="dropdown-item" href="/vivienda/{{home.id}}/tareas">{{ home.address }}</a>
+          </div>
+        </div>
       </li>
+
+      <!-- Acceso al formulario de creación de gastos para el inquilino -->
+      <li class = "nav-item" *ngIf="isLogged && userHasHome && !isAdmin">
+        <div *ngFor="let home of homes">
+          <div *ngIf="home.actualMemberCount >= 3; then thenBlock else elseBlock"></div>
+          <ng-template #thenBlock>
+            <a routerLink="/vivienda/{{home.id}}/gastos" routerLinkActive="active" class="nav-link bi bi-currency-euro">Gestión de Gastos</a>
+          </ng-template>
+          <ng-template #elseBlock>
+            <a routerLink="/vivienda/{{home.id}}/gastos" routerLinkActive="active" class="nav-link bi bi-currency-euro disabled">Gestión de Gastos</a>
+          </ng-template>
+
+        </div>
+      </li>
+
+      <!-- Acceso al formulario de creación de gastos para el propietarios -->
+      <li class="nav-item dropdown" *ngIf="isLogged && userHasHome && isAdmin">
+        <a class="nav-link dropdown-toggle bi bi-currency-euro" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             Gestión de Gastos
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div *ngFor="let home of homes">
+            <!--
+              ++++ SOLUCIÓN AL BUG DE QUE EL ADMIN AÑADA GASTOS SIN DEUDORES ++++
+              => Comprobar si la home id tiene inquilinos y si no tiene
+              que no se pueda hacer click
+            -->
+            <div *ngIf="home.actualMemberCount >= 2; then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+              <a class="dropdown-item" href="/vivienda/{{home.id}}/gastos">{{ home.address }}</a>
+            </ng-template>
+            <ng-template #elseBlock>
+              <a class="dropdown-item disabled" href="/vivienda/{{home.id}}/gastos">{{ home.address }}</a>
+            </ng-template>
+          </div>
+        </div>
+      </li>
+
     </ul>
     <div class="col-md">
     </div>

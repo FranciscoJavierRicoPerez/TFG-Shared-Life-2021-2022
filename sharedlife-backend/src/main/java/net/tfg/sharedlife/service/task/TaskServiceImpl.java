@@ -46,8 +46,8 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public List<TaskDTO> getTasksByUsername(String username) {
-		Log.info("Getting all tasks for user with username: {}", username);
+	public List<TaskDTO> getTasksByUsernameAndHomeId(String username, Long id) {
+		Log.info("Getting all tasks for user with username {} and home {}", username, id);
 		List<TaskDTO> tasksdto = new ArrayList<>();
 		List<User> users = userRepository.findAll();
 		User user = new User();
@@ -58,27 +58,29 @@ public class TaskServiceImpl implements TaskService{
 		}
 		List<Task> tasks = user.getTasks();
 		for(Task t : tasks) {
-			TaskDTO taskdto = new TaskDTO();
-			taskdto.setId(t.getId());
-			taskdto.setTitle(t.getTitle());
-			taskdto.setDescription(t.getDescription());
-			taskdto.setStartDate(t.getStartDate());
-			taskdto.setEndDate(t.getEndDate());
-			taskdto.setUser(t.getUser().getUsername());
-			taskdto.setFinished(t.isFinished());
-			taskdto.setIdHome(t.getHome().getId().toString());
-			tasksdto.add(taskdto);
+			if(t.getHome().getId().equals(id)) {
+				TaskDTO taskdto = new TaskDTO();
+				taskdto.setId(t.getId());
+				taskdto.setTitle(t.getTitle());
+				taskdto.setDescription(t.getDescription());
+				taskdto.setStartDate(t.getStartDate());
+				taskdto.setEndDate(t.getEndDate());
+				taskdto.setUser(t.getUser().getUsername());
+				taskdto.setFinished(t.isFinished());
+				taskdto.setIdHome(t.getHome().getId().toString());
+				tasksdto.add(taskdto);
+			}
 		}
 		return tasksdto;
 	}
 
 	@Override
-	public List<TaskDTO> getTasksByHomeIdAndUsername(Long id, String username) {
+	public List<TaskDTO> getTasksByHomeId(Long id) {
 		Log.info("Getting all tasks for home with id: {}", id);
 		List<TaskDTO> tasksdto = new ArrayList<>();
 		List<Task> tasks = taskRepository.findAll();
 		for(Task t : tasks) {
-			if(t.getHome().getId().equals(id) && !t.getUser().getUsername().equals(username)) {
+			if(t.getHome().getId().equals(id)) {
 				TaskDTO taskdto = new TaskDTO();
 				taskdto.setTitle(t.getTitle());
 				taskdto.setDescription(t.getDescription());
@@ -100,5 +102,11 @@ public class TaskServiceImpl implements TaskService{
 		t.setFinished(finished);
 		t.setEndDate(new Date());
 		taskRepository.save(t);
+	}
+
+	@Override
+	public void deleteTask(Long id){
+		Log.info("Deleting the task with id: {}", id);
+		taskRepository.deleteById(id);
 	}
 }

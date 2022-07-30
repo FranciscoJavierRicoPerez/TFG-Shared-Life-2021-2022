@@ -36,6 +36,7 @@ export class HomeInfoPageComponent implements OnInit {
   debtsUsers: User[] = [];
   debtUser: User;
   errorSendInvitation: boolean;
+  alreadyInvited: boolean;
   invitationForm = new FormGroup({
     username: new FormControl('', [Validators.required])
   })
@@ -73,7 +74,7 @@ export class HomeInfoPageComponent implements OnInit {
       );
 
       // OBTENCION DE LAS TODAS LAS TAREAS DE UN USUARIO
-      this.TaskService.getAllTaskByUsername(this.username).subscribe(
+      this.TaskService.getAllTaskByUsernameAndHomeId(this.username, this.idHome).subscribe(
         data => {
           this.tasks = data;
           console.log(this.tasks);
@@ -88,6 +89,7 @@ export class HomeInfoPageComponent implements OnInit {
       this.SpentService.getAllDebtsByUsername(this.username).subscribe(
         data => {
           this.debts = data;
+          console.log("ESTOY MUY LOCO")
           console.log(this.debts);
           console.log("OK getting the debts of the user");
         },
@@ -100,7 +102,7 @@ export class HomeInfoPageComponent implements OnInit {
       this.spent = new Spent('','','','','','',false);
 
       // OBTENEMOS TODOS LOS  GASTOS PUBLICADOS POR EL USUARIO
-      this.SpentService.getSpentsByUsername(this.username).subscribe(
+      this.SpentService.getSpentsByUsernameAndHomeId(this.username, this.idHome).subscribe(
         data => {
           this.spents = data;
           console.log(this.spents);
@@ -130,7 +132,12 @@ export class HomeInfoPageComponent implements OnInit {
       },
       err => {
         console.log("Invitation send err");
-        this.errorSendInvitation = true;
+        if(err.status == 401){
+          this.alreadyInvited = true;
+        }
+        else{
+          this.errorSendInvitation = true;
+        }
       }
     );
   }

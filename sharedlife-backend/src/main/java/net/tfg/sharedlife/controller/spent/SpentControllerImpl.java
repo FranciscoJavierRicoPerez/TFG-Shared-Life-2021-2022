@@ -38,7 +38,7 @@ public class SpentControllerImpl implements SpentController {
 	@Override
 	public ResponseEntity<?> createSpent(SpentDTO spent, boolean admin) {
 		logger.info("Creating a new spent...");
-		spentService.createTask(spent, admin);
+		spentService.createSpent(spent, admin);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -60,12 +60,12 @@ public class SpentControllerImpl implements SpentController {
 		return new ResponseEntity<>(spent, HttpStatus.OK);
 	}
 
-	@GetMapping("/byUsername")
+	@GetMapping("/home/{id}/username")
 	@Override
-	public ResponseEntity<List<SpentDTO>> getSpentsByUsername(@RequestParam("username") String username) {
+	public ResponseEntity<List<SpentDTO>> getSpentsByUsernameAndHomeId(@RequestParam("username") String username, @PathVariable("id") Long id) {
 		logger.info("Getting all the spents created by ther user with username {}", username);
 		List<SpentDTO> spents = new ArrayList<>();
-		spents = spentService.getSpentsByUsername(username);
+		spents = spentService.getSpentsByUsernameAndHomeId(username, id);
 		return new ResponseEntity<>(spents, HttpStatus.OK);
 	}
 
@@ -101,6 +101,24 @@ public class SpentControllerImpl implements SpentController {
 	public ResponseEntity<?> deleteSpentAndDebts(Long id) {
 		logger.info("Deleting the spent with id {} and his associated debts");
 		spentService.deleteSpentAndDebts(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@DeleteMapping("/debt/{idDebt}")
+	@Override
+	public ResponseEntity<?> deleteDebt(Long debtId) {
+		logger.info("Deleting the debt {}", debtId);
+		spentService.deleteDebt(debtId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@DeleteMapping("/{idSpent}")
+	@Override
+	public ResponseEntity<?> deleteSpent(Long idSpent) {
+		logger.info("Deleting the spent {}", idSpent);
+		spentService.deleteSpent(idSpent);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

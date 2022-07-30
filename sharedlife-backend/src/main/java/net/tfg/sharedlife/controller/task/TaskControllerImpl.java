@@ -9,15 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import net.tfg.sharedlife.dto.TaskDTO;
 import net.tfg.sharedlife.service.task.TaskService;
@@ -44,13 +36,13 @@ public class TaskControllerImpl implements TaskController{
 	}
 
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-	@GetMapping("/byUsername")
+	@GetMapping("/byHomeId/{id}/byUsername")
 	@Override
-	public ResponseEntity<List<TaskDTO>> getTasksByUsername(@RequestParam("username") String username) {
+	public ResponseEntity<List<TaskDTO>> getTasksByUsernameAndHomeId(@RequestParam("username") String username, @PathVariable("id") Long id) {
 		Log.info("Searching all tasks for user with username: {}", username);
 		List<TaskDTO> tasks = new ArrayList<>();
 		if(null != username) {
-			tasks = taskService.getTasksByUsername(username);
+			tasks = taskService.getTasksByUsernameAndHomeId(username, id);
 		}
 		return new ResponseEntity<>(tasks, HttpStatus.OK);
 	}
@@ -58,10 +50,10 @@ public class TaskControllerImpl implements TaskController{
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	@GetMapping("/byHomeId/{id}")
 	@Override
-	public ResponseEntity<List<TaskDTO>> getTasksByHomeIdAndUsername(@PathVariable("id") Long id, @RequestParam("username") String username) {
+	public ResponseEntity<List<TaskDTO>> getTasksByHomeId(@PathVariable("id") Long id) {
 		Log.info("Searching all task from house with id: {}", id);
 		List<TaskDTO> tasks = new ArrayList<>();
-		tasks = taskService.getTasksByHomeIdAndUsername(id, username);
+		tasks = taskService.getTasksByHomeId(id);
 		return new ResponseEntity<>(tasks, HttpStatus.OK);
 	}
 
@@ -71,6 +63,15 @@ public class TaskControllerImpl implements TaskController{
 	public ResponseEntity<?> updateFinishedStatus(Long id, @RequestBody boolean finished){
 		Log.info("Updating the finished status value for task with id: {}", id);
 		taskService.updateTaskFinished(id, finished);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@DeleteMapping("/{id}")
+	@Override
+	public ResponseEntity<?> deleteTask(@PathVariable("id") Long id){
+		Log.info("Deleting the task with id: {}", id);
+		taskService.deleteTask(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

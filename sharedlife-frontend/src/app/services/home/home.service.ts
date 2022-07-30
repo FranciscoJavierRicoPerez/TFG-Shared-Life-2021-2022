@@ -45,4 +45,8 @@ export class HomeService {
   deleteHome(idHome: string): Observable<any>{
     return this.httpClient.delete(`${this.baseURL}/id/${idHome}/delete`);
   }
+
+  userHasHome(username: string): Observable<any>{
+    return this.httpClient.get<any>(`${this.baseURL}/hasHome?username=${username}`);
+  }
 }

@@ -8,6 +8,7 @@ export class HomeCreateDTO {
   rooms!: string;
   token: string;
   completed: boolean;
+  actualMemberCount: string;
   constructor(a: string, f: string, n: string, ct: string, co: string, r: string, t: string, c:boolean){
     this.address=a;
     this.floor=f;
@@ -17,5 +18,6 @@ export class HomeCreateDTO {
     this.rooms=r;
     this.token=t;
     this.completed=c;
+    this.actualMemberCount="";
   }
 }

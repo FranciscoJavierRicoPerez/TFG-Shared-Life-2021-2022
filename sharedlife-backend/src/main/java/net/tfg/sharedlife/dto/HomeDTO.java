@@ -13,4 +13,5 @@ public class HomeDTO {
 	private String rooms;
 	private String token;
 	private boolean completed;
+	private String actualMemberCount;
 }

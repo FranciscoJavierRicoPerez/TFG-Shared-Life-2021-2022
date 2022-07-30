@@ -25,8 +25,8 @@ public interface SpentController {
 	@GetMapping("/id/{id}")
 	ResponseEntity<SpentDTO> getSpentById(@PathVariable("id") Long id);
 	
-	@GetMapping("/byUsername")
-	ResponseEntity<List<SpentDTO>> getSpentsByUsername(@RequestParam("username") String username);
+	@GetMapping("/home/{id}/username")
+	ResponseEntity<List<SpentDTO>> getSpentsByUsernameAndHomeId(@RequestParam("username") String username, @PathVariable("id") Long id);
 	
 	@GetMapping("/debts/id/{id}")
 	ResponseEntity<List<DebtDTO>> getDebtsBySpentId(@PathVariable("id") Long id);
@@ -39,4 +39,10 @@ public interface SpentController {
 	
 	@DeleteMapping("/{id}/delete")
 	ResponseEntity<?> deleteSpentAndDebts(@PathVariable("id") Long id);
+	
+	@DeleteMapping("debt/{idDebt}")
+	ResponseEntity<?> deleteDebt(@PathVariable("idDebt") Long debtId);
+	
+	@DeleteMapping("/{idSpent}")
+	ResponseEntity<?> deleteSpent(@PathVariable("idSpent") Long idSpent);
 }
