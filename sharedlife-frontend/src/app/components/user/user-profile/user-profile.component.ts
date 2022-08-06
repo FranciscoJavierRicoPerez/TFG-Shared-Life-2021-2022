@@ -25,6 +25,8 @@ export class UserProfileComponent implements OnInit {
   invitation: Invitation;
   members: User[] = [];
   userHomes: Home[] = [];
+  homeAddress: string = "";
+  mapIdHomeAddress = new Map<string, string>();
   acceptInvitationForm = new FormGroup({
     homeCode: new FormControl('', [Validators.required])
   });
@@ -69,6 +71,14 @@ export class UserProfileComponent implements OnInit {
           data => {
             this.invitations = data;
             console.log(this.invitations);
+            for(let invitation of this.invitations){
+              this.HomeService.getHomeById(invitation.idHome).subscribe(
+                data => {
+                  this.mapIdHomeAddress.set(invitation.idHome, data.address)
+                  console.log(this.mapIdHomeAddress);
+                }
+              )
+            }
           }
         );
       }
@@ -77,7 +87,7 @@ export class UserProfileComponent implements OnInit {
         this.HomeService.getHouseByUsername(this.username).subscribe(
           data => {
             this.homes = data;
-            console.log(this.homes);
+            console.log("AQUIIII PARA VER SI EL USUARIO TIENE VIVIENDAS O ESO SE HA JODIDO" + this.homes);
           }
         )
       }
@@ -110,4 +120,10 @@ export class UserProfileComponent implements OnInit {
     window.location.reload();
   }
 
+  copyToClipBoard(homeCode: string){
+    navigator.clipboard.writeText(homeCode).then( () => {
+      //console.log(content);
+      console.log("Text copied to clipboard...");
+    });
+  }
 }

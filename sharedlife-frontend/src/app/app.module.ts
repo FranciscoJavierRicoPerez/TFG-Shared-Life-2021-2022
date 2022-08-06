@@ -16,7 +16,6 @@ import { HomeInfoPageComponent } from './components/home/home-info-page/home-inf
 import { TaskCreateComponent } from './components/task/task-create/task-create.component';
 import { SpentCreateComponent } from './components/spent/spent-create/spent-create.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
