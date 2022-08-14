@@ -41,6 +41,9 @@
             <div *ngIf="alreadyInvited">
               El usuario ya tiene una invitación pendiente
             </div>
+            <div *ngIf="userNotExists">
+              No existe ningun usuario con ese nombre
+            </div>
             <div class="form-group" style="margin: 5px">
               <button class="btn btn-success btn-lg btn-block" [disabled]="!invitationForm.valid || home.completed">Enviar</button>
             </div>

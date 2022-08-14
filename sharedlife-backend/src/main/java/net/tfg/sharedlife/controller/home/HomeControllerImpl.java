@@ -84,6 +84,9 @@ public class HomeControllerImpl implements HomeController{
 			if(e.getMessage().endsWith(ErrorMessages.USER_ALREADY_INVITED)) {
 				return new ResponseEntity<>(HttpStatus.valueOf(401));
 			}
+			if(e.getMessage().equals(ErrorMessages.USER_NOT_FOUND)){
+				return new ResponseEntity<>(HttpStatus.valueOf(503));
+			}
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

@@ -138,6 +138,9 @@ public class HomeServiceImpl implements HomeService {
 		if(checkUserNotHaveInvitation(invitation.getUsername(), invitation.getIdHome())) {
 			throw new DataIncorrectException(ErrorMessages.USER_ALREADY_INVITED);
 		}
+		if(checkUserNotExists(invitation.getUsername())){
+			throw new DataIncorrectException(ErrorMessages.USER_NOT_FOUND);
+		}
 		Invitation i = new Invitation();
 		i.setIdHome(invitation.getIdHome());
 		i.setUsername(invitation.getUsername());
@@ -281,6 +284,15 @@ public class HomeServiceImpl implements HomeService {
 			}
 		}
 		return hasInvitation;
+	}
+
+	private boolean checkUserNotExists(String username){
+		boolean notExists = false;
+		User u = userService.getByUsername(username).orElse(null);
+		if(u  == null){
+			notExists = true;
+		}
+		return notExists;
 	}
 
 }
