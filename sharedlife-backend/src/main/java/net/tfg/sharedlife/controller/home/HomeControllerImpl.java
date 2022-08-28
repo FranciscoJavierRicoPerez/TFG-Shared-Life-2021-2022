@@ -5,6 +5,7 @@ import net.tfg.sharedlife.dto.HomeDTO;
 import net.tfg.sharedlife.dto.InvitationDTO;
 import net.tfg.sharedlife.dto.NewUserDto;
 import net.tfg.sharedlife.exception.DataIncorrectException;
+import net.tfg.sharedlife.model.Home;
 import net.tfg.sharedlife.service.home.HomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,27 +28,23 @@ public class HomeControllerImpl implements HomeController{
 	
 	private final static Logger logger = LoggerFactory.getLogger(HomeControllerImpl.class);
 
-	/** The home service. */
 	@Autowired
 	private HomeService homeService;
 	
-	/**
-	 * Creates the home.
-	 *
-	 * @param home the home
-	 * @return the home
-	 */
 	@PreAuthorize("hasRole('ADMIN')")
 	@Override
 	@PostMapping
-	public ResponseEntity<?> createHome(HomeDTO home) {
+	public ResponseEntity<Home> createHome(HomeDTO homeDTO) {
 		logger.info("Starting creating house process...");
+		Home home = null;
+		HttpStatus status = HttpStatus.OK;
 		try {
-			homeService.createHome(home);
+			home = homeService.createHome(homeDTO);
 		}catch(DataIncorrectException e) {
 			logger.error("Error creating home");
+			status = HttpStatus.BAD_REQUEST;	
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<Home>(home, status);
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
@@ -56,8 +53,14 @@ public class HomeControllerImpl implements HomeController{
 	public ResponseEntity<List<HomeDTO>> getHomesByUser(@RequestParam("username") String username){
 		logger.info("Finding the houses for user with username: {}", username);
 		List<HomeDTO> homes = new ArrayList<>();
-		homes = homeService.getHomesByUser(username);
-		return new ResponseEntity<>(homes, HttpStatus.OK);
+		HttpStatus status = HttpStatus.OK;
+		try{
+			homes = homeService.getHomesByUser(username);
+		} catch(DataIncorrectException e){
+			logger.error("Error getting the homes of the user: {}", e.getMessage());
+			status = HttpStatus.BAD_REQUEST;
+		}
+		return new ResponseEntity<>(homes, status);
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
@@ -65,9 +68,14 @@ public class HomeControllerImpl implements HomeController{
 	@GetMapping("/id/{id}")
 	public ResponseEntity<HomeDTO> getHomeById(@PathVariable("id") Long id){
 		logger.info("Searching the house with id: {}", id);
-		HomeDTO home = new HomeDTO();
-		home = homeService.getHomeById(id);
-		return new ResponseEntity<>(home, HttpStatus.OK);
+		HomeDTO home = null;
+		HttpStatus status = HttpStatus.OK;
+		try{
+			home = homeService.getHomeById(id);
+		}catch(DataIncorrectException e){
+			status = HttpStatus.BAD_REQUEST;
+		}
+		return new ResponseEntity<>(home, status);
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
@@ -75,20 +83,21 @@ public class HomeControllerImpl implements HomeController{
 	@PostMapping("/invitation")
 	public ResponseEntity<?> createInvitationToHome(@RequestBody InvitationDTO invitation){
 		logger.info("Sending a invitation to user with username: {}", invitation.getUsername());
+		HttpStatus status = HttpStatus.OK;
 		try {
 			homeService.createInvitation(invitation);
 		}catch(DataIncorrectException e) {
 			if(e.getMessage().equals(ErrorMessages.USER_ALREADY_HAVE_HOME_ERR)) {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				status = HttpStatus.BAD_REQUEST;
 			}
 			if(e.getMessage().endsWith(ErrorMessages.USER_ALREADY_INVITED)) {
-				return new ResponseEntity<>(HttpStatus.valueOf(401));
+				status = HttpStatus.valueOf(401);
 			}
 			if(e.getMessage().equals(ErrorMessages.USER_NOT_FOUND)){
-				return new ResponseEntity<>(HttpStatus.valueOf(503));
+				status = HttpStatus.valueOf(503);
 			}
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(status);
 	}
 	
 	@PreAuthorize("hasRole('USER')")

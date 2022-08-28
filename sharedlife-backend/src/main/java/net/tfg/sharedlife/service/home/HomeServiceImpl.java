@@ -12,6 +12,8 @@ import net.tfg.sharedlife.model.*;
 import net.tfg.sharedlife.repository.SpentRepository;
 import net.tfg.sharedlife.service.spent.SpentService;
 import net.tfg.sharedlife.service.task.TaskService;
+
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,16 +60,8 @@ public class HomeServiceImpl implements HomeService {
 	
 	private final static Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);
 
-
-	/**
-	 * Creates the home.
-	 *
-	 * @param home the home
-	 * @return the home
-	 * @throws DataIncorrectException the data incorrect exception
-	 */
 	@Override
-	public void createHome(HomeDTO home) throws DataIncorrectException {
+	public Home createHome(HomeDTO home) throws DataIncorrectException {
 		if(null == home) {
 			throw new DataIncorrectException(ErrorMessages.HOME_INFORMATION_ERR);
 		}
@@ -79,14 +73,18 @@ public class HomeServiceImpl implements HomeService {
 		newHome.setUsers(users);
 		newHome.setActualMemberCount(1); // Por defecto 1 que sera el administrador
 		homeRepository.save(newHome);
+		return newHome;
 	}
 	
 	@Override
-	public List<HomeDTO> getHomesByUser(String username){
+	public List<HomeDTO> getHomesByUser(String username) throws DataIncorrectException{
 		logger.info("Getting the homes of the user: {}", username);
+		if(Strings.isBlank(username)){
+			throw new DataIncorrectException(ErrorMessages.USERNAME_NOT_CORRECT);
+		}
 		List<HomeDTO> homes = new ArrayList<>();
 		User user = userService.getByUsername(username).get();
-		List<Home> aux = homeRepository.findAll(); // ESTA LINEA EXPLOTA
+		List<Home> aux = homeRepository.findAll();
 		for(Home home : aux) {
 			for(User u : home.getUsers()) {
 				if(u.equals(user)) {
@@ -107,8 +105,11 @@ public class HomeServiceImpl implements HomeService {
 	}
 	
 	@Override
-	public HomeDTO getHomeById(Long id) {
-		Home home = homeRepository.findById(id).get();
+	public HomeDTO getHomeById(Long id) throws DataIncorrectException{
+		Home home = homeRepository.findById(id).orElse(null);
+		if(null == home){
+			throw new DataIncorrectException(ErrorMessages.HOME_INFORMATION_ERR);
+		}
 		HomeDTO homedto = new HomeDTO();
 		homedto.setId(home.getId());
 		homedto.setAddress(home.getAddress());

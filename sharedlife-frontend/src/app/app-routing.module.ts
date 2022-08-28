@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'register', component: UserRegisterComponent },
   { path: '', redirectTo: 'inicio', pathMatch: 'full' }, // al iniciar la aplicacion se redirigira directamente aquí}
   { path: 'perfil', component: UserProfileComponent },
-  { path: 'home/create', component: HomeCreateComponent, canActivate: [HomeGuardService], data: { expectRole: ['admin'] } },
+  { path: 'vivienda/nueva', component: HomeCreateComponent, canActivate: [HomeGuardService], data: { expectRole: ['admin'] } },
   { path: 'login', component: LoginComponent },
   { path: 'inicio', component: HomePageComponent }, // PAGINA PRINCIPAL DE LA APLICACION
   { path: 'vivienda/:id', component: HomeInfoPageComponent },
