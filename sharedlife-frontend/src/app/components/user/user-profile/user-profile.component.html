@@ -31,7 +31,7 @@
           </div>
         </div>
         <br>
-        <div *ngIf="isAdmin">
+        <div *ngIf="isAdmin && homes.length > 0">
           <div class="card">
             <div class="card-header">
               <h1>Viviendas</h1>
@@ -87,7 +87,7 @@
                   <h4 class="modal-title">¿Quieres unirte a esta vivienda?</h4>
                 </div>
                 <div class="modal-body">
-                  <p>Si aceptas tendras acceso a la informacion de la vivienda y los demas inquilinos y el propietario tambien podran acceder a tus datos</p>
+                  <p>Al aceptar tendrás acceso a la información de la vivienda pero los demás inquilinos y el propietario tambíen podrán acceder a tus datos</p>
                   <div>
                     <form [formGroup]="acceptInvitationForm" (ngSubmit)="sendConfirmationInvitation(invitation.idHome)" novalidate>
                       <div class="form-group" style="margin: 5px">
