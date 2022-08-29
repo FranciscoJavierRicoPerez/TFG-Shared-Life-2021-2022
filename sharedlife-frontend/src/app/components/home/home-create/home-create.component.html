@@ -19,7 +19,6 @@
             La direccion es un campo requerido
           </div>
         </div>
-        <br>
         <div class="form-group">
           <label for="floor">Piso</label>
           <input type="text"
@@ -31,7 +30,6 @@
             El piso es un campo requerido
           </div>
         </div>
-        <br>
         <div class="form-group">
           <label for="number">Numero</label>
           <input type="text"
@@ -43,7 +41,6 @@
             El piso es un campo requerido
           </div>
         </div>
-        <br>
         <div class="form-group">
           <label for="country">Pais</label>
           <input type="text"
@@ -55,7 +52,6 @@
             El pais es un campo requerido
           </div>
         </div>
-        <br>
         <div class="form-group">
           <label for="city">Ciudad</label>
           <input type="text"
@@ -67,7 +63,6 @@
             La ciudad es un campo requerido
           </div>
         </div>
-        <br>
         <div class="form-group">
           <label for="rooms">Habitaciones</label>
           <input type="text"
@@ -79,9 +74,11 @@
             La cantidad de habitaciones es un campo requerido
           </div>
         </div>
-        <br>
         <!-- EL [disabled]="!myForm.valid" desactiva el boton hasta que no se cumplan las validaciones -->
-        <button type="submit" [disabled]="!myForm.valid" class="btn btn-primary">Añadir vivienda</button>
+        <div class="form-group" style="margin: 5px;">
+          <button type="submit" [disabled]="!myForm.valid" class="btn btn-primary btn-lg">Añadir vivienda</button>
+          <button type="button" class="btn btn-danger btn-lg" style="margin: 13px;" routerLink="/inicio">Cancelar</button>
+        </div>
       </form>
 
     </div>

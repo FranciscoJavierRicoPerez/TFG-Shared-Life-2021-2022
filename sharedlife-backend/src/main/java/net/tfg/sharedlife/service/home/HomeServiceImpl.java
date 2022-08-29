@@ -9,9 +9,11 @@ import java.util.Set;
 
 import net.tfg.sharedlife.dto.*;
 import net.tfg.sharedlife.model.*;
-import net.tfg.sharedlife.repository.SpentRepository;
 import net.tfg.sharedlife.service.spent.SpentService;
 import net.tfg.sharedlife.service.task.TaskService;
+
+import org.apache.logging.log4j.util.Strings;
+import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import net.tfg.sharedlife.common.ErrorMessages;
 import net.tfg.sharedlife.enums.RoleEnum;
 import net.tfg.sharedlife.exception.DataIncorrectException;
+import net.tfg.sharedlife.mapper.HomeMapper;
 import net.tfg.sharedlife.repository.HomeRepository;
 import net.tfg.sharedlife.repository.InvitationRepository;
 import net.tfg.sharedlife.security.jwt.JwtProvider;
@@ -50,6 +53,8 @@ public class HomeServiceImpl implements HomeService {
 	@Autowired
 	private TaskService taskService;
 
+	private HomeMapper homeMapper = Mappers.getMapper(HomeMapper.class);
+
 	@Autowired
 	JwtProvider jwtProvider;
 	
@@ -58,48 +63,35 @@ public class HomeServiceImpl implements HomeService {
 	
 	private final static Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);
 
-
-	/**
-	 * Creates the home.
-	 *
-	 * @param home the home
-	 * @return the home
-	 * @throws DataIncorrectException the data incorrect exception
-	 */
 	@Override
-	public void createHome(HomeDTO home) throws DataIncorrectException {
-		if(null == home) {
+	public Home createHome(HomeDTO homeDTO) throws DataIncorrectException {
+		if(null == homeDTO) {
 			throw new DataIncorrectException(ErrorMessages.HOME_INFORMATION_ERR);
 		}
-		String username = jwtProvider.getUsernameFromToken(home.getToken());
+		String username = jwtProvider.getUsernameFromToken(homeDTO.getToken());
 		User user = userService.getByUsername(username).get();
-		Home newHome = new Home(home.getAddress(), home.getNumber(), home.getFloor(), home.getCity(), home.getCountry(), home.getRooms());
+		Home newHome = homeMapper.homeDTOtoHome(homeDTO);
 		Set<User> users = new HashSet<>();
 		users.add(user);
 		newHome.setUsers(users);
 		newHome.setActualMemberCount(1); // Por defecto 1 que sera el administrador
 		homeRepository.save(newHome);
+		return newHome;
 	}
 	
 	@Override
-	public List<HomeDTO> getHomesByUser(String username){
+	public List<HomeDTO> getHomesByUser(String username) throws DataIncorrectException{
 		logger.info("Getting the homes of the user: {}", username);
+		if(Strings.isBlank(username)){
+			throw new DataIncorrectException(ErrorMessages.USERNAME_NOT_CORRECT);
+		}
 		List<HomeDTO> homes = new ArrayList<>();
 		User user = userService.getByUsername(username).get();
-		List<Home> aux = homeRepository.findAll(); // ESTA LINEA EXPLOTA
+		List<Home> aux = homeRepository.findAll();
 		for(Home home : aux) {
 			for(User u : home.getUsers()) {
 				if(u.equals(user)) {
-					HomeDTO homedto = new HomeDTO();
-					homedto.setId(home.getId());
-					homedto.setAddress(home.getAddress());
-					homedto.setFloor(home.getFloor());
-					homedto.setNumber(home.getNumber());
-					homedto.setCity(home.getCity());
-					homedto.setCountry(home.getCountry());
-					homedto.setRooms(home.getRooms());
-					homedto.setActualMemberCount(home.getActualMemberCount().toString());
-					homes.add(homedto);
+					homes.add(homeMapper.homeToHomeDTO(home));
 				}
 			}
 		}
@@ -107,18 +99,12 @@ public class HomeServiceImpl implements HomeService {
 	}
 	
 	@Override
-	public HomeDTO getHomeById(Long id) {
-		Home home = homeRepository.findById(id).get();
-		HomeDTO homedto = new HomeDTO();
-		homedto.setId(home.getId());
-		homedto.setAddress(home.getAddress());
-		homedto.setFloor(home.getFloor());
-		homedto.setNumber(home.getNumber());
-		homedto.setCity(home.getCity());
-		homedto.setCountry(home.getCountry());
-		homedto.setRooms(home.getRooms());
-		homedto.setCompleted(false);
-		homedto.setActualMemberCount(home.getActualMemberCount().toString());
+	public HomeDTO getHomeById(Long id) throws DataIncorrectException{
+		Home home = homeRepository.findById(id).orElse(null);
+		if(null == home){
+			throw new DataIncorrectException(ErrorMessages.HOME_INFORMATION_ERR);
+		}
+		HomeDTO homedto = homeMapper.homeToHomeDTO(home);
 		if(checkHomeIsCompleted(id)) {
 			homedto.setCompleted(true);
 		}
@@ -137,6 +123,9 @@ public class HomeServiceImpl implements HomeService {
 		}
 		if(checkUserNotHaveInvitation(invitation.getUsername(), invitation.getIdHome())) {
 			throw new DataIncorrectException(ErrorMessages.USER_ALREADY_INVITED);
+		}
+		if(checkUserNotExists(invitation.getUsername())){
+			throw new DataIncorrectException(ErrorMessages.USER_NOT_FOUND);
 		}
 		Invitation i = new Invitation();
 		i.setIdHome(invitation.getIdHome());
@@ -281,6 +270,15 @@ public class HomeServiceImpl implements HomeService {
 			}
 		}
 		return hasInvitation;
+	}
+
+	private boolean checkUserNotExists(String username){
+		boolean notExists = false;
+		User u = userService.getByUsername(username).orElse(null);
+		if(u  == null){
+			notExists = true;
+		}
+		return notExists;
 	}
 
 }

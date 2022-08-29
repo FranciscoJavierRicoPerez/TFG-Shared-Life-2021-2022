@@ -9,7 +9,7 @@
         </a>
       </li>
       <li class = "nav-item" *ngIf="isLogged && isAdmin">
-        <a routerLink="/home/create" routerLinkActive="active" class="nav-link">Añadir casa</a>
+        <a routerLink="/vivienda/nueva" routerLinkActive="active" class="nav-link">Añadir casa</a>
       </li>
       <!-- Acceso al formulario de creación de tareas para el inquilino -->
       <li class = "nav-item" *ngIf="isLogged && userHasHome && !isAdmin">
