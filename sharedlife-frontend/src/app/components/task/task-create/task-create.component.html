@@ -53,6 +53,7 @@
             <th>Fecha de inicio</th>
             <th>Fecha finalizacion</th>
             <th>Finalizada</th>
+            <th>Acción</th>
           </tr>
         </thead>
         <tbody>
@@ -68,9 +69,16 @@
             <td *ngIf="task.finished">
               Terminada
             </td>
+            <td>
+              <button type="button" class="btn btn-success" (onclick)="openTaskInfoModal()"><i class="bi bi-info-square"></i> Info</button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
+  </div>
+  <!-- PRUEBA DE UN MODAL COMO COMPONENTE-->
+  <div *ngIf="infoModal">
+    <app-task-info-modal></app-task-info-modal>
   </div>
 </div>

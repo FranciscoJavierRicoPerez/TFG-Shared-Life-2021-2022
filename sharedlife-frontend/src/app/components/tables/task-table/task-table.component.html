@@ -1,0 +1,47 @@
+<p></p>
+<div class="card">
+    <div class="card-header"><h3>Tareas</h3></div>
+    <div class="card-body">
+      <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Fecha de inicio</th>
+                <th>Fecha finalizacion</th>
+                <th>Finalizada</th>
+                <th>Terminar</th>
+                <th>Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks">
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>
+              {{ correctDate(task.startDate) }}
+            </td>
+            <td *ngIf="task.finished">{{ correctDate(task.endDate) }}</td>
+            <td *ngIf="!task.finished"> ---- </td>
+            <td *ngIf="!task.finished"> Sin terminar </td>
+            <td *ngIf="task.finished"> Terminada </td>
+            <td *ngIf="!task.finished">
+              <button type="button" (click)="updateFinishedStatus(task.id)" class="btn btn-outline-success">Terminar</button>
+            </td>
+            <td *ngIf="task.finished">
+              <button type="button" class="btn btn-outline-success" disabled>Terminar</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger" (click)="deleteTask(task.id)">Borrar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer">
+        <p>
+        <button style="margin-right: 10px;" type="button" routerLink="/vivienda/{{idHome}}/tareas" class="btn btn-primary btn-lg">Información de las tareas</button>
+        <button type="button" class="btn btn-success btn-lg">Tareas Semanales</button>
+        </p>
+    </div>
+  </div>

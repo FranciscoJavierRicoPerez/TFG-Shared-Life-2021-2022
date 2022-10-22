@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import net.tfg.sharedlife.common.ErrorMessages;
 import net.tfg.sharedlife.enums.RoleEnum;
 import net.tfg.sharedlife.exception.DataIncorrectException;
+import net.tfg.sharedlife.exception.TasksException;
 import net.tfg.sharedlife.mapper.HomeMapper;
 import net.tfg.sharedlife.repository.HomeRepository;
 import net.tfg.sharedlife.repository.InvitationRepository;
@@ -195,28 +196,36 @@ public class HomeServiceImpl implements HomeService {
 		User user = userService.getByUsername(username).get();
 		Home home = homeRepository.findById(idHome).get();
 		logger.info("Deleting the tasks of the user {} for home {}", username, idHome);
-		for(TaskDTO t : taskService.getTasksByUsernameAndHomeId(username, idHome)){
-			taskService.deleteTask(t.getId());
+		try{
+			for(TaskDTO t : taskService.getTasksByUsernameAndHomeId(username, idHome)){
+				taskService.deleteTask(t.getId());
+			}
+			logger.info("Deleting the spents of the user {} for home {}", username, idHome);
+			for(SpentDTO s : spentService.getSpentsByUsernameAndHomeId(username, idHome)){
+				spentService.deleteSpent(s.getId());
+			}
+			home.getUsers().remove(user);
+			homeRepository.save(home);
+		}catch(TasksException e){
+			logger.info("Err deleting task");
 		}
-		logger.info("Deleting the spents of the user {} for home {}", username, idHome);
-		for(SpentDTO s : spentService.getSpentsByUsernameAndHomeId(username, idHome)){
-			spentService.deleteSpent(s.getId());
-		}
-		home.getUsers().remove(user);
-		homeRepository.save(home);
 	}
 	
 	@Override
 	public void deleteHome(Long id) {
 		logger.info("Deleting the home with id: {}", id);
 		Home home = homeRepository.findById(id).get();
-		for(Spent s : home.getSpents()){
-			spentService.deleteSpent(s.getId());
+		try{
+			for(Spent s : home.getSpents()){
+				spentService.deleteSpent(s.getId());
+			}
+			for(Task t : home.getTasks()){
+				taskService.deleteTask(t.getId());
+			}
+			homeRepository.delete(home);
+		}catch(TasksException e){
+			logger.info("Error deleting home");
 		}
-		for(Task t : home.getTasks()){
-			taskService.deleteTask(t.getId());
-		}
-		homeRepository.delete(home);
 	}
 
 	

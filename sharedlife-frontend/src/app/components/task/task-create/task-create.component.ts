@@ -26,6 +26,9 @@ export class TaskCreateComponent implements OnInit {
   idHome: string;
   allHomeTasks: Task[] = [];
   home: Home;
+
+  infoModal: boolean = false;
+
   createTaskForm = new FormGroup({
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
@@ -106,6 +109,10 @@ export class TaskCreateComponent implements OnInit {
   correctDate(date : string){
     var auxDate = date.split("T");
     return auxDate[0];
+  }
+
+  openTaskInfoModal(){
+    this.infoModal = true;
   }
 
 }

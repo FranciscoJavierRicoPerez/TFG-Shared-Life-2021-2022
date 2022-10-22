@@ -15,6 +15,12 @@ import { interceptorProvider } from './interceptors/home-interceptor.service';
 import { HomeInfoPageComponent } from './components/home/home-info-page/home-info-page.component';
 import { TaskCreateComponent } from './components/task/task-create/task-create.component';
 import { SpentCreateComponent } from './components/spent/spent-create/spent-create.component';
+import { TaskInfoModalComponent } from './components/task/task-info-modal/task-info-modal.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { ConfirmationModalComponent } from './components/modals/confirmation-modal/confirmation-modal.component';
+import { TaskTableComponent } from './components/tables/task-table/task-table.component';
+import { SpentTableComponent } from './components/tables/spent-table/spent-table.component';
+import { DebtTableComponent } from './components/tables/debt-table/debt-table.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +34,12 @@ import { SpentCreateComponent } from './components/spent/spent-create/spent-crea
     HomeInfoPageComponent,
     TaskCreateComponent,
     SpentCreateComponent,
+    TaskInfoModalComponent,
+    FooterComponent,
+    ConfirmationModalComponent,
+    TaskTableComponent,
+    SpentTableComponent,
+    DebtTableComponent,
   ],
   imports: [
     BrowserModule,

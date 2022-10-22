@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.tfg.sharedlife.dto.TaskDTO;
+import net.tfg.sharedlife.exception.TasksException;
 import net.tfg.sharedlife.model.Task;
 import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.repository.HomeRepository;
@@ -105,8 +106,12 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public void deleteTask(Long id){
+	public void deleteTask(Long id) throws TasksException{
 		Log.info("Deleting the task with id: {}", id);
-		taskRepository.deleteById(id);
+		Task task = taskRepository.findById(id).orElse(null);
+		if(id == null || task == null){
+			throw new TasksException("ERR_NOT_FOUND");
+		}
+		taskRepository.delete(task);
 	}
 }

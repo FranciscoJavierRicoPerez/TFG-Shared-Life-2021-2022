@@ -26,4 +26,8 @@ export class TaskService {
   updateFinishedStatus(id: string, finished: boolean){
     return this.HttpClient.put(`${this.baseURL}/${id}/finished`, finished);
   }
+
+  deleteTask(id: string){
+    return this.HttpClient.delete(`${this.baseURL}/${id}`);
+  }
 }

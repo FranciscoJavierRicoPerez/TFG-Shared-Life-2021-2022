@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import net.tfg.sharedlife.dto.TaskDTO;
+import net.tfg.sharedlife.exception.TasksException;
 import net.tfg.sharedlife.service.task.TaskService;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -71,7 +72,13 @@ public class TaskControllerImpl implements TaskController{
 	@Override
 	public ResponseEntity<?> deleteTask(@PathVariable("id") Long id){
 		Log.info("Deleting the task with id: {}", id);
-		taskService.deleteTask(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+		HttpStatus status = HttpStatus.OK;
+		try{
+			taskService.deleteTask(id);
+		}catch(TasksException e){
+			Log.info("ERR deleting task", e);
+			status = HttpStatus.BAD_REQUEST;
+		}
+		return new ResponseEntity<>(status);
 	}
 }

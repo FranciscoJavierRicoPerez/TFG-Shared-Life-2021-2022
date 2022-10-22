@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import net.tfg.sharedlife.dto.TaskDTO;
+import net.tfg.sharedlife.exception.TasksException;
 
 public interface TaskService {
 	void createTask(@RequestBody TaskDTO task);
@@ -15,5 +16,5 @@ public interface TaskService {
 	
 	void updateTaskFinished(Long id, boolean finished);
 
-	void deleteTask(Long id);
+	void deleteTask(Long id) throws TasksException;
 }

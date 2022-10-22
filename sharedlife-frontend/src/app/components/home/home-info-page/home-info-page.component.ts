@@ -8,7 +8,7 @@ import { Invitation } from './../../../models/invitation/invitation';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HomeCreateDTO } from 'src/app/models/home/home-create-dto/home-create-dto';
 import { HomeService } from './../../../services/home/home.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user/user';
 
@@ -30,11 +30,8 @@ export class HomeInfoPageComponent implements OnInit {
   debts: Debt[] = [];
   spent: Spent;
   displayStyle = "none";
-  displayStyleA = "none";
   spents: Spent[] = [];
-  debtsA: Debt[] = [];
   debtsUsers: User[] = [];
-  debtUser: User;
   errorSendInvitation: boolean;
   alreadyInvited: boolean;
   userNotExists: boolean;
@@ -53,6 +50,7 @@ export class HomeInfoPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log("CARGANDO HOME INFO PAGE")
     if(this.TokenService.getToken()){
       this.username = this.TokenService.getUserName();
       this.authorities = this.TokenService.getAuthorities();
@@ -74,18 +72,6 @@ export class HomeInfoPageComponent implements OnInit {
         }
       );
 
-      // OBTENCION DE LAS TODAS LAS TAREAS DE UN USUARIO
-      this.TaskService.getAllTaskByUsernameAndHomeId(this.username, this.idHome).subscribe(
-        data => {
-          this.tasks = data;
-          console.log(this.tasks);
-          console.log("OK getting all tasks by username");
-        },
-        error => {
-          console.log("ERROR getting all tasks by username");
-        }
-      );
-
       // OBTENER LAS DEUDAS QUE TIENE PENDIENTE EL USUARIO
       this.SpentService.getAllDebtsByUsername(this.username).subscribe(
         data => {
@@ -98,22 +84,6 @@ export class HomeInfoPageComponent implements OnInit {
           console.log("ERROR getting the debts of the user");
         }
       );
-
-      // INICIALIZAMOS EL SPENT PARA QUE NO DE ERROR???
-      this.spent = new Spent('','','','','','',false);
-
-      // OBTENEMOS TODOS LOS  GASTOS PUBLICADOS POR EL USUARIO
-      this.SpentService.getSpentsByUsernameAndHomeId(this.username, this.idHome).subscribe(
-        data => {
-          this.spents = data;
-          console.log(this.spents);
-          console.log("OK getting the spents of the user");
-        },
-        error => {
-          console.log("ERROR getting the spents of the user");
-        }
-      );
-
     }
   }
 
@@ -144,85 +114,6 @@ export class HomeInfoPageComponent implements OnInit {
         }
       }
     );
-  }
-
-  updateFinishedStatus(id: string){
-    console.log("Update the task with id: " + id);
-    this.TaskService.updateFinishedStatus(id, true).subscribe(
-      data => {
-        console.log("Update finished task OK");
-      },
-      error => {
-        console.log("Update finished task ERROR");
-      }
-    );
-    window.location.reload();
-  }
-
-  getSpentById(id: string){
-    this.displayStyle = "block";
-    //this.spent = new Spent('','','','','','');
-    this.SpentService.getSpentById(id).subscribe(
-      data => {
-        this.spent = data;
-        console.log(this.spent);
-        console.log("OK Getting the spent with id " + id);
-      },
-      error =>{
-        console.log("ERR getting the spent with id " + id);
-      }
-    );
-  }
-
-  getDebtsById(id: string){
-    this.displayStyleA = "block";
-    this.SpentService.getDebtsBySpentId(id).subscribe(
-      data => {
-        this.debtsA = data;
-        console.log(this.debtsA);
-        console.log("OK Getting the debts");
-        // AQUI AHORA TENGO QUE OBTENER TODOS LOS USUARIO DE CADA UNO DE LOS DEBTS
-        this.debtsA.forEach(debt => {
-          this.UserService.getUserById(Number(debt['idUser'])).subscribe(
-            data => {
-              this.debtUser = data;
-              this.debtsUsers.push(this.debtUser);
-              console.log(this.debtsUsers);
-            },
-            error => {
-              console.log("ERR Getting de users debters");
-            }
-          );
-        });
-      },
-      error => {
-        console.log("ERR getting the debts");
-      }
-    );
-    this.debtsA = [];
-    this.debtsUsers = [];
-  }
-
-  closePopup() {
-    this.displayStyle = "none";
-  }
-
-  closePopupA() {
-    this.displayStyleA = "none";
-  }
-
-  paidDebt(id: string, paid: boolean){
-    console.log(id)
-    console.log(paid);
-    this.SpentService.paidDebt(id, paid).subscribe(
-      data => {
-        console.log("OK change paid")
-      },
-      error => {
-        console.log("ERR change paid")
-      }
-    );
-    window.location.reload();
   }
 
   leaveHouse(){
@@ -261,11 +152,6 @@ export class HomeInfoPageComponent implements OnInit {
         console.log("error deleting spents");
       }
     );
-  }
-
-  correctDate(date : string){
-    var auxDate = date.split("T");
-    return auxDate[0];
   }
 
 }
