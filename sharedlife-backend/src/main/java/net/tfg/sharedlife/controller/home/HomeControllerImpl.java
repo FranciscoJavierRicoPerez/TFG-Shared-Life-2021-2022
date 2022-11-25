@@ -24,7 +24,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/home")
-public class HomeControllerImpl implements HomeController{
+public class HomeControllerImpl implements HomeController {
 	
 	private final static Logger logger = LoggerFactory.getLogger(HomeControllerImpl.class);
 
@@ -71,7 +71,7 @@ public class HomeControllerImpl implements HomeController{
 		HomeDTO home = null;
 		HttpStatus status = HttpStatus.OK;
 		try{
-			home = homeService.getHomeById(id);
+			home = homeService.getHomeDtoById(id);
 		}catch(DataIncorrectException e){
 			status = HttpStatus.BAD_REQUEST;
 		}

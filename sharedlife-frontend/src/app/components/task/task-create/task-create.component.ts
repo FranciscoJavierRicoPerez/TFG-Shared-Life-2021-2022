@@ -25,6 +25,8 @@ export class TaskCreateComponent implements OnInit {
   newTask: Task;
   idHome: string;
   allHomeTasks: Task[] = [];
+  weeklyTasks: Task[] = []
+  homeTasks: Task[] = [];
   home: Home;
 
   infoModal: boolean = false;
@@ -68,7 +70,14 @@ export class TaskCreateComponent implements OnInit {
           this.TaskService.getAllTaskByHomeId(this.idHome, this.username).subscribe(
             data => {
               this.allHomeTasks = data;
-              console.log(this.allHomeTasks);
+              // Ahora del allHomeTasks puede dividirlo en tareas semanales y normales
+              for(var task of this.allHomeTasks){
+                if(task.weekTask){
+                  this.weeklyTasks.push(task);
+                } else {
+                  this.homeTasks.push(task);
+                }
+              }
               console.log("Getting all task home OK");
             },
             error => {

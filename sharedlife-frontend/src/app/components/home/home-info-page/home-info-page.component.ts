@@ -44,9 +44,7 @@ export class HomeInfoPageComponent implements OnInit {
     private Router: Router,
     private ActivatedRoute: ActivatedRoute,
     private TokenService: TokenService,
-    private TaskService: TaskService,
     private SpentService: SpentService,
-    private UserService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -69,19 +67,6 @@ export class HomeInfoPageComponent implements OnInit {
         data => {
           this.users = data;
           console.log(this.users);
-        }
-      );
-
-      // OBTENER LAS DEUDAS QUE TIENE PENDIENTE EL USUARIO
-      this.SpentService.getAllDebtsByUsername(this.username).subscribe(
-        data => {
-          this.debts = data;
-          console.log("ESTOY MUY LOCO")
-          console.log(this.debts);
-          console.log("OK getting the debts of the user");
-        },
-        error => {
-          console.log("ERROR getting the debts of the user");
         }
       );
     }

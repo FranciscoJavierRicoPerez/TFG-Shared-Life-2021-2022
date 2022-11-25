@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import net.tfg.sharedlife.dto.TaskDTO;
+import net.tfg.sharedlife.model.Task;
 
 public interface TaskController {
 	
@@ -23,5 +24,8 @@ public interface TaskController {
 
 	@DeleteMapping("/{id}")
 	ResponseEntity<?> deleteTask(@PathVariable("id") Long id);
+
+	@GetMapping("/home/{id}/weeklyTasks")
+	ResponseEntity<List<Task>> getWeeklyTasksByHomeId(@PathVariable("id") Long id);
 
 }

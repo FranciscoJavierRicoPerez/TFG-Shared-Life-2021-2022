@@ -2,7 +2,6 @@ package net.tfg.sharedlife.model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +14,7 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.tfg.sharedlife.enums.HomeRoomEnum;
 
 @Data
 @EqualsAndHashCode
@@ -25,24 +25,39 @@ public class Task {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	// Titulo de la tarea
 	@Column(name = "title")
 	private String title;
 	
+	// Descripción de la tarea
 	@Column(name = "description")
 	private String description;
 	
+	//Fecha de inicio de la tarea
 	@Column(name = "startDate")
 	private Date startDate;
 	
+	//Fecha de fin de tarea
 	@Column(name = "endDate")
 	private Date endDate;
 	
+	// Indica si la tarea esta terminada o no
 	@Column(name = "finished")
 	private boolean finished;
+
+	// Indica si la tarea es una tarea semana o no
+	@Column(name = "weekTask")
+	private Boolean weekTask;
+
+	// Enumerado que indica si la tarea pertenece a una habitacion de la casa
+	@Column(name = "homeRoom")
+	private HomeRoomEnum homeRoom;
+	// Enumerado que indica el estado actual de la tarea (TO_DO, IN_PROGRESS, ON_REVIEW, DONE)
+
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_user")
-	private User user;
+	private User user; // RESPONSABLE DE LA TAREA
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_home")

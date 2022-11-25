@@ -3,6 +3,7 @@ package net.tfg.sharedlife.service.task;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,12 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.tfg.sharedlife.dto.TaskDTO;
+import net.tfg.sharedlife.enums.HomeRoomEnum;
+import net.tfg.sharedlife.enums.RoleEnum;
 import net.tfg.sharedlife.exception.TasksException;
+import net.tfg.sharedlife.model.Home;
 import net.tfg.sharedlife.model.Task;
 import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.repository.HomeRepository;
 import net.tfg.sharedlife.repository.TaskRepository;
 import net.tfg.sharedlife.repository.UserRepository;
+import net.tfg.sharedlife.service.user.UserService;
 
 @Service
 public class TaskServiceImpl implements TaskService{
@@ -27,10 +32,13 @@ public class TaskServiceImpl implements TaskService{
 	private TaskRepository taskRepository;
 	
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepository userRepository; // borrar
 	
 	@Autowired
-	private HomeRepository homeRepository;
+	private HomeRepository homeRepository; // borrar
+
+	@Autowired 
+	private UserService userService;
 	
 	@Override
 	public void createTask(TaskDTO taskdto) {
@@ -42,6 +50,8 @@ public class TaskServiceImpl implements TaskService{
 		task.setUser(user);
 		task.setFinished(false);
 		task.setHome(homeRepository.getById(Long.parseLong(taskdto.getIdHome())));
+		task.setHomeRoom(null);
+		task.setWeekTask(false);
 		taskRepository.save(task);
 		Log.info("New task created succesfully");
 	}
@@ -69,6 +79,7 @@ public class TaskServiceImpl implements TaskService{
 				taskdto.setUser(t.getUser().getUsername());
 				taskdto.setFinished(t.isFinished());
 				taskdto.setIdHome(t.getHome().getId().toString());
+				taskdto.setWeekTask(t.getWeekTask());
 				tasksdto.add(taskdto);
 			}
 		}
@@ -90,6 +101,7 @@ public class TaskServiceImpl implements TaskService{
 				taskdto.setUser(t.getUser().getUsername());
 				taskdto.setFinished(t.isFinished());
 				taskdto.setIdHome(t.getHome().getId().toString());
+				taskdto.setWeekTask(t.getWeekTask());
 				tasksdto.add(taskdto);
 			}
 		}
@@ -114,4 +126,77 @@ public class TaskServiceImpl implements TaskService{
 		}
 		taskRepository.delete(task);
 	}
+
+	@Override
+	public void createWeeklyTask(Home home) {
+		Log.info("Creating all the weekly tasks");
+		List<Task> weeklyTasks = new ArrayList<>();
+		HomeRoomEnum [] rooms = {
+			HomeRoomEnum.LIVING_ROOM, 
+			HomeRoomEnum.BATHROOM, 
+			HomeRoomEnum.KITCHEN, 
+			HomeRoomEnum.HALLWAY
+		};
+		for(int i = 0; i < rooms.length; i++){
+			Task task = new Task();
+			switch(rooms[i]){
+				case LIVING_ROOM:
+					task.setTitle("LIMPIEZA DEL SALON");
+					task.setDescription("Tarea semanal de limpieza del salon");
+					break;
+				case BATHROOM:
+					task.setTitle("LIMPIEZA DEL CUARTO DE BAÑO");
+					task.setDescription("Tarea semanal de limpieza del cuarto de baño");
+					break;
+				case KITCHEN:
+					task.setTitle("LIMPIEZA DE LA COCINA");
+					task.setDescription("Tarea semanal de limpieza de la cocina");
+					break;
+				case HALLWAY:
+					task.setTitle("LIMPIEZA DEL PASILLO Y SACAR LA BASURA");
+					task.setDescription("Tarea semanal de limpieza del pasillo y sacar la basura");
+					break;
+			}
+			task.setHomeRoom(rooms[i]);
+			task.setWeekTask(true);
+			task.setStartDate(new Date());
+			task.setFinished(false);
+			Set<User> users = home.getUsers();
+			for(User u : users){
+				if(!u.getRoles().contains(RoleEnum.ROLE_ADMIN)){
+					task.setUser(u);
+				}
+			}
+			task.setHome(home);
+			taskRepository.save(task);
+			weeklyTasks.add(task);
+		}
+		home.setTasks(weeklyTasks);
+		Log.info("Creating weekly tasks process terminate succesfully...");
+	}
+
+	@Override
+	public List<Task> findAllByIdHomeAndWeeklyTaskTrue(Long idHome) throws TasksException {
+		List<Task> tasks = new ArrayList<>();
+		List<Task> weeklyTasks = new ArrayList<>();
+		if(null == idHome){
+			throw new TasksException("ID HOME NULL");
+		}
+ 		tasks = taskRepository.findAll();
+		for(Task task : tasks){
+			if(task.getHome().getId().equals(idHome) && Boolean.TRUE.equals(task.getWeekTask())){
+				weeklyTasks.add(task);
+			}
+		}
+		return weeklyTasks;
+	}
+
+	@Override
+	public void updateTaskResponsabilities(User user,  List<Task> tasks) {
+		for(Task task : tasks){
+			task.setUser(user);
+			taskRepository.save(task);
+		}
+	}
+
 }

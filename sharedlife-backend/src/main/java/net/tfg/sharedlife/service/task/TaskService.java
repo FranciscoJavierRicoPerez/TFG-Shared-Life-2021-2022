@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import net.tfg.sharedlife.dto.TaskDTO;
 import net.tfg.sharedlife.exception.TasksException;
+import net.tfg.sharedlife.model.Home;
+import net.tfg.sharedlife.model.Task;
+import net.tfg.sharedlife.model.User;
 
 public interface TaskService {
 	void createTask(@RequestBody TaskDTO task);
@@ -17,4 +20,13 @@ public interface TaskService {
 	void updateTaskFinished(Long id, boolean finished);
 
 	void deleteTask(Long id) throws TasksException;
+
+	void createWeeklyTask(Home home);
+
+	//void manageWeeklyTaskOwner(Home home);
+
+	List<Task> findAllByIdHomeAndWeeklyTaskTrue(Long idHome) throws TasksException;
+
+	void updateTaskResponsabilities(User user, List<Task> tasks);
+
 }

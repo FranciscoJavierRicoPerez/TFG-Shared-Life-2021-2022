@@ -30,4 +30,8 @@ export class TaskService {
   deleteTask(id: string){
     return this.HttpClient.delete(`${this.baseURL}/${id}`);
   }
+
+  getWeeklyTasksByHomeId(id: string){
+    return this.HttpClient.get<any>(`${this.baseURL}$/home/${id}/weeklyTasks`);
+  }
 }

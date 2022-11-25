@@ -17,7 +17,7 @@ public interface HomeService {
 	
 	List<HomeDTO> getHomesByUser(String username);
 	
-	HomeDTO getHomeById(Long id);
+	HomeDTO getHomeDtoById(Long id);
 	
 	void createInvitation(InvitationDTO invitation) throws DataIncorrectException;
 	
@@ -30,5 +30,8 @@ public interface HomeService {
 	void deleteHome(Long id);
 	
 	Boolean hasHome(String username);
+
+	Home getHomeById(Long id);
+
 	
 }

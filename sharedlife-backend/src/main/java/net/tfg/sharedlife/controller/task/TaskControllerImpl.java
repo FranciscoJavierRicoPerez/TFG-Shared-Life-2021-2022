@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import net.tfg.sharedlife.dto.TaskDTO;
 import net.tfg.sharedlife.exception.TasksException;
+import net.tfg.sharedlife.model.Task;
 import net.tfg.sharedlife.service.task.TaskService;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -80,5 +81,21 @@ public class TaskControllerImpl implements TaskController{
 			status = HttpStatus.BAD_REQUEST;
 		}
 		return new ResponseEntity<>(status);
+	}
+
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@GetMapping("/home/{id}/weeklyTasks")
+	@Override
+	public ResponseEntity<List<Task>> getWeeklyTasksByHomeId(Long id) {
+		Log.info("Getting all the weekly tasks of the home with id: {}", id);
+		HttpStatus status = HttpStatus.OK;
+		List<Task> weeklyTasks = new ArrayList<>();
+		try{
+			weeklyTasks = taskService.findAllByIdHomeAndWeeklyTaskTrue(id);
+		}catch(TasksException e){
+			Log.info("Error getting the weekly tasks of the home with id:  {}", id);
+			status = HttpStatus.BAD_REQUEST;
+		}
+		return new ResponseEntity<>(weeklyTasks, status);
 	}
 }

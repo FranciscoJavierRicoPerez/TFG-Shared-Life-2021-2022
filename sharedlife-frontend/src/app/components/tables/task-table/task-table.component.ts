@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { TaskService } from './../../../services/task/task.service';
+import { Task } from 'src/app/models/task/task';
 
 @Component({
   selector: 'app-task-table',
@@ -12,6 +13,8 @@ export class TaskTableComponent implements OnInit {
   @Input() idHome: string;
 
   tasks: Task[] = [];
+  weeklyTasks: Task[] = []
+  homeTasks: Task[] = [];
 
   constructor(private TaskService: TaskService) { }
 
@@ -22,6 +25,13 @@ export class TaskTableComponent implements OnInit {
       data => {
         this.tasks = data;
         console.log(this.tasks);
+        for(var task of this.tasks){
+          if(task.weekTask){
+            this.weeklyTasks.push(task); 
+          } else {
+            this.homeTasks.push(task);
+          }
+        }
         console.log("OK getting all tasks by username");
       },
       error => {

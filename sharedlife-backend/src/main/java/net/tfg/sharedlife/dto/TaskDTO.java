@@ -12,6 +12,8 @@ public class TaskDTO {
 	private Date startDate;
 	private Date endDate;
 	private boolean finished;
+	private boolean weekTask;
+	private String homeRoom;
 	private String user;
 	private String idHome;
 }

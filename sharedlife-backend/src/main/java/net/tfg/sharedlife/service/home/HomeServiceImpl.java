@@ -48,7 +48,7 @@ public class HomeServiceImpl implements HomeService {
 	private InvitationRepository invitationRepository;
 
 	@Autowired
-	@Lazy
+	@Lazy // No me gusta que haya un lazy
 	private SpentService spentService;
 
 	@Autowired
@@ -100,7 +100,7 @@ public class HomeServiceImpl implements HomeService {
 	}
 	
 	@Override
-	public HomeDTO getHomeById(Long id) throws DataIncorrectException{
+	public HomeDTO getHomeDtoById(Long id) throws DataIncorrectException{
 		Home home = homeRepository.findById(id).orElse(null);
 		if(null == home){
 			throw new DataIncorrectException(ErrorMessages.HOME_INFORMATION_ERR);
@@ -148,6 +148,8 @@ public class HomeServiceImpl implements HomeService {
 		home.setUsers(users);
 		home.setActualMemberCount(home.getActualMemberCount()+1); // Añadimos a un nuevo inquilino
 		
+		weeklyTaskManagement(home.getId());
+
 		List<Invitation> invitations = invitationRepository.findAll();
 		Invitation invitation = new Invitation();
 		for(Invitation i : invitations) {
@@ -289,5 +291,90 @@ public class HomeServiceImpl implements HomeService {
 		}
 		return notExists;
 	}
+
+	private void weeklyTaskManagement(Long id){
+		logger.info("Starting weekly task management process...");
+		// Una vez añadido el miembro a la vivienda, compruebo si es el primero o si no lo es hago el reparto de tareas
+		if(null != id){
+			Home home = homeRepository.getById(id);
+			if(home.getUsers().size() == 2){
+				// Solo hay un inquilino, tengo que crear las tareas y asignarlas.
+				taskService.createWeeklyTask(home);
+			} else{
+				// Tengo que hacer el reparto de tareas.
+				manageWeeklyTaskOwner(home);
+			}
+		}
+		logger.info("Weekly task management process terminate succesfully");
+	}
+
+	public Home getHomeById(Long id){
+		return homeRepository.findById(id).get();
+	}
+
+	
+	private void manageWeeklyTaskOwner(Home home) {
+		logger.info("Updating the weekly task responsible");
+		List<User> renters = getAllRentersByHomeId(home.getId());
+		/* 
+		 * ALGORITMO DE REPARTO DE TAREAS SEMANALES
+		 * -> Inicialmente cuando se une el primer inquilino a la vivienda, se crean las 4 tareas iniciales y se le asignan todas a el
+		 * -> Cuando se empiezan a añadir miembros a la vivienda, se tienen que repartir las tareas entre ellos
+		 * -> CASOS MENOS INQUILINOS QUE TAREAS:
+		 * 		- En primera instancia solo van a haber 4 tareas semanales
+		 * 		- Para saber cuantas tareas tengo que asignarle a cada uno tengo que dividir 
+		 * 		  el número de tareas semanales por el actualMemberCount
+		 * 		- Esa es la cantidad de tareas que tienen que asi
+		 */
+		int actualMemberCount = renters.size();
+		List<Task> auxWeekTasks = new ArrayList<>();
+		User newRenter = null;
+		for(User user : renters) {
+			if(user.getTasks().isEmpty()){ // Usuario que acaba de entrar
+				newRenter = user;
+			} else {
+				if(actualMemberCount == 3){ // Los dos inquilinos tienen 2 tareas por lo que quiero 1 de cada uno
+					auxWeekTasks.add(user.getTasks().get(0));
+				} else {
+					if(actualMemberCount == 4 && user.getTasks().size() > 1){ // Solo quiero quitarle tareas al que mas tiene
+						auxWeekTasks.add(user.getTasks().get(0));
+					} else {
+						if(actualMemberCount == 2){
+							auxWeekTasks.add(user.getTasks().get(0));
+							auxWeekTasks.add(user.getTasks().get(1));
+						}
+					}
+				}
+			}
+		}
+		if(newRenter != null){
+			newRenter.setTasks(auxWeekTasks);
+			userService.saveUserInformation(newRenter);
+			taskService.updateTaskResponsabilities(newRenter, auxWeekTasks);
+		}
+		logger.info("Weekly tasks responsabilities updated succesfully");
+	}
+
+	/*private List<Task> getAllWeeklyTasksByHomeId(Long id){
+		List<Task> weeklyTasks = new ArrayList<>();
+		if(null != id){
+			weeklyTasks = taskService.findAllByIdHomeAndWeeklyTaskTrue(id);
+		}
+		return weeklyTasks;
+	}*/
+
+	private List<User> getAllRentersByHomeId(Long id){
+		List<User> renters = new ArrayList<>();
+		if(null != id){
+			for(NewUserDto userdto : getMembers(id)){
+				User user = userService.getByUsername(userdto.getUsername()).get();
+				if(user.getRoles().size() < 2){ // Si tiene menos de 2 roles no es admin
+					renters.add(user);
+				}
+			} 
+		}
+		return renters;
+	}
+
 
 }

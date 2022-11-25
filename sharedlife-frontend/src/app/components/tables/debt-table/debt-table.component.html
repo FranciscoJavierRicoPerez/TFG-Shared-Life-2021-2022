@@ -1,22 +1,32 @@
-<!-- <div class="card">
-    <div class="card-header"><h3>Deudas</h3></div>
-    <div class="card-body">
+<p></p>
+<div class="card">
+  <div class="card-header"><h3>Deudas</h3></div>
+  <div class="card-body">
+
+
+    <!-- Sin spents-->
+    <div *ngIf="debts.length == 0">
+      <div align="center">
+        <strong>
+          <i>Sin información de deudas</i>
+      </strong>
+      </div>
+    </div>
+    <!-- Con spents-->
+    <div *ngIf="debts.length > 0">
       <table class="table">
         <thead class="table-dark">
-          <tr>
-            <th>Cantidad a pagar</th>
-            <th>Usuario al que pagar</th>
-            <th>Información del gasto</th>
-            <th>Pagar</th>
-          </tr>
+            <tr>
+              <th>Cantidad a pagar</th>
+              <th>Usuario al que pagar</th>
+              <th>Pagar</th>
+              <th>Información del gasto</th>
+            </tr>
         </thead>
         <tbody>
           <tr *ngFor="let debt of debts">
             <td>{{ debt.pricePerPerson }}</td>
             <td>{{ debt.userToPay }}</td>
-            <td>
-              <button type="button" (click)="getSpentById(debt.idSpent)" class="btn btn-warning">Gasto</button>
-            </td>
             <td>
               <div *ngIf="!debt.paid">
                 <button type="button" class="btn btn-primary" (click)="paidDebt(debt.id, true)">Pagar</button>
@@ -25,69 +35,13 @@
                 <button type="button" class="btn btn-success" disabled>Pagado</button>
               </div>
             </td>
+            <td>
+              <button type="button" (click)="getSpentById(debt.idSpent)" class="btn btn-warning">Gasto</button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-</div>
-
-<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-    <div class="modal-header">
-      <h4 class="modal-title">Información del gasto</h4>
-    </div>
-    <div class="modal-body">
-      <div class="card bg-light mb-3">
-        <div class="card-body">
-          <p class="card-text">
-            Título: {{ spent.title}}<br>
-            Descripción: {{ spent.description }}<br>
-            Total a pagar: {{ spent.totalPrice }}<br>
-            ¿Cuanto debo?: FUNCION QUE OBTENGA EL PRICE PER PERSON<br>
-          </p>
-        </div>
-      </div>
-      <div>
-        <button type="button" class="btn btn-danger" (click)="closePopup()"> Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div> -->
-
-<p></p>
-<h5>PRUEBA</h5>
-<div class="card">
-  <div class="card-header"><h3>Deudas</h3></div>
-  <div class="card-body">
-    <table class="table">
-      <thead class="table-dark">
-          <tr>
-            <th>Cantidad a pagar</th>
-            <th>Usuario al que pagar</th>
-            <th>Pagar</th>
-            <th>Información del gasto</th>
-          </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let debt of debts">
-          <td>{{ debt.pricePerPerson }}</td>
-          <td>{{ debt.userToPay }}</td>
-          <td>
-            <div *ngIf="!debt.paid">
-              <button type="button" class="btn btn-primary" (click)="paidDebt(debt.id, true)">Pagar</button>
-            </div>
-            <div *ngIf="debt.paid">
-              <button type="button" class="btn btn-success" disabled>Pagado</button>
-            </div>
-          </td>
-          <td>
-            <button type="button" (click)="getSpentById(debt.idSpent)" class="btn btn-warning">Gasto</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
   <div class="card-footer"></div>
 </div>
