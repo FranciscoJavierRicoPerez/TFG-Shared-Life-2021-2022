@@ -15,6 +15,7 @@ import net.tfg.sharedlife.enums.HomeRoomEnum;
 import net.tfg.sharedlife.enums.RoleEnum;
 import net.tfg.sharedlife.exception.TasksException;
 import net.tfg.sharedlife.model.Home;
+import net.tfg.sharedlife.model.Role;
 import net.tfg.sharedlife.model.Task;
 import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.repository.HomeRepository;
@@ -162,8 +163,14 @@ public class TaskServiceImpl implements TaskService{
 			task.setStartDate(new Date());
 			task.setFinished(false);
 			Set<User> users = home.getUsers();
+			boolean isAdmin = false;
 			for(User u : users){
-				if(!u.getRoles().contains(RoleEnum.ROLE_ADMIN)){
+				for(Role role : u.getRoles()){
+					if(role.getRoleName().equals(RoleEnum.ROLE_ADMIN)){
+						isAdmin = true;
+					}
+				}
+				if(!isAdmin){
 					task.setUser(u);
 				}
 			}
@@ -197,6 +204,12 @@ public class TaskServiceImpl implements TaskService{
 			task.setUser(user);
 			taskRepository.save(task);
 		}
+	}
+
+	@Override
+	public Task getTaskById(Long id) {
+		// TODO Auto-generated method stub
+		return taskRepository.findById(id).get();
 	}
 
 }

@@ -1,7 +1,9 @@
 package net.tfg.sharedlife.service.home;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Base64.Encoder;
 import java.util.HashSet;
 import java.util.List;
@@ -197,17 +199,31 @@ public class HomeServiceImpl implements HomeService {
 	public void leaveHome(Long idHome, String username) {
 		User user = userService.getByUsername(username).get();
 		Home home = homeRepository.findById(idHome).get();
-		logger.info("Deleting the tasks of the user {} for home {}", username, idHome);
+		boolean weekTaskNeedReasignation = false;
+		List<Long> tasksToReasignate = new ArrayList<>();
 		try{
-			for(TaskDTO t : taskService.getTasksByUsernameAndHomeId(username, idHome)){
-				taskService.deleteTask(t.getId());
+			logger.info("Deleting the tasks of the user {} for home {}", username, idHome);
+			List<TaskDTO> tasks = taskService.getTasksByUsernameAndHomeId(username, idHome);
+			for(TaskDTO t : tasks){
+				// Comprobar si la tarea es weekTask, 
+					// si lo es no tengo que borrarla, tengo que reasignarla.
+				if(t.isWeekTask()){
+					weekTaskNeedReasignation = true;
+					tasksToReasignate.add(t.getId());
+				} else {
+					taskService.deleteTask(t.getId());
+				}
 			}
 			logger.info("Deleting the spents of the user {} for home {}", username, idHome);
-			for(SpentDTO s : spentService.getSpentsByUsernameAndHomeId(username, idHome)){
+			List<SpentDTO> spents = spentService.getSpentsByUsernameAndHomeId(username, idHome);
+			for(SpentDTO s : spents){
 				spentService.deleteSpent(s.getId());
 			}
 			home.getUsers().remove(user);
 			homeRepository.save(home);
+			if(weekTaskNeedReasignation){
+				this.reasignateWeekTask(home, tasksToReasignate);
+			}
 		}catch(TasksException e){
 			logger.info("Err deleting task");
 		}
@@ -355,13 +371,51 @@ public class HomeServiceImpl implements HomeService {
 		logger.info("Weekly tasks responsabilities updated succesfully");
 	}
 
-	/*private List<Task> getAllWeeklyTasksByHomeId(Long id){
+	private void reasignateWeekTask(Home home, List<Long> tasksToReasignateIds) throws TasksException{
+		logger.info("Reasignation of the week tasks because a renter has left");
+		List<User> renters = getAllRentersByHomeId(home.getId());
+		int weeklyTaskAssigned = 0;
+		int countAux;
+		User responsible = null;
+		if(renters.size() > 0){
+			for(Long id : tasksToReasignateIds){
+				// Busco al usuario con menos weekTask
+				responsible = null;
+				countAux = Integer.MAX_VALUE;
+				weeklyTaskAssigned = 0;
+				for(User u : renters){
+					// Encontrar al usuario con menos tareas en este momento y asignarle la que corresponda
+					// Cuanto las tareas semanales que tiene el usuario
+					for(Task t : u.getTasks()){
+						if(t.getWeekTask()){
+							weeklyTaskAssigned++;
+						}
+					}
+					// Tengo que comparar con las del siguiente usuario
+					if(weeklyTaskAssigned <= countAux){ // Aqui lo que estoy haciendo es asignar al usuario con mas tareas la tarea que se ha quedado suelta
+						responsible = u;
+						countAux = weeklyTaskAssigned;
+						weeklyTaskAssigned = 0;
+					}
+				}
+				taskService.updateTaskResponsabilities(responsible, Arrays.asList(taskService.getTaskById(id)));
+			}
+		} else {
+			// quiero que se borren todas las weektask a la espera de que se empiezen a añadir nuevos inquilinos
+			List<Task> weeklyTasks = taskService.findAllByIdHomeAndWeeklyTaskTrue(home.getId());
+			for(Task t : weeklyTasks){
+				taskService.deleteTask(t.getId());
+			}
+		}
+	}
+
+	/* private List<Task> getAllWeeklyTasksByHomeId(Long id) throws TasksException{
 		List<Task> weeklyTasks = new ArrayList<>();
 		if(null != id){
 			weeklyTasks = taskService.findAllByIdHomeAndWeeklyTaskTrue(id);
 		}
 		return weeklyTasks;
-	}*/
+	} */
 
 	private List<User> getAllRentersByHomeId(Long id){
 		List<User> renters = new ArrayList<>();

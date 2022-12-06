@@ -29,4 +29,6 @@ public interface TaskService {
 
 	void updateTaskResponsabilities(User user, List<Task> tasks);
 
+	Task getTaskById(Long id);
+
 }
