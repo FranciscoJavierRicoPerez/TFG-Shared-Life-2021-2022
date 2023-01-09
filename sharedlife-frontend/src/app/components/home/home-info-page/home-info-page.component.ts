@@ -35,10 +35,10 @@ export class HomeInfoPageComponent implements OnInit {
   errorSendInvitation: boolean;
   alreadyInvited: boolean;
   userNotExists: boolean;
+  renters: User[] = [];
   invitationForm = new FormGroup({
     username: new FormControl('', [Validators.required])
   })
-
   constructor(
     private HomeService: HomeService,
     private Router: Router,
@@ -66,6 +66,7 @@ export class HomeInfoPageComponent implements OnInit {
       this.HomeService.getAllHomeMembers(this.idHome).subscribe(
         data => {
           this.users = data;
+          this.renters = data;
           console.log(this.users);
         }
       );

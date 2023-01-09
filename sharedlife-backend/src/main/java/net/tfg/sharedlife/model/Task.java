@@ -2,6 +2,7 @@ package net.tfg.sharedlife.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -52,9 +54,7 @@ public class Task {
 	// Enumerado que indica si la tarea pertenece a una habitacion de la casa
 	@Column(name = "homeRoom")
 	private HomeRoomEnum homeRoom;
-	// Enumerado que indica el estado actual de la tarea (TO_DO, IN_PROGRESS, ON_REVIEW, DONE)
 
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_user")
 	private User user; // RESPONSABLE DE LA TAREA
@@ -62,4 +62,8 @@ public class Task {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_home")
 	private Home home;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_taskTraking")
+	private TaskTraking taskTraking; 
 }

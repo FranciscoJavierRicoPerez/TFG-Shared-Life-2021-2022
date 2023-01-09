@@ -5,8 +5,11 @@ import java.util.List;
 import net.tfg.sharedlife.dto.HomeDTO;
 import net.tfg.sharedlife.dto.InvitationDTO;
 import net.tfg.sharedlife.dto.NewUserDto;
+import net.tfg.sharedlife.dto.UserDTO;
 import net.tfg.sharedlife.exception.DataIncorrectException;
+import net.tfg.sharedlife.exception.TasksException;
 import net.tfg.sharedlife.model.Home;
+import net.tfg.sharedlife.model.User;
 
 /**
  * The Interface HomeService.
@@ -21,9 +24,9 @@ public interface HomeService {
 	
 	void createInvitation(InvitationDTO invitation) throws DataIncorrectException;
 	
-	void acceptInvitation(InvitationDTO invitation);
+	void acceptInvitation(InvitationDTO invitation) throws TasksException;
 	
-	List<NewUserDto> getMembers(Long idHome);
+	List<UserDTO> getMembers(Long idHome);
 	
 	void leaveHome(Long idHome, String username);
 	
@@ -32,6 +35,8 @@ public interface HomeService {
 	Boolean hasHome(String username);
 
 	Home getHomeById(Long id);
+
+	List<User> getAllRentersByHomeId(Long id);
 
 	
 }

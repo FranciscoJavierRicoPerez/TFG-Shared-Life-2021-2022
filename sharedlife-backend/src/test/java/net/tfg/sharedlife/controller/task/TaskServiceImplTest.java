@@ -2,7 +2,6 @@ package net.tfg.sharedlife.controller.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -15,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.jayway.jsonpath.Option;
 
 import net.tfg.sharedlife.exception.TasksException;
 import net.tfg.sharedlife.model.Task;

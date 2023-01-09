@@ -1,19 +1,18 @@
 package net.tfg.sharedlife.service.task;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import net.tfg.sharedlife.dto.*;
+import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.tfg.sharedlife.dto.TaskDTO;
 import net.tfg.sharedlife.enums.HomeRoomEnum;
 import net.tfg.sharedlife.enums.RoleEnum;
 import net.tfg.sharedlife.exception.TasksException;
+import net.tfg.sharedlife.mapper.TaskTrakingMapper;
 import net.tfg.sharedlife.model.Home;
 import net.tfg.sharedlife.model.Role;
 import net.tfg.sharedlife.model.Task;
@@ -21,6 +20,7 @@ import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.repository.HomeRepository;
 import net.tfg.sharedlife.repository.TaskRepository;
 import net.tfg.sharedlife.repository.UserRepository;
+import net.tfg.sharedlife.service.taskTraking.TaskTrakingService;
 import net.tfg.sharedlife.service.user.UserService;
 
 @Service
@@ -40,6 +40,11 @@ public class TaskServiceImpl implements TaskService{
 
 	@Autowired 
 	private UserService userService;
+
+	@Autowired
+	private TaskTrakingService taskTrakingService;
+
+	private TaskTrakingMapper taskTrakingMapper = Mappers.getMapper(TaskTrakingMapper.class);
 	
 	@Override
 	public void createTask(TaskDTO taskdto) {
@@ -81,6 +86,7 @@ public class TaskServiceImpl implements TaskService{
 				taskdto.setFinished(t.isFinished());
 				taskdto.setIdHome(t.getHome().getId().toString());
 				taskdto.setWeekTask(t.getWeekTask());
+				taskdto.setTaskTraking(taskTrakingMapper.taskTrakingToTaskTrakingDTO(t.getTaskTraking()));
 				tasksdto.add(taskdto);
 			}
 		}
@@ -95,6 +101,7 @@ public class TaskServiceImpl implements TaskService{
 		for(Task t : tasks) {
 			if(t.getHome().getId().equals(id)) {
 				TaskDTO taskdto = new TaskDTO();
+				taskdto.setId(t.getId());
 				taskdto.setTitle(t.getTitle());
 				taskdto.setDescription(t.getDescription());
 				taskdto.setStartDate(t.getStartDate());
@@ -103,6 +110,7 @@ public class TaskServiceImpl implements TaskService{
 				taskdto.setFinished(t.isFinished());
 				taskdto.setIdHome(t.getHome().getId().toString());
 				taskdto.setWeekTask(t.getWeekTask());
+				taskdto.setTaskTraking(taskTrakingMapper.taskTrakingToTaskTrakingDTO(t.getTaskTraking()));
 				tasksdto.add(taskdto);
 			}
 		}
@@ -129,7 +137,7 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public void createWeeklyTask(Home home) {
+	public void createWeeklyTask(Home home) throws TasksException {
 		Log.info("Creating all the weekly tasks");
 		List<Task> weeklyTasks = new ArrayList<>();
 		HomeRoomEnum [] rooms = {
@@ -175,6 +183,7 @@ public class TaskServiceImpl implements TaskService{
 				}
 			}
 			task.setHome(home);
+			task.setTaskTraking(taskTrakingService.initiateTaskTraking());
 			taskRepository.save(task);
 			weeklyTasks.add(task);
 		}
@@ -207,9 +216,50 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public Task getTaskById(Long id) {
-		// TODO Auto-generated method stub
+	public Task getTaskById(Long id) throws TasksException {
+		if(taskRepository.findById(id).isEmpty()) {
+			throw new TasksException("TASK_NOT_FOUND");
+		}
 		return taskRepository.findById(id).get();
+	}
+
+	@Override
+	public boolean taskTrakingProcess(ConfirmedTaskDTO confirmedTaskDTO) throws TasksException {
+		if(confirmedTaskDTO.getIdTask() == null){
+			throw new TasksException("ID_TASK_NOT_EXIST");
+		}
+		List<User> renters = new ArrayList<>();
+		/// ESTE FOR TIENE QUE CAMBIAR POR UN MAPPER O ALGO
+		for(UserDTO u : confirmedTaskDTO.getMembers()){
+			User user = new User();
+			user.setId(u.getId());
+			user.setEmail(u.getEmail());
+			user.setUsername(u.getUsername());
+			user.setFirstName(u.getFirstName());
+			user.setLastName(u.getLastName());
+			user.setPassword(u.getPassword());
+			Set<Role> roles = new HashSet<>();
+			for(String role : u.getRoles()){
+				if(role.equals("ROLE_ADMIN")){
+					roles.add(new Role(RoleEnum.ROLE_ADMIN));
+				} else {
+					roles.add(new Role(RoleEnum.ROLE_USER));
+				}
+			}
+			user.setRoles(roles);
+			renters.add(user);
+		}
+		///////////////////////////////////////////////////////
+		return taskTrakingService.taskTrakingProcess(getTaskById(confirmedTaskDTO.getIdTask()), confirmedTaskDTO.getUsername(), renters);
+	}
+
+	@Override
+	public TaskTrakingStatusDTO checkTaskTraking(String username) throws TasksException {
+		User user = userRepository.getByUsername(username).get();
+		if(user == null){
+			throw new TasksException("ERR_CHEKING_TASK_TRAKING");
+		}
+		return taskTrakingService.checkTaskTraking(user);
 	}
 
 }

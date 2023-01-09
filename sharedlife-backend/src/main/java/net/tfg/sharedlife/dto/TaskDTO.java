@@ -16,4 +16,5 @@ public class TaskDTO {
 	private String homeRoom;
 	private String user;
 	private String idHome;
+	private TaskTrakingDTO taskTraking;
 }

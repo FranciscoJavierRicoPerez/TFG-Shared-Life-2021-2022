@@ -1,33 +1,43 @@
 <app-menu></app-menu>
 <div class="container justify-content-center">
-
   <div class="card">
-    <div class="card-header"><h3>{{home.address}}</h3></div>
+    <div class="card-header">
+      <h3>{{ home.address }}</h3>
+    </div>
     <div class="card-body">
       <h3>Datos de la vivienda</h3>
-      {{home.city}}<br>  {{home.address}}<br> {{home.number}}<br> Habitaciones disponibles {{home.rooms}}
-    
+      {{ home.city }}<br />
+      {{ home.address }}<br />
+      {{ home.number }}<br />
+      Habitaciones disponibles {{ home.rooms }}
+
       <!-- MIEMBROS DE LA VIVIENDA -->
-      <p></p>   
+      <p></p>
       <div class="card">
         <div class="card-header">
           <h3>Miembros</h3>
         </div>
         <div class="card-body card-deck mt-3">
-            <div *ngFor="let user of users">
-              <label>
-                <div class="card" style="width: 270px; text-align: center">
-                  <center>
-                    <img class="card-img-top" src="./assets/perfil.png" style="width: 150px;">
-                  </center>
-                  <div class="card-body">
-                    <h5 class="card-title">{{ user.firstName }} {{ user.lastName }}</h5>
-                    <p class="card-text">{{ user.username }}</p>
-                    <a href="#" class="btn btn-warning btn-lg">Perfil</a>
-                  </div>
+          <div *ngFor="let user of users">
+            <label>
+              <div class="card" style="width: 270px; text-align: center">
+                <center>
+                  <img
+                    class="card-img-top"
+                    src="./assets/perfil.png"
+                    style="width: 150px"
+                  />
+                </center>
+                <div class="card-body">
+                  <h5 class="card-title">
+                    {{ user.firstName }} {{ user.lastName }}
+                  </h5>
+                  <p class="card-text">{{ user.username }}</p>
+                  <a href="#" class="btn btn-warning btn-lg">Perfil</a>
                 </div>
-              </label>
-            </div>
+              </div>
+            </label>
+          </div>
         </div>
       </div>
       <p></p>
@@ -35,56 +45,93 @@
       <div *ngIf="isAdmin">
         <div class="card">
           <div class="card-header"><h3>Invitaciones</h3></div>
-            <form [formGroup]="invitationForm" (ngSubmit)="sendInvitation()" novalidate>
-              <div class="card-body">
-                <div class="form-group" style="margin: 5px">
-                  <label for="username">Nombre usuario</label>
-                  <input type="text"
-                         name="username"
-                         id="username"
-                         class="form-control"
-                         formControlName="username" required>
-                  <div *ngIf="invitationForm.get('username')?.hasError('required') && invitationForm.get('username')?.touched">
-                    El nombre de usuario es un campo requerido
-                  </div>
-                  <div *ngIf="errorSendInvitation">
-                    Este usuario ya esta registrado en otra vivienda
-                  </div>
-                  <div *ngIf="home.completed">
-                    La vivienda ya esta completa no se pueden enviar mas invitaciones
-                  </div>
-                  <div *ngIf="alreadyInvited">
-                    El usuario ya tiene una invitación pendiente
-                  </div>
-                  <div *ngIf="userNotExists">
-                    No existe ningun usuario con ese nombre
-                  </div>
+          <form
+            [formGroup]="invitationForm"
+            (ngSubmit)="sendInvitation()"
+            novalidate
+          >
+            <div class="card-body">
+              <div class="form-group" style="margin: 5px">
+                <label for="username">Nombre usuario</label>
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  class="form-control"
+                  formControlName="username"
+                  required
+                />
+                <div
+                  *ngIf="
+                    invitationForm.get('username')?.hasError('required') &&
+                    invitationForm.get('username')?.touched
+                  "
+                >
+                  El nombre de usuario es un campo requerido
+                </div>
+                <div *ngIf="errorSendInvitation">
+                  Este usuario ya esta registrado en otra vivienda
+                </div>
+                <div *ngIf="home.completed">
+                  La vivienda ya esta completa no se pueden enviar mas
+                  invitaciones
+                </div>
+                <div *ngIf="alreadyInvited">
+                  El usuario ya tiene una invitación pendiente
+                </div>
+                <div *ngIf="userNotExists">
+                  No existe ningun usuario con ese nombre
                 </div>
               </div>
-              <div class="card-footer">
-                <div class="form-group" style="margin: 5px">
-                  <button class="btn btn-success btn-lg" [disabled]="!invitationForm.valid || home.completed">Enviar</button>
-                </div>
+            </div>
+            <div class="card-footer">
+              <div class="form-group" style="margin: 5px">
+                <button
+                  class="btn btn-success btn-lg"
+                  [disabled]="!invitationForm.valid || home.completed"
+                >
+                  Enviar
+                </button>
               </div>
-            </form>
+            </div>
+          </form>
         </div>
       </div>
-      <app-task-table [idHome]=idHome [username]=username></app-task-table>
-      <app-spent-table [idHome]=idHome [username]=username></app-spent-table>
+      <app-task-table 
+        [idHome]="idHome" 
+        [username]="username"
+        [renters]="renters"
+      ></app-task-table>
+      <app-spent-table
+        [idHome]="idHome"
+        [username]="username"
+      ></app-spent-table>
       <p></p>
       <div *ngIf="!isAdmin">
-        <app-debt-table [username]=username></app-debt-table>
+        <app-debt-table [username]="username"></app-debt-table>
       </div>
     </div>
     <div class="card-footer">
       <div *ngIf="!isAdmin">
-        <button type="button" (click)="leaveHouse()" class="btn btn-primary btn-lg">Abandonar Vivienda</button>
+        <button
+          type="button"
+          (click)="leaveHouse()"
+          class="btn btn-primary btn-lg"
+        >
+          Abandonar Vivienda
+        </button>
       </div>
       <div *ngIf="isAdmin">
-        <button type="button" (click)="deleteHouse()" class="btn btn-danger btn-lg">Eliminar Vivienda</button>
+        <button
+          type="button"
+          (click)="deleteHouse()"
+          class="btn btn-danger btn-lg"
+        >
+          Eliminar Vivienda
+        </button>
       </div>
     </div>
   </div>
   <p></p>
-  <br>
+  <br/>
 </div>

@@ -4,8 +4,11 @@ import net.tfg.sharedlife.common.ErrorMessages;
 import net.tfg.sharedlife.dto.HomeDTO;
 import net.tfg.sharedlife.dto.InvitationDTO;
 import net.tfg.sharedlife.dto.NewUserDto;
+import net.tfg.sharedlife.dto.UserDTO;
 import net.tfg.sharedlife.exception.DataIncorrectException;
+import net.tfg.sharedlife.exception.TasksException;
 import net.tfg.sharedlife.model.Home;
+import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.service.home.HomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,21 +106,25 @@ public class HomeControllerImpl implements HomeController {
 	@PreAuthorize("hasRole('USER')")
 	@Override
 	@PostMapping("/invitation/accept")
-	public ResponseEntity<?> acceptInvitationToHome(@RequestBody InvitationDTO invitation){
+	public ResponseEntity<?> acceptInvitationToHome(@RequestBody InvitationDTO invitation) {
 		// ESTE METODO TIENE QUE AÑADIR AL USUARIO A LA TAMBLA HOME_USER SI EL HOME_CODE PASADO ES EL MISMO QUE ESTA EN LA TABLA
 		// BORRAR DE LA TABLA DE INVITACIONES TODAS LAS INVITACIONES QUE TENGA EL USUARIO
 		logger.info("Starting accept invitation process for user with username: {} to home with id: {}", invitation.getUsername(), invitation.getIdHome());
-		homeService.acceptInvitation(invitation);
+		try{
+			homeService.acceptInvitation(invitation);
+		} catch (TasksException e){
+			logger.info("error");
+		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasRole('USER')")
 	@Override
 	@GetMapping("/id/{id}/members")
-	public ResponseEntity<List<NewUserDto>> getMembers(@PathVariable("id") Long id){
+	public ResponseEntity<List<UserDTO>> getMembers(@PathVariable("id") Long id){
 		//// PUEDE SER QUE NO FUNCIONE YA QUE AL HACER EN EL FRONT EL window.localtion.reload NO SE SI SIE PIERDE EL VALOR DE ID HOME
 		logger.info("Searching members of the house with id: {}", id);
-		List<NewUserDto> users = new ArrayList<>();
+		List<UserDTO> users = new ArrayList<>();
 		users = homeService.getMembers(id);
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}

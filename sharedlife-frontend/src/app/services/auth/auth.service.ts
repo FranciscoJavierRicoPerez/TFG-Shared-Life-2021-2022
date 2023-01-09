@@ -4,6 +4,7 @@ import { UserLoginDto } from './../../models/user/user-login-dto/user-login-dto'
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtDto } from 'src/app/models/jwt/jwt-dto';
+import { NewUserDTO } from 'src/app/models/user/new-user-dto/NewUserDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class AuthService {
     return this.HttpClient.post<JwtDto>(this.URL+"login", UserLoginDto);
   }
 
-  public register(newUser: User): Observable<any>{
+  public register(newUser: NewUserDTO): Observable<any>{
     return this.HttpClient.post<any>(this.URL+"register", newUser);
   }
 }

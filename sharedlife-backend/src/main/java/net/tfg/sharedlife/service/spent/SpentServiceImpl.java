@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.tfg.sharedlife.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,8 +75,8 @@ public class SpentServiceImpl implements SpentService {
 			// => ES DECIR EL USUARIO QUE TENGA EL NOMBRE Y EL QUE CONTENGA EL ROL DE USUARIO
 		logger.info("Creating de debts for the member users");
 		Set<Debt> debts = new HashSet<>();
-		List<NewUserDto> members = homeService.getMembers(Long.parseLong(spentDto.getIdHome()));
-		for(NewUserDto u : members) {
+		List<UserDTO> members = homeService.getMembers(Long.parseLong(spentDto.getIdHome()));
+		for(UserDTO u : members) {
 			if(!spentDto.getUserToPay().equals(u.getUsername()) && !admin && !u.getRoles().contains("ROLE_ADMIN")) { // En este caso no crea si es ADMIN
 				logger.info("Debts in the case the spent is creating by the user");
 				User member = userService.getByUsername(u.getUsername()).get();

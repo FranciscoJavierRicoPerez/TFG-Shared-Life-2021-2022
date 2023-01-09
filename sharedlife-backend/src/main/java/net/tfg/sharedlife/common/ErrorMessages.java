@@ -1,6 +1,5 @@
 package net.tfg.sharedlife.common;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ErrorMessages.
  */

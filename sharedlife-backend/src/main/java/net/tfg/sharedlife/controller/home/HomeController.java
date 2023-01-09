@@ -2,6 +2,8 @@ package net.tfg.sharedlife.controller.home;
 
 import java.util.List;
 
+import net.tfg.sharedlife.dto.UserDTO;
+import net.tfg.sharedlife.exception.TasksException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,10 +35,10 @@ public interface HomeController {
 	ResponseEntity<?> createInvitationToHome(@RequestBody InvitationDTO invitation);
 	
 	@PostMapping("/invitation/accept")
-	ResponseEntity<?> acceptInvitationToHome(@RequestBody InvitationDTO invitation);
+	ResponseEntity<?> acceptInvitationToHome(@RequestBody InvitationDTO invitation) throws TasksException;
 	
 	@GetMapping("/id/{id}/members")
-	ResponseEntity<List<NewUserDto>> getMembers(@PathVariable("id") Long id);
+	ResponseEntity<List<UserDTO>> getMembers(@PathVariable("id") Long id);
 	
 	@DeleteMapping("/id/{id}/leave")
 	ResponseEntity<?> leaveHome(@PathVariable("id") Long id, @RequestParam("username") String username);

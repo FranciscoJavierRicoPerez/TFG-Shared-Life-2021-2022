@@ -2,6 +2,8 @@ package net.tfg.sharedlife.service.task;
 
 import java.util.List;
 
+import net.tfg.sharedlife.dto.ConfirmedTaskDTO;
+import net.tfg.sharedlife.dto.TaskTrakingStatusDTO;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import net.tfg.sharedlife.dto.TaskDTO;
@@ -21,7 +23,7 @@ public interface TaskService {
 
 	void deleteTask(Long id) throws TasksException;
 
-	void createWeeklyTask(Home home);
+	void createWeeklyTask(Home home) throws TasksException;
 
 	//void manageWeeklyTaskOwner(Home home);
 
@@ -29,6 +31,10 @@ public interface TaskService {
 
 	void updateTaskResponsabilities(User user, List<Task> tasks);
 
-	Task getTaskById(Long id);
+	Task getTaskById(Long id) throws TasksException;
+
+	boolean taskTrakingProcess(ConfirmedTaskDTO confirmedTaskDTO) throws TasksException;
+
+	TaskTrakingStatusDTO checkTaskTraking(String username) throws TasksException;
 
 }

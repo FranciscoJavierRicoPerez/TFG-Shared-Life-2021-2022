@@ -2,6 +2,9 @@ package net.tfg.sharedlife.controller.task;
 
 import java.util.List;
 
+import net.tfg.sharedlife.dto.ConfirmedTaskDTO;
+import net.tfg.sharedlife.dto.TaskStatusDTO;
+import net.tfg.sharedlife.dto.TaskTrakingStatusDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,5 +30,11 @@ public interface TaskController {
 
 	@GetMapping("/home/{id}/weeklyTasks")
 	ResponseEntity<List<Task>> getWeeklyTasksByHomeId(@PathVariable("id") Long id);
+
+	@PostMapping("/modifyTaskProgress")
+	ResponseEntity<?> modifyTaskProgress(@RequestBody ConfirmedTaskDTO confirmedTaskDTO);
+
+	@GetMapping("/checkTaskTraking")
+	ResponseEntity<TaskTrakingStatusDTO> checkTaskTraking(@RequestParam("username") String username);
 
 }
