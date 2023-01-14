@@ -13,4 +13,12 @@ public interface TaskTrakingService {
     boolean taskTrakingProcess(Task task, String username, List<User> renters);
 
     TaskTrakingStatusDTO checkTaskTraking(User user);
+
+    TaskTrakingStatusDTO checkTaskTrakingOfMyTasks(User user);
+
+    boolean checkAllTaskAreConfirmed(List<Long> ids);
+
+    void deleteTaskTraking(Task t);
+
+    void saveTaskTraking(TaskTraking taskTraking);
 }

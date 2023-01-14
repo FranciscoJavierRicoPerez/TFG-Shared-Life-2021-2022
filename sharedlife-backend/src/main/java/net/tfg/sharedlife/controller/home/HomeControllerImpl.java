@@ -155,6 +155,13 @@ public class HomeControllerImpl implements HomeController {
 		hasHomes = homeService.hasHome(username);
 		return new ResponseEntity<>(hasHomes, HttpStatus.OK);
 	}
-	
-	
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@PostMapping("/id/{id}/weeklyTaskManagement")
+	@Override
+	public ResponseEntity<?> weeklyTaskManagement(@PathVariable("id") Long id, @RequestBody List<Long> ids) {
+		HttpStatus status = HttpStatus.OK;
+		homeService.weeklyTaskReasignationManagement(id, ids);
+		return new ResponseEntity<>(status);
+	}
 }

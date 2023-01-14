@@ -4,9 +4,7 @@ import java.util.*;
 
 import net.tfg.sharedlife.dto.TaskStatusDTO;
 import net.tfg.sharedlife.dto.TaskTrakingStatusDTO;
-import net.tfg.sharedlife.model.Task;
-import net.tfg.sharedlife.model.TaskTrakingsUsers;
-import net.tfg.sharedlife.model.User;
+import net.tfg.sharedlife.model.*;
 import net.tfg.sharedlife.repository.TaskRepository;
 import net.tfg.sharedlife.repository.TaskTrakingsUsersRepository;
 import org.slf4j.Logger;
@@ -14,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.tfg.sharedlife.model.TaskTraking;
 import net.tfg.sharedlife.repository.TaskTrakingRepository;
 
 import javax.transaction.Transactional;
@@ -106,5 +103,78 @@ public class TaskTrakingServiceImpl implements TaskTrakingService {
         }
         taskTrakingStatusDTO.setTaskStatusDTOList(taskStatusDTOList);
         return taskTrakingStatusDTO;
+    }
+
+    @Override
+    public TaskTrakingStatusDTO checkTaskTrakingOfMyTasks(User user) {
+        TaskTrakingStatusDTO  taskTrakingStatusDTO = new TaskTrakingStatusDTO();
+        List<TaskStatusDTO> taskStatusDTOList = new ArrayList<>();
+        List<Task> tasks = user.getTasks();
+        for(Task t : tasks){
+            if(t.getWeekTask()){
+                TaskStatusDTO taskStatusDTO = new TaskStatusDTO();
+                TaskTraking taskTraking = t.getTaskTraking(); // Aqui tengo el traking de la tare
+                List<TaskTrakingsUsers> taskTrakingsUsersList =
+                        taskTrakingsUsersRepository.findAllByTaskTrakingId(taskTraking.getId()); // Obtener todos los trakingsUsers apartir del id de traking
+                int count = 0;
+                for(TaskTrakingsUsers taskTrakingsUsers : taskTrakingsUsersList) {
+                    if(taskTrakingsUsers.isConfirmed()){
+                        count++;
+                    }
+                }
+                taskStatusDTO.setIdTask(t.getId());
+                if(count == taskTrakingsUsersList.size()){
+                    taskStatusDTO.setConfirmed(true);
+                } else {
+                    taskStatusDTO.setConfirmed(false);
+                }
+                taskStatusDTOList.add(taskStatusDTO);
+            }
+        }
+        taskTrakingStatusDTO.setTaskStatusDTOList(taskStatusDTOList);
+        return taskTrakingStatusDTO;
+    }
+
+    @Override
+    public boolean checkAllTaskAreConfirmed(List<Long> ids) {
+        boolean allConfirmed = false;
+        int count = 0;
+        for(Long id : ids){
+            Task t = taskRepository.findById(id).get();
+            TaskTraking traking = t.getTaskTraking();
+            List<TaskTrakingsUsers> taskTrakingsUsersList =
+                    taskTrakingsUsersRepository.findAllByTaskTrakingId(traking.getId());
+            int count2 = 0;
+            for(TaskTrakingsUsers taskTrakingsUsers : taskTrakingsUsersList){
+                if(taskTrakingsUsers.isConfirmed()){
+                    count2++;
+                }
+            }
+            if(count2 == taskTrakingsUsersList.size()){
+                count++;
+            }
+        }
+        if(count == ids.size()){
+            allConfirmed = true;
+        }
+        return allConfirmed;
+    }
+
+    @Override
+    public void deleteTaskTraking(Task t) {
+        TaskTraking taskTraking = t.getTaskTraking();
+        List<TaskTrakingsUsers> taskTrakingsUsersList =
+                taskTrakingsUsersRepository.findAllByTaskTrakingId(taskTraking.getId());
+        for(TaskTrakingsUsers taskTrakingsUser : taskTrakingsUsersList){
+            taskTrakingsUsersRepository.deleteById(taskTrakingsUser.getId());
+        }
+        taskTrakingRepository.delete(taskTraking);
+        t.setTaskTraking(null);
+        taskRepository.save(t);
+    }
+
+    @Override
+    public void saveTaskTraking(TaskTraking taskTraking) {
+        taskTrakingRepository.save(taskTraking);
     }
 }

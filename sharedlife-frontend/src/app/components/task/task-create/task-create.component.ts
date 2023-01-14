@@ -29,6 +29,8 @@ export class TaskCreateComponent implements OnInit {
   homeTasks: Task[] = [];
   home: Home;
   taskTrakingStatus: TaskTrakingStatusDTO;
+  allTaskConfirmed: boolean = false;
+  weeklyTaskIds: string[] = [];
 
   infoModal: boolean = false;
 
@@ -91,6 +93,47 @@ export class TaskCreateComponent implements OnInit {
                 },
                 err => {
                   console.log("ERR checking the task traking");
+                }
+              );
+
+              // Hacer una comprobacion de si todas las tarea semanales de todos los miembros de la vivienda tienen todas las confirmaciones 
+              // SI LAS TIENE SE BORRAN TODOS LOS TRAKING Y SE REINICA LAS TAREAS
+              // necesitp una funcion que devuelva un booleano indicando eso va a recibir por parametro 
+              for(let i = 0; i < this.weeklyTasks.length; i++){
+                this.weeklyTaskIds.push(this.weeklyTasks[i].id);
+              }
+              this.TaskService.checkIfAllTaskAreConfirmed(this.weeklyTaskIds).subscribe(
+                data => {
+                  debugger;
+                  console.log("OK checking if all weeklyTask are confirmed");
+                  this.allTaskConfirmed = data;
+                  console.log(this.allTaskConfirmed);
+                  if(this.allTaskConfirmed){
+                    debugger;
+                    console.log("Starting the process restart of the weekly tasks");
+                    this.TaskService.restartWeeklyTasks(this.weeklyTaskIds).subscribe(
+                      data => {
+                        console.log('OK weekly task reasigned');
+                        debugger;
+                        this.HomeService.manageWeeklyTask(this.idHome, this.weeklyTaskIds).subscribe(
+                          data => {
+                            debugger;
+                            console.log('Weekly task reasigned');
+                          }, 
+                          err => {
+                            debugger;
+                            console.log('ERR reasinating weekly task');
+                          }
+                        );
+                      }, 
+                      err => {
+                        console.log('ERR in the reasicnation of the weeklyTask');
+                      }
+                    );
+                  }
+                },
+                err => {
+                  console.log("ERR checking if all weekly task are confirmed");
                 }
               );
             },

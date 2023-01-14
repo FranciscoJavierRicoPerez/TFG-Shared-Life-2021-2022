@@ -3,6 +3,7 @@ package net.tfg.sharedlife.service.task;
 import java.util.*;
 
 import net.tfg.sharedlife.dto.*;
+import net.tfg.sharedlife.model.*;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +14,6 @@ import net.tfg.sharedlife.enums.HomeRoomEnum;
 import net.tfg.sharedlife.enums.RoleEnum;
 import net.tfg.sharedlife.exception.TasksException;
 import net.tfg.sharedlife.mapper.TaskTrakingMapper;
-import net.tfg.sharedlife.model.Home;
-import net.tfg.sharedlife.model.Role;
-import net.tfg.sharedlife.model.Task;
-import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.repository.HomeRepository;
 import net.tfg.sharedlife.repository.TaskRepository;
 import net.tfg.sharedlife.repository.UserRepository;
@@ -211,6 +208,15 @@ public class TaskServiceImpl implements TaskService{
 	public void updateTaskResponsabilities(User user,  List<Task> tasks) {
 		for(Task task : tasks){
 			task.setUser(user);
+			// Tambien deberia comprobar si es una weeklyTask
+			// y si es weekTask y no tiene un traking asociado debo crearlo
+			if(task.getWeekTask()){
+				if(task.getTaskTraking() == null) {
+					TaskTraking taskTraking = taskTrakingService.initiateTaskTraking();
+					taskTrakingService.saveTaskTraking(taskTraking);
+					task.setTaskTraking(taskTraking);
+				}
+			}
 			taskRepository.save(task);
 		}
 	}
@@ -262,4 +268,33 @@ public class TaskServiceImpl implements TaskService{
 		return taskTrakingService.checkTaskTraking(user);
 	}
 
+	@Override
+	public TaskTrakingStatusDTO checkTaskTrakingOfMyTasks(String username) throws TasksException {
+		User user = userRepository.getByUsername(username).get();
+		if(user == null){
+			throw new TasksException("ERR_CHEKING_TASK_TRAKING");
+		}
+		return taskTrakingService.checkTaskTrakingOfMyTasks(user);
+	}
+
+	@Override
+	public boolean checkAllTaskAreConfirmed(List<Long> ids) throws TasksException {
+		if(ids.isEmpty()){
+			throw new TasksException("ERR_NO_TASKS");
+		}
+		return taskTrakingService.checkAllTaskAreConfirmed(ids);
+	}
+
+	@Override
+	public void restartWeeklyTasks(List<Long> ids) {
+		for(Long id : ids){
+			Task t = taskRepository.getById(id);
+			// Para cada tarea tengo que borrar su taskTraking y su taskTrakingUsers
+			// Empezamos con el taskTrakingUsers
+			taskTrakingService.deleteTaskTraking(t);
+			taskRepository.save(t);
+			t.setUser(null);
+			taskRepository.save(t);
+		}
+	}
 }

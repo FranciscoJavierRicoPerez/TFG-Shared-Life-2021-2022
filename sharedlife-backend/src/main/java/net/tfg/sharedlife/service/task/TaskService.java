@@ -37,4 +37,11 @@ public interface TaskService {
 
 	TaskTrakingStatusDTO checkTaskTraking(String username) throws TasksException;
 
+	TaskTrakingStatusDTO checkTaskTrakingOfMyTasks(String username) throws TasksException;
+
+	boolean checkAllTaskAreConfirmed(List<Long> ids) throws TasksException;
+
+	void restartWeeklyTasks(List<Long> ids);
+
+
 }

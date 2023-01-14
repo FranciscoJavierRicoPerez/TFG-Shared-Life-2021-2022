@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfirmedTaskDTO } from 'src/app/models/taskTraking/confirmedTaskDTO';
 import { User } from 'src/app/models/user/user';
@@ -57,6 +57,33 @@ export class TaskService {
   checkTaskTraking(username: string) {
     return this.HttpClient.get<any>(
       `${this.baseURL}/checkTaskTraking?username=${username}`
+    );
+  }
+
+  checkTaskTrakingOfMyTasks(username: string) {
+    return this.HttpClient.get<any>(
+      `${this.baseURL}/checkTaskTrakingOfMyTasks?username=${username}`
+    );
+  }
+
+  checkIfAllTaskAreConfirmed(ids: string[]): Observable<any> {
+    let queryParams = new HttpParams();
+    for (let i = 0; i < ids.length; i++) {
+      queryParams = queryParams.append('ids', ids[i]);
+    }
+    return this.HttpClient.get<any>(
+      `${this.baseURL}/checkAllTaskAreConfirmed?${queryParams.toString()}`
+    );
+  }
+
+  restartWeeklyTasks(ids: string[]){
+    let queryParams = new HttpParams();
+    for (let i = 0; i < ids.length; i++) {
+      queryParams = queryParams.append('ids', ids[i]);
+    }
+    return this.HttpClient.post<any>(
+      `${this.baseURL}/restartWeeklyTasks`,
+      ids
     );
   }
 }

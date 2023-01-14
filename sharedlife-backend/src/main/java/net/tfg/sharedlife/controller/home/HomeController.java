@@ -49,4 +49,7 @@ public interface HomeController {
 	@GetMapping("/hasHome")
 	ResponseEntity<Boolean> hasHome(@RequestParam("username") String username);
 
+	@PostMapping("/id/{id}/weeklyTaskManagement")
+	ResponseEntity<?>  weeklyTaskManagement(@PathVariable("id") Long id, @RequestBody List<Long> ids);
+
 }

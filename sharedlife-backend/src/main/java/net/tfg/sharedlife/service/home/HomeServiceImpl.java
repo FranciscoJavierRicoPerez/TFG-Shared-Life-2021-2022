@@ -307,7 +307,8 @@ public class HomeServiceImpl implements HomeService {
 		return notExists;
 	}
 
-	private void weeklyTaskManagement(Long id) throws TasksException {
+	@Override
+	public void weeklyTaskManagement(Long id) throws TasksException {
 		logger.info("Starting weekly task management process...");
 		// Una vez añadido el miembro a la vivienda, compruebo si es el primero o si no
 		// lo es hago el reparto de tareas
@@ -322,6 +323,30 @@ public class HomeServiceImpl implements HomeService {
 			}
 		}
 		logger.info("Weekly task management process terminate succesfully");
+	}
+
+	@Override
+	public void weeklyTaskReasignationManagement(Long idHome, List<Long> idsWeeklyTask) {
+		try {
+			this.reasignateWeekTaskOneForUser(getHomeById(idHome), idsWeeklyTask);
+		} catch (TasksException e) {
+			logger.info("Error in the reasignation of the weeklyTaks");
+		}
+	}
+
+	private void reasignateWeekTaskOneForUser(Home home, List<Long> idsWeeklyTask) throws TasksException {
+		List<User> renters = this.getAllRentersByHomeId(home.getId());
+		List<Task> tasks = new ArrayList<>();
+		for(Long id : idsWeeklyTask){
+			tasks.add(taskService.getTaskById(id));
+		}
+		for(User user : renters){
+			for(Task t : tasks){
+				taskService.updateTaskResponsabilities(user, Arrays.asList(t));
+				tasks.remove(t);
+				break;
+			}
+		}
 	}
 
 	public Home getHomeById(Long id) {
@@ -413,6 +438,8 @@ public class HomeServiceImpl implements HomeService {
 			}
 		}
 	}
+
+
 
 	/*
 	 * private List<Task> getAllWeeklyTasksByHomeId(Long id) throws TasksException{

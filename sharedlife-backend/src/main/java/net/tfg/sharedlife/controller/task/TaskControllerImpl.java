@@ -137,4 +137,46 @@ public class TaskControllerImpl implements TaskController {
 		return new ResponseEntity<>(taskTrakingStatusDTO, status);
 	}
 
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@GetMapping("/checkTaskTrakingOfMyTasks")
+	@Override
+	public ResponseEntity<TaskTrakingStatusDTO> checkTaskTrakingOfMyTasks(String username) {
+		Log.info("Checking the traking of the tasks who me {} have responsabilities", username);
+		HttpStatus status = HttpStatus.OK;
+		TaskTrakingStatusDTO taskTrakingStatusDTO = null;
+		try {
+			taskTrakingStatusDTO = taskService.checkTaskTrakingOfMyTasks(username);
+		} catch (TasksException e){
+			Log.info("Error checking the task traking of the tasks who {} must confirm", username);
+			status = HttpStatus.BAD_REQUEST;
+		}
+		return new ResponseEntity<>(taskTrakingStatusDTO, status);
+	}
+
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@GetMapping("/checkAllTaskAreConfirmed")
+	@Override
+	public ResponseEntity<Boolean> checkAllTaskAreConfirmed(List<Long> ids) {
+		Log.info("Cheking if all weekly tasks are confirmed");
+		HttpStatus status = HttpStatus.OK;
+		boolean allConfirmed = false;
+		try {
+			allConfirmed = taskService.checkAllTaskAreConfirmed(ids);
+		} catch (TasksException e) {
+			Log.info("Error checking if all weekly task are confirmed");
+		}
+		return new ResponseEntity<>(allConfirmed, status);
+	}
+
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@PostMapping("/restartWeeklyTasks")
+	@Override
+	public ResponseEntity<?> restartWeeklyTasks(@RequestBody List<Long> ids) {
+		Log.info("Restarting the traking of the weekly tasks");
+		HttpStatus status = HttpStatus.OK;
+		taskService.restartWeeklyTasks(ids);
+		return new ResponseEntity<>(status);
+	}
+
+
 }

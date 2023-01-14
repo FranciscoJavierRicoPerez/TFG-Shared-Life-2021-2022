@@ -11,4 +11,7 @@ public interface TaskTrakingsUsersRepository extends JpaRepository<TaskTrakingsU
     TaskTrakingsUsers findByUserId(Long id);
 
     List<TaskTrakingsUsers> findAllByUserId(Long id);
+
+    List<TaskTrakingsUsers> findAllByTaskTrakingId(Long id);
+
 }

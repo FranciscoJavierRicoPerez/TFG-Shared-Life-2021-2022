@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output } from '@angular/core';
 import { TaskService } from './../../../services/task/task.service';
 import { Task } from 'src/app/models/task/task';
 import { User } from 'src/app/models/user/user';
+import { TaskTrakingStatusDTO } from 'src/app/models/taskTraking/TaskTrakingStatusDTO';
 
 @Component({
   selector: 'app-task-table',
@@ -15,6 +16,7 @@ export class TaskTableComponent implements OnInit {
   tasks: Task[] = [];
   weeklyTasks: Task[] = [];
   homeTasks: Task[] = [];
+  taskTrakingStatus: TaskTrakingStatusDTO;
 
   constructor(private TaskService: TaskService) {}
 
@@ -36,6 +38,17 @@ export class TaskTableComponent implements OnInit {
           }
         }
         console.log('OK getting all tasks by username');
+        // Necesito un endpoint que devuelva esto mismo pero con las tareas de las que soy responsable
+         this.TaskService.checkTaskTrakingOfMyTasks(this.username).subscribe(
+          data => {
+            console.log('OK checking the task traking');
+            this.taskTrakingStatus = data;
+            console.log(this.taskTrakingStatus);
+          }, 
+          err => {
+            console.log('Err checking the task traking');
+          }
+        );
       },
       (error) => {
         console.log('ERROR getting all tasks by username');

@@ -85,7 +85,7 @@
                     Completada
                   </button>
                 </td>
-                <td
+                <!-- <td
                 *ngIf="
                   task.taskTraking.creationDate !== null &&
                   task.taskTraking.startDate !== null &&
@@ -99,7 +99,21 @@
                 >
                   Revisión
                 </button>
+              </td> -->
+
+              <td>
+                <div *ngIf="task.taskTraking.creationDate !== null && task.taskTraking.startDate !== null && task.taskTraking.endDate !== null">
+                  <div *ngFor="let taskStatus of taskTrakingStatus.taskStatusDTOList">
+                    <div *ngIf="!taskStatus.confirmed && task.id === taskStatus.idTask">
+                      <button type="button" class="btn btn-danger" disabled> Revisión </button>
+                    </div>
+                    <div *ngIf="taskStatus.confirmed && task.id === taskStatus.idTask">
+                      <button type="button" class="btn btn-success" disabled> Revisada </button>
+                    </div>
+                  </div>
+                </div>
               </td>
+
               </tr>
             </tbody>
           </table>

@@ -37,4 +37,13 @@ public interface TaskController {
 	@GetMapping("/checkTaskTraking")
 	ResponseEntity<TaskTrakingStatusDTO> checkTaskTraking(@RequestParam("username") String username);
 
+	@GetMapping("/checkTaskTrakingOfMyTasks")
+	ResponseEntity<TaskTrakingStatusDTO> checkTaskTrakingOfMyTasks(@RequestParam("username") String username);
+
+	@GetMapping("/checkAllTaskAreConfirmed")
+	ResponseEntity<Boolean> checkAllTaskAreConfirmed(@RequestParam("ids") List<Long> ids);
+
+	@PostMapping("/restartWeeklyTasks")
+	ResponseEntity<?> restartWeeklyTasks(@RequestBody List<Long> ids);
+
 }
