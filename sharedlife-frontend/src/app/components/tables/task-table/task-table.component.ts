@@ -13,6 +13,7 @@ export class TaskTableComponent implements OnInit {
   @Input() username: string;
   @Input() idHome: string;
   @Input() renters: User[];
+  @Input() isAdmin: boolean;
   tasks: Task[] = [];
   weeklyTasks: Task[] = [];
   homeTasks: Task[] = [];
