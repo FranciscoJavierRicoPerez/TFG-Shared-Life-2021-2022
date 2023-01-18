@@ -2,6 +2,7 @@ package net.tfg.sharedlife.controller.spent;
 
 import java.util.List;
 
+import net.tfg.sharedlife.dto.SpentCheckPaidDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,4 +46,10 @@ public interface SpentController {
 	
 	@DeleteMapping("/{idSpent}")
 	ResponseEntity<?> deleteSpent(@PathVariable("idSpent") Long idSpent);
+
+	@GetMapping("debt/{idDebt}/username")
+	ResponseEntity<Boolean> verifyUserPaidDebt(@PathVariable("idDebt") Long idDebt, @RequestParam String username);
+
+	@GetMapping("/{id}/debtsInfo")
+	SpentCheckPaidDTO getDebtsInfo(@PathVariable("id") Long id);
 }

@@ -4,6 +4,7 @@ import { SpentService } from './../../../services/spent/spent.service';
 import { User } from 'src/app/models/user/user';
 import { Debt } from './../../../models/Debt/debt';
 import { UserService } from './../../../services/user/user.service';
+import { DebtInfo } from 'src/app/models/Debt/debtInfo';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class SpentTableComponent{
   debtsUsers: User[] = [];
   debtsA: Debt[] = [];
   debtUser: User;
+  debtsInfo: DebtInfo[] = [];
 
   constructor(
     private SpentService: SpentService,
@@ -44,7 +46,7 @@ export class SpentTableComponent{
 
   getDebtsById(id: string){
     this.displayStyleA = "block";
-    this.SpentService.getDebtsBySpentId(id).subscribe(
+    /* this.SpentService.getDebtsBySpentId(id).subscribe(
       data => {
         this.debtsA = data;
         console.log(this.debtsA);
@@ -66,9 +68,18 @@ export class SpentTableComponent{
       error => {
         console.log("ERR getting the debts");
       }
+    );*/
+    this.SpentService.getDebtsInfo(id).subscribe(
+      data => {
+        console.log("debts info ok");
+        this.debtsInfo = data['verifyPaidDTOList'];
+        console.log(this.debtsInfo);
+      },
+      error => {
+        console.log("debts info err");
+      }
     );
-    this.debtsA = [];
-    this.debtsUsers = [];
+    //this.debtsA = [];
+    //this.debtsUsers = [];
   }
-
 }

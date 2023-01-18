@@ -46,10 +46,21 @@
                     <h4 class="modal-title">Información de los deudores</h4>
                   </div>
                   <div class="modal-body">
-                      <div *ngFor="let user of debtsUsers">
+                      <div *ngFor="let debtInfo of debtsInfo">
                         <div class="card bg-light mb-3">
                           <div class="card-body">
-                            <p class="card-text">{{ user.firstName }} {{ user.lastName }}</p>
+                            <div class="card-text">
+                              <div *ngIf="debtInfo.paid">
+                                <p>
+                                  <button type="button" class="btn btn-success" disabled>Pagado</button>
+                                  <strong> {{ debtInfo.user.username }} </strong>
+                                </p>
+                              </div>
+                              <div *ngIf="!debtInfo.paid">
+                                <button type="button" class="btn btn-warning" disabled>No pagado</button>
+                                  <strong>  {{ debtInfo.user.username }}</strong>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
