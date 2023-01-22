@@ -86,54 +86,66 @@ export class TaskCreateComponent implements OnInit {
               }
               console.log('Getting all task home OK');
               this.TaskService.checkTaskTraking(this.username).subscribe(
-                data => {
-                  console.log("OK checking the task traking");
+                (data) => {
+                  console.log('OK checking the task traking');
                   this.taskTrakingStatus = data;
                   console.log(this.taskTrakingStatus);
                 },
-                err => {
-                  console.log("ERR checking the task traking");
+                (err) => {
+                  console.log('ERR checking the task traking');
                 }
               );
 
-              // Hacer una comprobacion de si todas las tarea semanales de todos los miembros de la vivienda tienen todas las confirmaciones 
+              // Hacer una comprobacion de si todas las tarea semanales de todos los miembros de la vivienda tienen todas las confirmaciones
               // SI LAS TIENE SE BORRAN TODOS LOS TRAKING Y SE REINICA LAS TAREAS
-              // necesitp una funcion que devuelva un booleano indicando eso va a recibir por parametro 
-              for(let i = 0; i < this.weeklyTasks.length; i++){
+              // necesitp una funcion que devuelva un booleano indicando eso va a recibir por parametro
+              for (let i = 0; i < this.weeklyTasks.length; i++) {
                 this.weeklyTaskIds.push(this.weeklyTasks[i].id);
               }
-              this.TaskService.checkIfAllTaskAreConfirmed(this.weeklyTaskIds).subscribe(
-                data => {
+              this.TaskService.checkIfAllTaskAreConfirmed(
+                this.weeklyTaskIds
+              ).subscribe(
+                (data) => {
                   debugger;
-                  console.log("OK checking if all weeklyTask are confirmed");
+                  console.log('OK checking if all weeklyTask are confirmed');
                   this.allTaskConfirmed = data;
                   console.log(this.allTaskConfirmed);
-                  if(this.allTaskConfirmed){
+                  if (this.allTaskConfirmed) {
                     debugger;
-                    console.log("Starting the process restart of the weekly tasks");
-                    this.TaskService.restartWeeklyTasks(this.weeklyTaskIds).subscribe(
-                      data => {
+                    console.log(
+                      'Starting the process restart of the weekly tasks'
+                    );
+                    this.TaskService.restartWeeklyTasks(
+                      this.weeklyTaskIds
+                    ).subscribe(
+                      (data) => {
                         console.log('OK weekly task reasigned');
                         debugger;
-                        this.HomeService.manageWeeklyTask(this.idHome, this.weeklyTaskIds).subscribe(
-                          data => {
+                        this.HomeService.manageWeeklyTask(
+                          this.idHome,
+                          this.weeklyTaskIds
+                        ).subscribe(
+                          (data) => {
                             debugger;
                             console.log('Weekly task reasigned');
-                          }, 
-                          err => {
+                            //window.location.reload();
+                          },
+                          (err) => {
                             debugger;
                             console.log('ERR reasinating weekly task');
                           }
                         );
-                      }, 
-                      err => {
-                        console.log('ERR in the reasicnation of the weeklyTask');
+                      },
+                      (err) => {
+                        console.log(
+                          'ERR in the reasicnation of the weeklyTask'
+                        );
                       }
                     );
                   }
                 },
-                err => {
-                  console.log("ERR checking if all weekly task are confirmed");
+                (err) => {
+                  console.log('ERR checking if all weekly task are confirmed');
                 }
               );
             },
@@ -183,9 +195,19 @@ export class TaskCreateComponent implements OnInit {
 
   confirmTaskCompleted(idTask: string) {
     // Paso como pareametro el nombre del usuario que confirma que la tarea esta completa
-    console.log("The user "+ this.username + " confirms the task " + idTask + " is completed");
+    console.log(
+      'The user ' +
+        this.username +
+        ' confirms the task ' +
+        idTask +
+        ' is completed'
+    );
     // MANDAR TAMBIEN TODOS LOS MEMBERS this.users
-    this.TaskService.confirmTaskCompleted(this.username, idTask, this.users).subscribe(
+    this.TaskService.confirmTaskCompleted(
+      this.username,
+      idTask,
+      this.users
+    ).subscribe(
       (data) => {
         console.log('Task completed succesfully');
         console.log(data);
