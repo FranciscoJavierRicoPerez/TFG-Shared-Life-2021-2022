@@ -21,6 +21,7 @@ import { ConfirmationModalComponent } from './components/modals/confirmation-mod
 import { TaskTableComponent } from './components/tables/task-table/task-table.component';
 import { SpentTableComponent } from './components/tables/spent-table/spent-table.component';
 import { DebtTableComponent } from './components/tables/debt-table/debt-table.component';
+import { MemberProfileComponent } from './components/user/member-profile/member-profile.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { DebtTableComponent } from './components/tables/debt-table/debt-table.co
     TaskTableComponent,
     SpentTableComponent,
     DebtTableComponent,
+    MemberProfileComponent,
   ],
   imports: [
     BrowserModule,

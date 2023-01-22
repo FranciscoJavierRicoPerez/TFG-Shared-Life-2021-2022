@@ -1,0 +1,34 @@
+<app-menu></app-menu>
+<div class="container justify-content-center">
+  <div class="card">
+    <div class="card-header">
+      <h1>Perfil de {{ member.firstName }}</h1>
+    </div>
+    <div class="card-body">
+      <div class="card" style="width: 500px">
+        <div class="card-body">
+          <div id="contenedor">
+            <div>
+              <p>
+                <figure>
+                  <img src="./assets/perfil.png" alt="..." width="200px" />
+                </figure>
+              </p>
+            </div>
+            <div>
+              <p>
+                Nombre:
+                {{ member.firstName }}
+                {{ member.lastName }}
+                <br />
+                Correo: {{ member.email }}
+                <br />
+                Usuario: {{ member.username }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
