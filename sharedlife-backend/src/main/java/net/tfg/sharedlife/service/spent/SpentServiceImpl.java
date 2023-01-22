@@ -5,14 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.tfg.sharedlife.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.tfg.sharedlife.dto.DebtDTO;
-import net.tfg.sharedlife.dto.NewUserDto;
-import net.tfg.sharedlife.dto.SpentDTO;
 import net.tfg.sharedlife.model.Debt;
 import net.tfg.sharedlife.model.Spent;
 import net.tfg.sharedlife.model.User;
@@ -74,8 +72,8 @@ public class SpentServiceImpl implements SpentService {
 			// => ES DECIR EL USUARIO QUE TENGA EL NOMBRE Y EL QUE CONTENGA EL ROL DE USUARIO
 		logger.info("Creating de debts for the member users");
 		Set<Debt> debts = new HashSet<>();
-		List<NewUserDto> members = homeService.getMembers(Long.parseLong(spentDto.getIdHome()));
-		for(NewUserDto u : members) {
+		List<UserDTO> members = homeService.getMembers(Long.parseLong(spentDto.getIdHome()));
+		for(UserDTO u : members) {
 			if(!spentDto.getUserToPay().equals(u.getUsername()) && !admin && !u.getRoles().contains("ROLE_ADMIN")) { // En este caso no crea si es ADMIN
 				logger.info("Debts in the case the spent is creating by the user");
 				User member = userService.getByUsername(u.getUsername()).get();
@@ -281,5 +279,36 @@ public class SpentServiceImpl implements SpentService {
 			spentRepository.deleteById(id);
 		}
 	}
-	
+
+	@Override
+	public boolean verifyUserPaidDebt(Long idDebt, String username) {
+		boolean paid = false;
+		Debt debt = debtRepository.getById(idDebt);
+		User user = userService.getByUsername(username).get();
+		if(user.getId().equals(debt.getIdUser())){
+			paid = debt.isPaid();
+		}
+		return paid;
+	}
+
+	@Override
+	public SpentCheckPaidDTO getDebtsInfo(Long idSpent) {
+		SpentCheckPaidDTO spentCheckPaidDTO = new SpentCheckPaidDTO();
+		List<VerifyPaidDTO> verifyPaidDTOList = new ArrayList<>();
+		SpentDTO spent = getSpentById(idSpent);
+		List<DebtDTO> debtDTOList = getDebtsBySpentId(spent.getId());
+		for(DebtDTO debtDTO : debtDTOList){
+			VerifyPaidDTO verifyPaidDTO = new VerifyPaidDTO();
+			User user = userService.findUserById(debtDTO.getIdUser());
+			UserDTO userDTO = new UserDTO();
+			userDTO.setId(user.getId());
+			userDTO.setUsername(user.getUsername());
+			verifyPaidDTO.setUser(userDTO);
+			verifyPaidDTO.setPaid(debtDTO.isPaid());
+			verifyPaidDTOList.add(verifyPaidDTO);
+		}
+		spentCheckPaidDTO.setVerifyPaidDTOList(verifyPaidDTOList);
+		return spentCheckPaidDTO;
+	}
+
 }

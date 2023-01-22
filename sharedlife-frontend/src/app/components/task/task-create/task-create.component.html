@@ -5,72 +5,198 @@
       <h3>Gestion de tareas para {{ home.address }}</h3>
     </div>
     <div class="card-body">
-      <form [formGroup]="createTaskForm" (ngSubmit)="createTask(idHome)">
-        <div class="form-group" style="margin: 5px;">
-          <label for="title">Título</label>
-          <input type="text"
-                 id="title"
-                 formControlName="title"
-                 class="form-control">
-          <div *ngIf="createTaskForm.get('title')?.hasError('required') && createTaskForm.get('title')?.touched">
-            El titulo es un campo necesario
+      <div class="card">
+        <div class="card-header"><h3>Nueva Tarea</h3></div>
+        <form [formGroup]="createTaskForm" (ngSubmit)="createTask(idHome)">
+          <div class="card-body">
+            <div class="form-group" style="margin: 5px">
+              <label for="title">Título</label>
+              <input
+                type="text"
+                id="title"
+                formControlName="title"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  createTaskForm.get('title')?.hasError('required') &&
+                  createTaskForm.get('title')?.touched
+                "
+              >
+                El titulo es un campo necesario
+              </div>
+            </div>
+            <div class="form-group" style="margin: 5px">
+              <label for="description">Descripción</label>
+              <input
+                type="text"
+                id="description"
+                formControlName="description"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  createTaskForm.get('description')?.hasError('required') &&
+                  createTaskForm.get('description')?.touched
+                "
+              >
+                La descripcion es un campo necesario
+              </div>
+            </div>
+            <div class="form-group" style="margin: 5px">
+              <label for="user">Responsable</label>
+              <select
+                id="user"
+                formControlName="user"
+                class="form-select"
+                aria-label="Default select example"
+              >
+                <option *ngFor="let user of users" [ngValue]="user.username">
+                  {{ user.username }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="form-group" style="margin: 5px">
+              <button
+                type="submit"
+                [disabled]="!createTaskForm.valid"
+                class="btn btn-primary btn-lg"
+              >
+                Crear Tarea
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger btn-lg"
+                style="margin: 13px"
+                routerLink="/inicio"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <p></p>
+      <div class="card">
+        <div class="card-header"><h3>Tareas</h3></div>
+        <div class="card-body">
+          <!-- card para las tareas normales -->
+          <div *ngIf="!isAdmin" class="card">
+            <div class="card-header"><h3>Tareas de la semana</h3></div>
+            <div class="card-body">
+              <div *ngIf="weeklyTasks.length == 0">
+                <div align="center">
+                  <strong>
+                    <i>Sin información de tareas</i>
+                  </strong>
+                </div>
+              </div>
+              <div *ngIf="weeklyTasks.length > 0">
+                <table class="table">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Titulo</th>
+                      <th>Descripción</th>
+                      <th>Fecha de inicio</th>
+                      <th>Seguimiento</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let task of weeklyTasks">
+                      <td>{{ task.title }}</td>
+                      <td>{{ task.description }}</td>
+                      <td>{{ correctDate(task.startDate) }}</td>
+                      <!-- Este boton tiene que ser visibles para todos los inquilinos menos para el que ha hecho la tarea -->
+                      <td>
+                        <div
+                          *ngFor="
+                            let taskStatus of taskTrakingStatus.taskStatusDTOList
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              task.id === taskStatus.idTask &&
+                              taskStatus.confirmed
+                            "
+                          >
+                            <button
+                              type="button"
+                              class="btn btn-warning"
+                              disabled
+                            >
+                              Confirmada
+                            </button>
+                          </div>
+                          <div
+                            *ngIf="
+                              task.id === taskStatus.idTask &&
+                              !taskStatus.confirmed
+                            "
+                          >
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary"
+                              (click)="confirmTaskCompleted(task.id)"
+                            >
+                              Confirmar
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- card para las tareas de la semana -->
+          <p></p>
+          <div class="card">
+            <div class="card-header"><h3>Tareas de la vivienda</h3></div>
+            <div class="card-body">
+              <div *ngIf="homeTasks.length == 0">
+                <div align="center">
+                  <strong>
+                    <i>Sin información de tareas</i>
+                  </strong>
+                </div>
+              </div>
+              <div *ngIf="homeTasks.length > 0">
+                <table class="table">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Titulo</th>
+                      <th>Descripción</th>
+                      <th>Fecha de inicio</th>
+                      <th>Fecha finalizacion</th>
+                      <th>Finalizada</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let task of homeTasks">
+                      <td>{{ task.title }}</td>
+                      <td>{{ task.description }}</td>
+                      <td>{{ correctDate(task.startDate) }}</td>
+                      <td *ngIf="task.finished">
+                        {{ correctDate(task.endDate) }}
+                      </td>
+                      <td *ngIf="!task.finished">----</td>
+                      <td *ngIf="!task.finished">Sin terminar</td>
+                      <td *ngIf="task.finished">Terminada</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="form-group" style="margin: 5px;">
-          <label for="description">Descripción</label>
-          <input type="text"
-                 id="description"
-                 formControlName="description"
-                 class="form-control">
-          <div *ngIf="createTaskForm.get('description')?.hasError('required') && createTaskForm.get('description')?.touched">
-            La descripcion es un campo necesario
-          </div>
-        </div>
-        <div class="form-group" style="margin: 5px;">
-          <label for="user">Responsable</label>
-          <select id="user" formControlName="user" class="form-select" aria-label="Default select example">
-            <option *ngFor="let user of users" [ngValue]="user.username">{{ user.username }}</option>
-          </select>
-        </div>
-        <div class="form-group" style="margin: 5px;">
-          <button type="submit" [disabled]="!createTaskForm.valid"  class="btn btn-primary btn-lg btn-block">Crear Tarea</button>
-          <button type="button" class="btn btn-danger btn-lg btn-block" style="margin: 13px;" routerLink="/inicio">Cancelar</button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
-  <p></p>
-  <div class="card">
-    <div class="card-header">
-      <h3>Tareas de la vivienda</h3>
-    </div>
-    <div class="card-body">
-      <table class="table">
-        <thead class="table-dark">
-          <tr>
-            <th>Titulo</th>
-            <th>Descripción</th>
-            <th>Fecha de inicio</th>
-            <th>Fecha finalizacion</th>
-            <th>Finalizada</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let task of allHomeTasks">
-            <td>{{ task.title }}</td>
-            <td>{{ task.description }}</td>
-            <td>{{ correctDate(task.startDate) }}</td>
-            <td *ngIf="task.finished">{{ correctDate(task.endDate) }}</td>
-            <td *ngIf="!task.finished"> ---- </td>
-            <td *ngIf="!task.finished">
-              Sin terminar
-            </td>
-            <td *ngIf="task.finished">
-              Terminada
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <!-- PRUEBA DE UN MODAL COMO COMPONENTE-->
+  <div *ngIf="infoModal">
+    <app-task-info-modal></app-task-info-modal>
   </div>
 </div>

@@ -18,6 +18,6 @@ export class HomeCreateDTO {
     this.rooms=r;
     this.token=t;
     this.completed=c;
-    this.actualMemberCount="";
+    this.actualMemberCount="0";
   }
 }

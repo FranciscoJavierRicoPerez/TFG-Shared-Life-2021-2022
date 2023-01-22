@@ -6,47 +6,62 @@ import { Injectable } from '@angular/core';
 import { Home } from 'src/app/models/home/home';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HomeService {
+  private baseURL = 'http://localhost:8080/home';
 
-  private baseURL = "http://localhost:8080/home";
+  constructor(private httpClient: HttpClient) {}
 
-  constructor(private httpClient: HttpClient) { }
-
-  createHouse(home: HomeCreateDTO): Observable<Object>{
+  createHouse(home: HomeCreateDTO): Observable<Object> {
     return this.httpClient.post(`${this.baseURL}`, home);
   }
 
-  getHouseByUsername(username: string): Observable<any>{
-    return this.httpClient.get<any>(`${this.baseURL}/byUsername?username=${username}`);
+  getHouseByUsername(username: string): Observable<any> {
+    return this.httpClient.get<any>(
+      `${this.baseURL}/byUsername?username=${username}`
+    );
   }
 
-  getHomeById(id: string): Observable<any>{
+  getHomeById(id: string): Observable<any> {
     return this.httpClient.get<any>(`${this.baseURL}/id/${id}`);
   }
 
-  sendInvitation(invitation: Invitation): Observable<Object>{
+  sendInvitation(invitation: Invitation): Observable<Object> {
     return this.httpClient.post(`${this.baseURL}/invitation`, invitation);
   }
 
-  acceptInvitation(invitation: Invitation): Observable<Object>{
-    return this.httpClient.post(`${this.baseURL}/invitation/accept`, invitation);
+  acceptInvitation(invitation: Invitation): Observable<Object> {
+    return this.httpClient.post(
+      `${this.baseURL}/invitation/accept`,
+      invitation
+    );
   }
 
-  getAllHomeMembers(idHome: string): Observable<any>{
+  getAllHomeMembers(idHome: string): Observable<any> {
     return this.httpClient.get<any>(`${this.baseURL}/id/${idHome}/members`);
   }
 
-  leaveHome(idHome: string, username: string): Observable<any>{
-    return this.httpClient.delete(`${this.baseURL}/id/${idHome}/leave?username=${username}`);
+  leaveHome(idHome: string, username: string): Observable<any> {
+    return this.httpClient.delete(
+      `${this.baseURL}/id/${idHome}/leave?username=${username}`
+    );
   }
 
-  deleteHome(idHome: string): Observable<any>{
+  deleteHome(idHome: string): Observable<any> {
     return this.httpClient.delete(`${this.baseURL}/id/${idHome}/delete`);
   }
 
-  userHasHome(username: string): Observable<any>{
-    return this.httpClient.get<any>(`${this.baseURL}/hasHome?username=${username}`);
+  userHasHome(username: string): Observable<any> {
+    return this.httpClient.get<any>(
+      `${this.baseURL}/hasHome?username=${username}`
+    );
+  }
+
+  manageWeeklyTask(id: string, ids: string[]): Observable<any> {
+    return this.httpClient.post<any>(
+      `${this.baseURL}/id/${id}/weeklyTaskManagement/`,
+      ids
+    );
   }
 }

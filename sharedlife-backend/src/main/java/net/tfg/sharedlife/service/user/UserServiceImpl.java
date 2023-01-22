@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import net.tfg.sharedlife.controller.user.UserControllerImpl;
 import net.tfg.sharedlife.dto.HomeDTO;
-import net.tfg.sharedlife.enums.RoleEnum;
-import net.tfg.sharedlife.model.Home;
 import net.tfg.sharedlife.service.home.HomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,5 +133,11 @@ public class UserServiceImpl implements UserService{
 		userRepository.deleteById(id);
 	}
 
+
+	@Override
+	public void saveUserInformation(User user) {
+		Log.info("Saving infotmation of the user: " + user.getUsername());
+		userRepository.save(user);
+	}
 
 }
