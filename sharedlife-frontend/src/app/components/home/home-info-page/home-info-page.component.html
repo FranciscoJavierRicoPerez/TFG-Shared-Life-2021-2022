@@ -33,7 +33,12 @@
                     {{ user.firstName }} {{ user.lastName }}
                   </h5>
                   <p class="card-text">{{ user.username }}</p>
-                  <a href="#" class="btn btn-warning btn-lg">Perfil</a>
+                  <div *ngIf="user.username === username">
+                    <a href="/perfil" class="btn btn-warning btn-lg">Perfil</a>    
+                  </div>
+                  <div *ngIf="user.username !== username">
+                    <a href="/usuario/{{user.username}}/perfil" class="btn btn-warning btn-lg">Perfil</a>
+                  </div>
                 </div>
               </div>
             </label>
