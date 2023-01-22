@@ -6,7 +6,7 @@ import net.tfg.sharedlife.dto.HomeDTO;
 import net.tfg.sharedlife.model.Home;
 
 @Mapper
-public interface HomeMapper{
+public interface HomeMapper {
 
     Home homeDTOtoHome(HomeDTO homeDTO);
 

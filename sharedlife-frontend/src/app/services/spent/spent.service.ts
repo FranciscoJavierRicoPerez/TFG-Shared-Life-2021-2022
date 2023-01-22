@@ -44,4 +44,12 @@ export class SpentService {
     return this.HttpClient.delete(`${this.baseURL}/${id}/delete`);
   }
 
+  verifyUserPaidDebt(idDebt: string, username:string){
+    return this.HttpClient.get<any>(`${this.baseURL}/debt/${idDebt}/username?username=${username}`)
+  }
+
+  getDebtsInfo(idSpent: string){
+    return this.HttpClient.get<any>(`${this.baseURL}/${idSpent}/debtsInfo`);
+  }
+
 }

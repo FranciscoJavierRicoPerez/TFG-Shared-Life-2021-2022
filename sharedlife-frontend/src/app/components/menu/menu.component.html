@@ -33,7 +33,7 @@
       <!-- Acceso al formulario de creación de gastos para el inquilino -->
       <li class = "nav-item" *ngIf="isLogged && userHasHome && !isAdmin">
         <div *ngFor="let home of homes">
-          <div *ngIf="home.actualMemberCount >= 3; then thenBlock else elseBlock"></div>
+          <div *ngIf="home.actualMemberCount >= 2; then thenBlock else elseBlock"></div>
           <ng-template #thenBlock>
             <a routerLink="/vivienda/{{home.id}}/gastos" routerLinkActive="active" class="nav-link bi bi-currency-euro">Gestión de Gastos</a>
           </ng-template>

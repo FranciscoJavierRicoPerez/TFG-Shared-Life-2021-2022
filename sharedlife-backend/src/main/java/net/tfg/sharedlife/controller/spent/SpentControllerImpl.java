@@ -3,6 +3,7 @@ package net.tfg.sharedlife.controller.spent;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.tfg.sharedlife.dto.SpentCheckPaidDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,5 +122,22 @@ public class SpentControllerImpl implements SpentController {
 		spentService.deleteSpent(idSpent);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@GetMapping("debt/{idDebt}/username")
+	@Override
+	public ResponseEntity<Boolean> verifyUserPaidDebt(Long idDebt, String username) {
+		logger.info("Verifiying if user {} has paid the debt {}", username, idDebt);
+		return new ResponseEntity<>(spentService.verifyUserPaidDebt(idDebt, username) ,HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
+	@GetMapping("/{id}/debtsInfo")
+	@Override
+	public SpentCheckPaidDTO getDebtsInfo(Long id) {
+		logger.info("Getting the info of the debts");
+		SpentCheckPaidDTO spentCheckPaidDTO = spentService.getDebtsInfo(id);
+		return spentCheckPaidDTO;
+	}
+
 }

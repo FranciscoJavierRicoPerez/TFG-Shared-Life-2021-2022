@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user/user';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ThisReceiver } from '@angular/compiler';
+import { NewUserDTO } from 'src/app/models/user/new-user-dto/NewUserDTO';
 
 @Component({
   selector: 'app-user-register',
@@ -13,7 +14,7 @@ import { ThisReceiver } from '@angular/compiler';
 })
 export class UserRegisterComponent implements OnInit {
 
-  user: User;
+  user: NewUserDTO;
 
   myForm = new FormGroup({
     firstName: new FormControl('', Validators.required),
@@ -34,7 +35,7 @@ export class UserRegisterComponent implements OnInit {
 
   saveUser(): void{
     console.log(this.myForm);
-    this.user = new User(
+    this.user = new NewUserDTO(
       this.myForm.value.firstName,
       this.myForm.value.lastName,
       this.myForm.value.email,

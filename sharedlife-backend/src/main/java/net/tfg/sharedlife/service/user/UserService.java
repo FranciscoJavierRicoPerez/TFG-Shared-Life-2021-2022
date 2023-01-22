@@ -27,5 +27,7 @@ public interface UserService {
 	List<InvitationDTO> getInvitationsByUsername(String username);
 
 	void deleteUser(Long id);
+
+	void saveUserInformation(User user);
 	
 }
