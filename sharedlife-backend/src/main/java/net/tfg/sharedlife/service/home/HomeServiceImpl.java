@@ -238,7 +238,12 @@ public class HomeServiceImpl implements HomeService {
 				spentService.deleteSpent(s.getId());
 			}
 			for (Task t : home.getTasks()) {
-				taskService.deleteTask(t.getId());
+				// Comprobar si es una weekTask
+				if(t.getWeekTask()){
+					taskService.deleteWeeklyTask(t);
+				} else {
+					taskService.deleteTask(t.getId());
+				}
 			}
 			homeRepository.delete(home);
 		} catch (TasksException e) {

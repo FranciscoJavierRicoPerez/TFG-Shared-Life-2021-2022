@@ -16,6 +16,8 @@ export class UserRegisterComponent implements OnInit {
 
   user: NewUserDTO;
 
+  loading: boolean = false;
+
   myForm = new FormGroup({
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
@@ -28,12 +30,15 @@ export class UserRegisterComponent implements OnInit {
   constructor(
     private AuthService: AuthService,
     private Router: Router
-  ) {}
+  ) {
+    this.loading = false;
+  }
 
   ngOnInit(): void {
   }
 
-  saveUser(): void{
+  async saveUser() {
+    this.loading = true;
     console.log(this.myForm);
     this.user = new NewUserDTO(
       this.myForm.value.firstName,
@@ -45,11 +50,21 @@ export class UserRegisterComponent implements OnInit {
       this.user.roles.push("admin");
     }
     console.log(this.user);
-    this.AuthService.register(this.user).subscribe();
-    this.Router.navigate(['/login'])
+    (await this.AuthService.register(this.user)).subscribe(
+      data => {
+        debugger;
+        console.log("Ok register user");
+        this.loading = false;
+        this.Router.navigate(['/login'])
+      }, 
+      error => {
+        console.log("Err register user");
+        this.loading = false;
+      }
+    );
   }
 
-  onSubmit(): void{
-    this.saveUser();
+  async onSubmit(){
+    await this.saveUser();
   }
 }

@@ -297,4 +297,12 @@ public class TaskServiceImpl implements TaskService{
 			taskRepository.save(t);
 		}
 	}
+
+	@Override
+	public void deleteWeeklyTask(Task t) {
+		if(t.getTaskTraking() != null){
+			taskTrakingService.deleteTaskTraking(t);
+		}
+		taskRepository.delete(t);
+	}
 }
