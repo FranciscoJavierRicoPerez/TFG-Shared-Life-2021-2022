@@ -3,16 +3,15 @@ import { BehaviorSubject } from 'rxjs';
 import { io } from 'socket.io-client';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChatService {
-
   public message$: BehaviorSubject<string> = new BehaviorSubject('');
-  constructor() { }
+  constructor() {}
 
   socket = io('http://localhost:3000');
 
-  public sendMessage(message: any, username: string){
+  public sendMessage(message: any, username: string) {
     console.log('sendMessage: ', message);
     this.socket.emit('message', { username: username, message: message });
   }
@@ -22,6 +21,5 @@ export class ChatService {
       this.message$.next(message);
     });
     return this.message$.asObservable();
-  }
-
+  };
 }

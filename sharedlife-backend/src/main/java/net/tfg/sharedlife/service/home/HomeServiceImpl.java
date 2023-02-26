@@ -234,9 +234,11 @@ public class HomeServiceImpl implements HomeService {
 		logger.info("Deleting the home with id: {}", id);
 		Home home = homeRepository.findById(id).get();
 		try {
+			// Comprobamos si existen gastos
 			for (Spent s : home.getSpents()) {
 				spentService.deleteSpent(s.getId());
 			}
+			// Comprobamos si existes tareas
 			for (Task t : home.getTasks()) {
 				// Comprobar si es una weekTask
 				if(t.getWeekTask()){
@@ -245,6 +247,8 @@ public class HomeServiceImpl implements HomeService {
 					taskService.deleteTask(t.getId());
 				}
 			}
+			// Comprobamos si existen invitaciones
+			invitationRepository.deleteAll(invitationRepository.findByIdHome(home.getId().toString()));
 			homeRepository.delete(home);
 		} catch (TasksException e) {
 			logger.info("Error deleting home");
