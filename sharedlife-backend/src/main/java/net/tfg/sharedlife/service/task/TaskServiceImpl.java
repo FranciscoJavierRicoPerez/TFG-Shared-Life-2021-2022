@@ -103,7 +103,9 @@ public class TaskServiceImpl implements TaskService{
 				taskdto.setDescription(t.getDescription());
 				taskdto.setStartDate(t.getStartDate());
 				taskdto.setEndDate(t.getEndDate());					
-				taskdto.setUser(t.getUser().getUsername());
+				taskdto.setUser(
+						t.getUser().getUsername() // t.getUser() devuelve null
+				);
 				taskdto.setFinished(t.isFinished());
 				taskdto.setIdHome(t.getHome().getId().toString());
 				taskdto.setWeekTask(t.getWeekTask());

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand navbar-dark bg-dark mb-4" style="">
+<nav class="navbar navbar-expand navbar-dark bg-dark mb-5">
   <div class="navbar-collapse collapse" id="navbarSupportedContent">
     <ul class="nav navbar-nav navbar-left">
       <li class="nav-item">
@@ -88,10 +88,10 @@
         <div *ngFor="let home of homes">
           <div *ngIf="home.actualMemberCount >= 2; then thenBlock else elseBlock"></div>
           <ng-template #thenBlock>
-            <a routerLink="/vivienda/{{home.id}}/chat" routerLinkActive="active" class="nav-link bi bi-chat-dots">Chat</a>
+            <a routerLink="/vivienda/{{home.id}}/chat" routerLinkActive="active" class="nav-link bi bi-chat-dots"> Chat</a>
           </ng-template>
           <ng-template #elseBlock>
-            <a routerLink="/vivienda/{{home.id}}/chat" routerLinkActive="active" class="nav-link bi bi-chat-dots disabled">Chat</a>
+            <a routerLink="/vivienda/{{home.id}}/chat" routerLinkActive="active" class="nav-link bi bi-chat-dots disabled"> hat</a>
           </ng-template>
         </div>
       </li>
