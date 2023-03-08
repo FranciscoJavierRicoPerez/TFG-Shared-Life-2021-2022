@@ -3,84 +3,170 @@
   <div class="card">
     <div class="card-header">
       <div class="container text-center">
-        <h1>Crea tu casa</h1>
+        <h1>Añade una nueva vivienda</h1>
       </div>
     </div>
     <div class="card-body">
       <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-          <label for="address">Direccion</label>
-          <input type="text"
-                 id="address"
-                 formControlName="address"
-                 class="form-control"
-                 placeholder="¿Cual es la dirección?">
-          <div *ngIf="myForm.get('address')?.hasError('required') && myForm.get('address')?.touched">
-            La direccion es un campo requerido
+          <label for="address">Dirección</label>
+          <input
+            type="text"
+            id="address"
+            formControlName="address"
+            class="form-control"
+            placeholder="¿Cual es la dirección?"
+          />
+          <div
+            *ngIf="
+              myForm.get('address')?.hasError('required') &&
+              myForm.get('address')?.touched
+            "
+          >
+            La dirección es un campo requerido
           </div>
         </div>
         <div class="form-group">
           <label for="floor">Piso</label>
-          <input type="text"
-                 id="floor"
-                 formControlName="floor"
-                 class="form-control"
-                 placeholder="¿Cual es el piso?">
-          <div *ngIf="myForm.get('floor')?.hasError('required') && myForm.get('floor')?.touched">
+          <input
+            type="text"
+            id="floor"
+            formControlName="floor"
+            class="form-control"
+            placeholder="¿Cual es el piso?"
+          />
+          <div
+            *ngIf="
+              myForm.get('floor')?.hasError('required') &&
+              myForm.get('floor')?.touched
+            "
+          >
             El piso es un campo requerido
           </div>
         </div>
         <div class="form-group">
-          <label for="number">Numero</label>
-          <input type="text"
-                 id="number"
-                 formControlName="number"
-                 class="form-control"
-                 placeholder="¿Cual es el número?">
-          <div *ngIf="myForm.get('floor')?.hasError('required') && myForm.get('floor')?.touched">
+          <label for="number">Número</label>
+          <input
+            type="text"
+            id="number"
+            formControlName="number"
+            class="form-control"
+            placeholder="¿Cual es el número?"
+          />
+          <div
+            *ngIf="
+              myForm.get('floor')?.hasError('required') &&
+              myForm.get('floor')?.touched
+            "
+          >
             El piso es un campo requerido
           </div>
         </div>
         <div class="form-group">
-          <label for="country">Pais</label>
-          <input type="text"
-                 id="country"
-                 formControlName="country"
-                 class="form-control"
-                 placeholder="Indica el pais">
-          <div *ngIf="myForm.get('country')?.hasError('required') && myForm.get('country')?.touched">
+          <label for="country">País</label>
+          <input
+            type="text"
+            id="country"
+            formControlName="country"
+            class="form-control"
+            placeholder="Indica el pais"
+          />
+          <div
+            *ngIf="
+              myForm.get('country')?.hasError('required') &&
+              myForm.get('country')?.touched
+            "
+          >
             El pais es un campo requerido
           </div>
         </div>
         <div class="form-group">
           <label for="city">Ciudad</label>
-          <input type="text"
-                 id="city"
-                 formControlName="city"
-                 class="form-control"
-                 placeholder="Indica la ciudad">
-          <div *ngIf="myForm.get('city')?.hasError('required') && myForm.get('city')?.touched">
+          <input
+            type="text"
+            id="city"
+            formControlName="city"
+            class="form-control"
+            placeholder="Indica la ciudad"
+          />
+          <div
+            *ngIf="
+              myForm.get('city')?.hasError('required') &&
+              myForm.get('city')?.touched
+            "
+          >
             La ciudad es un campo requerido
           </div>
         </div>
         <div class="form-group">
           <label for="rooms">Habitaciones</label>
-          <input type="text"
-                 id="rooms"
-                 formControlName="rooms"
-                 class="form-control"
-                 placeholder="¿Cuantas habitaciones?">
-          <div *ngIf="myForm.get('rooms')?.hasError('required') && myForm.get('rooms')?.touched">
+          <input
+            type="text"
+            id="rooms"
+            formControlName="rooms"
+            class="form-control"
+            placeholder="¿Cuantas habitaciones?"
+          />
+          <div
+            *ngIf="
+              myForm.get('rooms')?.hasError('required') &&
+              myForm.get('rooms')?.touched
+            "
+          >
             La cantidad de habitaciones es un campo requerido
           </div>
         </div>
         <!-- EL [disabled]="!myForm.valid" desactiva el boton hasta que no se cumplan las validaciones -->
-        <div class="form-group" style="margin: 5px;">
-          <button type="submit" [disabled]="!myForm.valid" class="btn btn-primary btn-lg">Añadir vivienda</button>
-          <button type="button" class="btn btn-danger btn-lg" style="margin: 13px;" routerLink="/inicio">Cancelar</button>
+        <div class="form-group" style="margin: 5px">
+          <button
+            type="submit"
+            [disabled]="!myForm.valid"
+            class="btn btn-primary btn-lg bi bi-check2"
+          >
+            Confirmar
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger btn-lg bi bi-x-square"
+            style="margin: 13px"
+            routerLink="/inicio"
+          >
+            Cancelar
+          </button>
         </div>
       </form>
-
+      <div *ngIf="errorMessage !== ''">
+        <div
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {{ errorMessage }}
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="successMessage !== ''">
+        <div
+          class="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
+          {{ successMessage }}
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

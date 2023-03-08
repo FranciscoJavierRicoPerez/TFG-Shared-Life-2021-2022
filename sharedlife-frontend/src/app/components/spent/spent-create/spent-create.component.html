@@ -8,44 +8,77 @@
       <h3>Gestión de gastos de {{ home.address }}</h3>
     </div>
     <div class="card-body">
-
       <div class="card">
         <div class="card-header"><h2>Nuevo Gasto</h2></div>
         <div class="card-body">
           <form [formGroup]="spentCreateForm" (ngSubmit)="createSpent()">
-            <div class="form-group" style="margin: 5px;">
+            <div class="form-group" style="margin: 5px">
               <label for="title">Titulo</label>
-              <input type="text"
-                     id="title"
-                     formControlName="title"
-                     class="form-control">
-              <div *ngIf="spentCreateForm.get('title')?.hasError('required') && spentCreateForm.get('title')?.touched">
+              <input
+                type="text"
+                id="title"
+                formControlName="title"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  spentCreateForm.get('title')?.hasError('required') &&
+                  spentCreateForm.get('title')?.touched
+                "
+              >
                 El título es un campo requerido
               </div>
             </div>
-            <div class="form-group" style="margin: 5px;">
+            <div class="form-group" style="margin: 5px">
               <label for="description">Descripción</label>
-              <input type="text"
-                     id="description"
-                     formControlName="description"
-                     class="form-control">
-              <div *ngIf="spentCreateForm.get('description')?.hasError('required') && spentCreateForm.get('description')?.touched">
+              <input
+                type="text"
+                id="description"
+                formControlName="description"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  spentCreateForm.get('description')?.hasError('required') &&
+                  spentCreateForm.get('description')?.touched
+                "
+              >
                 La descripcion es un campo requerido
               </div>
             </div>
-            <div class="form-group" style="margin: 5px;">
+            <div class="form-group" style="margin: 5px">
               <label for="description">Precio</label>
-              <input type="number"
-                     id="totalPrice"
-                     formControlName="totalPrice"
-                     class="form-control">
-              <div *ngIf="spentCreateForm.get('totalPrice')?.hasError('required') && spentCreateForm.get('totalPrice')?.touched">
+              <input
+                type="number"
+                id="totalPrice"
+                formControlName="totalPrice"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  spentCreateForm.get('totalPrice')?.hasError('required') &&
+                  spentCreateForm.get('totalPrice')?.touched
+                "
+              >
                 El precio es un campo requerido
               </div>
             </div>
-            <div class="form-group" style="margin: 5px;">
-              <button type="submit" [disabled]="!spentCreateForm.valid"  class="btn btn-primary btn-lg">Añadir Gasto</button>
-              <button type="button" class="btn btn-danger btn-lg" style="margin: 13px;" routerLink="/inicio">Cancelar</button>
+            <div class="form-group" style="margin: 5px">
+              <button
+                type="submit"
+                [disabled]="!spentCreateForm.valid"
+                class="btn btn-primary btn-lg"
+              >
+                Añadir Gasto
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger btn-lg bi bi-x-square"
+                style="margin: 13px"
+                routerLink="/inicio"
+              >
+                Cancelar
+              </button>
             </div>
           </form>
         </div>
@@ -58,7 +91,11 @@
             <div class="card-header"><h3>Gastos de la vivienda</h3></div>
             <div class="card-body">
               <div *ngIf="spents.length === 0">
-                <div align="center"><h6><strong><i>Sin información de gastos</i></strong></h6></div>
+                <div align="center">
+                  <h6>
+                    <strong><i>Sin información de gastos</i></strong>
+                  </h6>
+                </div>
               </div>
               <div *ngIf="spents.length > 0">
                 <table class="table">
@@ -73,7 +110,7 @@
                     <tr *ngFor="let spent of spents">
                       <td>{{ spent.title }}</td>
                       <td>{{ spent.description }}</td>
-                      <td>{{ spent.totalPrice}} </td>
+                      <td>{{ spent.totalPrice }}</td>
                     </tr>
                   </tbody>
                 </table>

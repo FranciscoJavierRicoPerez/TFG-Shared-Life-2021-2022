@@ -6,6 +6,7 @@ import net.tfg.sharedlife.dto.InvitationDTO;
 import net.tfg.sharedlife.dto.NewUserDto;
 import net.tfg.sharedlife.dto.UserDTO;
 import net.tfg.sharedlife.exception.DataIncorrectException;
+import net.tfg.sharedlife.exception.HomeException;
 import net.tfg.sharedlife.exception.TasksException;
 import net.tfg.sharedlife.model.Home;
 import net.tfg.sharedlife.model.User;
@@ -43,11 +44,11 @@ public class HomeControllerImpl implements HomeController {
 		HttpStatus status = HttpStatus.OK;
 		try {
 			home = homeService.createHome(homeDTO);
-		}catch(DataIncorrectException e) {
+		}catch(HomeException e) {
 			logger.error("Error creating home");
 			status = HttpStatus.BAD_REQUEST;	
 		}
-		return new ResponseEntity<Home>(home, status);
+		return new ResponseEntity<>(home, status);
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")

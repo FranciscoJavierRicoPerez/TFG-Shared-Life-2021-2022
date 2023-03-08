@@ -18,13 +18,13 @@
               </div>
               <div>
                 <p>
-                  Nombre:
-                  {{ user.firstName }}
+                  <strong>
+                    {{ user.firstName }}
                   {{ user.lastName }}
                   <br />
-                  Correo: {{ user.email }}
+                  {{ user.email }}
                   <br />
-                  Usuario: {{ user.username }}
+                </strong>
                 </p>
               </div>
             </div>
@@ -84,14 +84,14 @@
                               class="btn btn-success"
                               (click)="copyToClipBoard(invitation.homeCode)"
                             >
-                              <i class="bi bi-clipboard"></i> Copiar
+                              <i class="bi bi-clipboard"></i> Código de acceso
                             </button>
                             <button
                               type="button"
                               class="btn btn-primary"
                               (click)="openPopup()"
                             >
-                              Aceptar
+                              <i class="bi bi-check2"></i>Aceptar
                             </button>
                           </label>
                         </div>

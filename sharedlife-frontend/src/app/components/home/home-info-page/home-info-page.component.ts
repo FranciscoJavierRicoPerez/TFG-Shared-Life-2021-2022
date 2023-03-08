@@ -35,6 +35,8 @@ export class HomeInfoPageComponent implements OnInit {
   alreadyInvited: boolean;
   userNotExists: boolean;
   renters: User[] = [];
+  errorMessage: string = '';
+  successMessage: string = '';
   invitationForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
   });
@@ -47,7 +49,6 @@ export class HomeInfoPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('CARGANDO HOME INFO PAGE');
     if (this.TokenService.getToken()) {
       this.username = this.TokenService.getUserName();
       this.authorities = this.TokenService.getAuthorities();
@@ -69,8 +70,8 @@ export class HomeInfoPageComponent implements OnInit {
   }
 
   sendInvitation(): void {
-    console.log(this.invitationForm.value);
-    console.log(this.idHome);
+    this.successMessage = '';
+    this.errorMessage = '';
     this.invitation = new Invitation(
       this.invitationForm.value['username'],
       this.idHome,
@@ -80,17 +81,21 @@ export class HomeInfoPageComponent implements OnInit {
     this.HomeService.sendInvitation(this.invitation).subscribe(
       (data) => {
         console.log('Invitation send ok');
-        window.location.reload();
+        this.successMessage = "La invitación ha sido enviada correctamente";
+        // window.location.reload();
       },
       (err) => {
         console.log('Invitation send err');
         if (err.status == 401) {
           this.alreadyInvited = true;
+          this.errorMessage = 'El usuario ya tiene una invitación pendiente';
         } else {
           if (err.status == 503) {
             this.userNotExists = true;
+            this.errorMessage = 'No existe ningun usuario con ese nombre';
           } else {
             this.errorSendInvitation = true;
+            this.errorMessage = 'Este usuario ya esta registrado en otra vivienda';
           }
         }
       }

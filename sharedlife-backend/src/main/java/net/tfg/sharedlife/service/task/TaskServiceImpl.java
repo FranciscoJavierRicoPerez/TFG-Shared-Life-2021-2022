@@ -170,8 +170,9 @@ public class TaskServiceImpl implements TaskService{
 			task.setStartDate(new Date());
 			task.setFinished(false);
 			Set<User> users = home.getUsers();
-			boolean isAdmin = false;
+			boolean isAdmin;
 			for(User u : users){
+				isAdmin = false;
 				for(Role role : u.getRoles()){
 					if(role.getRoleName().equals(RoleEnum.ROLE_ADMIN)){
 						isAdmin = true;

@@ -9,7 +9,7 @@
         </a>
       </li>
       <li class = "nav-item" *ngIf="isLogged && isAdmin">
-        <a routerLink="/vivienda/nueva" routerLinkActive="active" class="nav-link">Añadir casa</a>
+        <a routerLink="/vivienda/nueva" routerLinkActive="active" class="nav-link"><i class="bi bi-house"></i> Nueva vivienda</a>
       </li>
       <!-- Acceso al formulario de creación de tareas para el inquilino -->
       <li class = "nav-item" *ngIf="isLogged && userHasHome && !isAdmin">
@@ -107,10 +107,10 @@
         <a routerLink="/register" routerLinkActive="active" class="nav-link bi bi-person-plus"> Registro</a>
       </li>
       <li class="nav-item" *ngIf="isLogged">
-        <a class="nav-link" routerLink="/perfil">{{username}}</a>
+        <a class="nav-link bi bi-person-square" routerLink="/perfil"> {{username}}</a>
       </li>
       <li class = "nav-item" *ngIf="isLogged" >
-        <a routerLink="/inicio" class="nav-link bi bi-box-arrow-left" (click)="onLogOut()"> Cerrar Sesion</a>
+        <a routerLink="/inicio" class="nav-link bi bi-box-arrow-left" (click)="onLogOut()"> Cerrar Sesión</a>
       </li>
     </ul>
   </div>

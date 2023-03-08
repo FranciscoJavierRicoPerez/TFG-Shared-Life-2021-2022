@@ -5,11 +5,17 @@
       <h3>{{ home.address }}</h3>
     </div>
     <div class="card-body">
-      <h3>Datos de la vivienda</h3>
-      {{ home.city }}<br />
-      {{ home.address }}<br />
-      {{ home.number }}<br />
-      Habitaciones disponibles {{ home.rooms }}
+      <div class="card">
+        <div class="card-header">
+          <h3>Datos de la vivienda</h3>
+        </div>
+        <div class="card-body">
+          {{ home.city }}<br />
+          {{ home.address }}<br />
+          {{ home.number }}<br />
+          Habitaciones disponibles {{ home.rooms }}
+        </div>
+      </div>
 
       <!-- MIEMBROS DE LA VIVIENDA -->
       <p></p>
@@ -34,10 +40,14 @@
                   </h5>
                   <p class="card-text">{{ user.username }}</p>
                   <div *ngIf="user.username === username">
-                    <a href="/perfil" class="btn btn-warning btn-lg">Perfil</a>    
+                    <a href="/perfil" class="btn btn-warning btn-lg">Perfil</a>
                   </div>
                   <div *ngIf="user.username !== username">
-                    <a href="/usuario/{{user.username}}/perfil" class="btn btn-warning btn-lg">Perfil</a>
+                    <a
+                      href="/usuario/{{ user.username }}/perfil"
+                      class="btn btn-warning btn-lg"
+                      >Perfil</a
+                    >
                   </div>
                 </div>
               </div>
@@ -74,18 +84,55 @@
                 >
                   El nombre de usuario es un campo requerido
                 </div>
-                <div *ngIf="errorSendInvitation">
-                  Este usuario ya esta registrado en otra vivienda
+                <p></p>
+                <div *ngIf="successMessage !== ''">
+                  <div
+                    class="alert alert-success alert-dismissible fade show"
+                    role="alert"
+                  >
+                    {{ successMessage }}
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="alert"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+                <div *ngIf="errorMessage !== ''">
+                  <div
+                    class="alert alert-danger alert-dismissible fade show"
+                    role="alert"
+                  >
+                    {{ errorMessage }}
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="alert"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
                 </div>
                 <div *ngIf="home.completed">
-                  La vivienda ya esta completa no se pueden enviar mas
-                  invitaciones
-                </div>
-                <div *ngIf="alreadyInvited">
-                  El usuario ya tiene una invitación pendiente
-                </div>
-                <div *ngIf="userNotExists">
-                  No existe ningun usuario con ese nombre
+                  <div
+                    class="alert alert-alert alert-dismissible fade show"
+                    role="alert"
+                  >
+                    La vivienda ya esta completa no se pueden enviar mas
+                    invitaciones
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="alert"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -102,8 +149,8 @@
           </form>
         </div>
       </div>
-      <app-task-table 
-        [idHome]="idHome" 
+      <app-task-table
+        [idHome]="idHome"
         [username]="username"
         [renters]="renters"
         [isAdmin]="isAdmin"
@@ -139,5 +186,5 @@
     </div>
   </div>
   <p></p>
-  <br/>
+  <br />
 </div>

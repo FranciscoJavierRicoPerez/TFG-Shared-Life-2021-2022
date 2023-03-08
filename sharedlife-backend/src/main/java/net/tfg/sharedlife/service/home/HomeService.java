@@ -7,6 +7,7 @@ import net.tfg.sharedlife.dto.InvitationDTO;
 import net.tfg.sharedlife.dto.NewUserDto;
 import net.tfg.sharedlife.dto.UserDTO;
 import net.tfg.sharedlife.exception.DataIncorrectException;
+import net.tfg.sharedlife.exception.HomeException;
 import net.tfg.sharedlife.exception.TasksException;
 import net.tfg.sharedlife.model.Home;
 import net.tfg.sharedlife.model.User;
@@ -16,7 +17,7 @@ import net.tfg.sharedlife.model.User;
  */
 public interface HomeService {
 	
-	Home createHome(HomeDTO home);
+	Home createHome(HomeDTO home) throws HomeException;
 	
 	List<HomeDTO> getHomesByUser(String username);
 	
