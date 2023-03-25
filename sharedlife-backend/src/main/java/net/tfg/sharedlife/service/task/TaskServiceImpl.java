@@ -4,10 +4,12 @@ import java.util.*;
 
 import net.tfg.sharedlife.dto.*;
 import net.tfg.sharedlife.model.*;
+import net.tfg.sharedlife.service.home.HomeService;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import net.tfg.sharedlife.enums.HomeRoomEnum;
@@ -19,6 +21,8 @@ import net.tfg.sharedlife.repository.TaskRepository;
 import net.tfg.sharedlife.repository.UserRepository;
 import net.tfg.sharedlife.service.taskTraking.TaskTrakingService;
 import net.tfg.sharedlife.service.user.UserService;
+
+import javax.transaction.Transactional;
 
 @Service
 public class TaskServiceImpl implements TaskService{
@@ -40,6 +44,10 @@ public class TaskServiceImpl implements TaskService{
 
 	@Autowired
 	private TaskTrakingService taskTrakingService;
+
+	@Autowired
+	@Lazy
+	private HomeService homeService;
 
 	private TaskTrakingMapper taskTrakingMapper = Mappers.getMapper(TaskTrakingMapper.class);
 	
@@ -103,9 +111,7 @@ public class TaskServiceImpl implements TaskService{
 				taskdto.setDescription(t.getDescription());
 				taskdto.setStartDate(t.getStartDate());
 				taskdto.setEndDate(t.getEndDate());					
-				taskdto.setUser(
-						t.getUser().getUsername() // t.getUser() devuelve null
-				);
+				taskdto.setUser(t.getUser().getUsername());
 				taskdto.setFinished(t.isFinished());
 				taskdto.setIdHome(t.getHome().getId().toString());
 				taskdto.setWeekTask(t.getWeekTask());
@@ -207,6 +213,7 @@ public class TaskServiceImpl implements TaskService{
 		return weeklyTasks;
 	}
 
+	@Transactional
 	@Override
 	public void updateTaskResponsabilities(User user,  List<Task> tasks) {
 		for(Task task : tasks){
@@ -258,7 +265,6 @@ public class TaskServiceImpl implements TaskService{
 			user.setRoles(roles);
 			renters.add(user);
 		}
-		///////////////////////////////////////////////////////
 		return taskTrakingService.taskTrakingProcess(getTaskById(confirmedTaskDTO.getIdTask()), confirmedTaskDTO.getUsername(), renters);
 	}
 

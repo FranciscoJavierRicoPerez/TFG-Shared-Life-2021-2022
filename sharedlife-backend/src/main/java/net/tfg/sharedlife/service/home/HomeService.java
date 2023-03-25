@@ -42,5 +42,7 @@ public interface HomeService {
 	void weeklyTaskManagement(Long id) throws TasksException;
 
 	void weeklyTaskReasignationManagement(Long idHome, List<Long> idsWeeklyTask);
+
+	boolean checkUserBelongToHome(Long homeId, Long userId);
 	
 }

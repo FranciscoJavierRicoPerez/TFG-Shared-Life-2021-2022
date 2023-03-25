@@ -43,7 +43,6 @@
       </table>
     </div>
   </div>
-  <div class="card-footer"></div>
 </div>
 
 <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
@@ -56,9 +55,9 @@
       <div class="card bg-light mb-3">
         <div class="card-body">
           <p class="card-text">
-            Título: {{ spent.title }}<br>
-            Descripción: {{ spent.description }}<br>
-            Total a pagar: {{ spent.totalPrice }} <br>
+            <i><strong>Título: </strong></i>{{ spent.title }}<br />
+            <i><strong>Descripción: </strong></i> {{ spent.description }}<br />
+            <i><strong>Total a pagar: </strong></i>{{ spent.totalPrice }}<br />
           </p>
         </div>
       </div>

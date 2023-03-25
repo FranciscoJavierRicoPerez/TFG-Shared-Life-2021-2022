@@ -10,10 +10,12 @@
           <h3>Datos de la vivienda</h3>
         </div>
         <div class="card-body">
-          {{ home.city }}<br />
-          {{ home.address }}<br />
-          {{ home.number }}<br />
-          Habitaciones disponibles {{ home.rooms }}
+          <i><strong>País: </strong></i>{{ home.country }}<br />
+          <i><strong>Ciudad: </strong></i>{{ home.city }}<br />
+          <i><strong>Calle: </strong></i>{{ home.address }}<br />
+          <i><strong>Número: </strong></i>{{ home.number }}<br />
+          <i><strong>Piso: </strong></i>{{ home.floor }}<br />
+          <i><strong>Habitaciones disponibles: </strong></i> {{ home.rooms }}
         </div>
       </div>
 
@@ -36,16 +38,21 @@
                 </center>
                 <div class="card-body">
                   <h5 class="card-title">
-                    {{ user.firstName }} {{ user.lastName }}
+                    {{ user.firstName }} <br />
+                    {{ user.lastName }}
                   </h5>
                   <p class="card-text">{{ user.username }}</p>
                   <div *ngIf="user.username === username">
-                    <a href="/perfil" class="btn btn-warning btn-lg">Perfil</a>
+                    <a
+                      href="/perfil"
+                      class="btn btn-warning btn-lg bi bi-person"
+                      >Perfil</a
+                    >
                   </div>
                   <div *ngIf="user.username !== username">
                     <a
                       href="/usuario/{{ user.username }}/perfil"
-                      class="btn btn-warning btn-lg"
+                      class="btn btn-warning btn-lg bi bi-person"
                       >Perfil</a
                     >
                   </div>
@@ -119,7 +126,7 @@
                 </div>
                 <div *ngIf="home.completed">
                   <div
-                    class="alert alert-alert alert-dismissible fade show"
+                    class="alert alert-warning alert-dismissible fade show"
                     role="alert"
                   >
                     La vivienda ya esta completa no se pueden enviar mas

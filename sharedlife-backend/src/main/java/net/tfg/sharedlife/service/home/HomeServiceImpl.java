@@ -1,12 +1,7 @@
 package net.tfg.sharedlife.service.home;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
+import java.util.*;
 import java.util.Base64.Encoder;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import net.tfg.sharedlife.dto.*;
 import net.tfg.sharedlife.exception.HomeException;
@@ -32,6 +27,8 @@ import net.tfg.sharedlife.repository.HomeRepository;
 import net.tfg.sharedlife.repository.InvitationRepository;
 import net.tfg.sharedlife.security.jwt.JwtProvider;
 import net.tfg.sharedlife.service.user.UserService;
+
+import javax.transaction.Transactional;
 
 /**
  * The Class HomeServiceImpl.
@@ -351,6 +348,19 @@ public class HomeServiceImpl implements HomeService {
         } catch (TasksException e) {
             logger.info("Error in the reasignation of the weeklyTaks");
         }
+    }
+
+    @Override
+    public boolean checkUserBelongToHome(Long homeId, Long userId) {
+        boolean belong = false;
+        Home home = homeRepository.getById(homeId);
+        for(User user : home.getUsers()){
+            if (Objects.equals(user.getId(), userId)) {
+                belong = true;
+                break;
+            }
+        }
+        return belong;
     }
 
     private void reasignateWeekTaskOneForUser(Home home, List<Long> idsWeeklyTask) throws TasksException {
