@@ -40,7 +40,7 @@
                 >
                   <button
                     type="button"
-                    class="btn btn-outline-info"
+                    class="btn btn-info"
                     (click)="modifyTaskProgress(task.id)"
                   >
                     Comenzar
@@ -55,7 +55,7 @@
                 >
                   <button
                     type="button"
-                    class="btn btn-outline-warning"
+                    class="btn btn-warning"
                     (click)="modifyTaskProgress(task.id)"
                   >
                     Completada
@@ -77,19 +77,40 @@
                 </button>
               </td> -->
 
-              <td>
-                <div *ngIf="task.taskTraking.creationDate !== null && task.taskTraking.startDate !== null && task.taskTraking.endDate !== null">
-                  <div *ngFor="let taskStatus of taskTrakingStatus.taskStatusDTOList">
-                    <div *ngIf="!taskStatus.confirmed && task.id === taskStatus.idTask">
-                      <button type="button" class="btn btn-danger" disabled> Revisión </button>
-                    </div>
-                    <div *ngIf="taskStatus.confirmed && task.id === taskStatus.idTask">
-                      <button type="button" class="btn btn-success" disabled> Revisada </button>
+                <td>
+                  <div
+                    *ngIf="
+                      task.taskTraking.creationDate !== null &&
+                      task.taskTraking.startDate !== null &&
+                      task.taskTraking.endDate !== null
+                    "
+                  >
+                    <div
+                      *ngFor="
+                        let taskStatus of taskTrakingStatus.taskStatusDTOList
+                      "
+                    >
+                      <div
+                        *ngIf="
+                          !taskStatus.confirmed && task.id === taskStatus.idTask
+                        "
+                      >
+                        <button type="button" class="btn btn-danger" disabled>
+                          Revisión
+                        </button>
+                      </div>
+                      <div
+                        *ngIf="
+                          taskStatus.confirmed && task.id === taskStatus.idTask
+                        "
+                      >
+                        <button type="button" class="btn btn-success" disabled>
+                          Revisada
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </td>
-
+                </td>
               </tr>
             </tbody>
           </table>
@@ -167,7 +188,7 @@
       </div>
     </div>
   </div>
-  <div class="card-footer">
+  <!-- <div class="card-footer">
     <p>
       <button
         style="margin-right: 10px"
@@ -181,5 +202,5 @@
         Tareas Semanales
       </button>
     </p>
-  </div>
+  </div> -->
 </div>

@@ -22,6 +22,7 @@ import { TaskTableComponent } from './components/tables/task-table/task-table.co
 import { SpentTableComponent } from './components/tables/spent-table/spent-table.component';
 import { DebtTableComponent } from './components/tables/debt-table/debt-table.component';
 import { MemberProfileComponent } from './components/user/member-profile/member-profile.component';
+import { HomeChatPageComponent } from './components/chat/home-chat-page/home-chat-page.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { MemberProfileComponent } from './components/user/member-profile/member-
     SpentTableComponent,
     DebtTableComponent,
     MemberProfileComponent,
+    HomeChatPageComponent,
   ],
   imports: [
     BrowserModule,

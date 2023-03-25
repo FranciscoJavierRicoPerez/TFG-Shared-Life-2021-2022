@@ -10,6 +10,7 @@ import { HomeCreateComponent } from './components/home/home-create/home-create.c
 import { HomeGuardService } from './guards/home-guard.service';
 import { TaskCreateComponent } from './components/task/task-create/task-create.component';
 import { MemberProfileComponent } from './components/user/member-profile/member-profile.component';
+import { HomeChatPageComponent } from './components/chat/home-chat-page/home-chat-page.component';
 
 const routes: Routes = [
   { path: 'register', component: UserRegisterComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'vivienda/:id/gastos', component: SpentCreateComponent },
   { path: 'usuario/:id', component: UserProfileComponent },
   { path: 'usuario/:username/perfil', component: MemberProfileComponent },
+  { path: 'vivienda/:id/chat', component: HomeChatPageComponent},
 ];
 
 @NgModule({

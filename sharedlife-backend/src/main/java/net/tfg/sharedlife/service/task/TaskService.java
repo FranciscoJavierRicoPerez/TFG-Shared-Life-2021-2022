@@ -43,5 +43,7 @@ public interface TaskService {
 
 	void restartWeeklyTasks(List<Long> ids);
 
+	void deleteWeeklyTask(Task t);
+
 
 }

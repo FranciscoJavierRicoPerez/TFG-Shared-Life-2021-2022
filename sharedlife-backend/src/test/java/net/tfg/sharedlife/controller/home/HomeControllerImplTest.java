@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.tfg.sharedlife.exception.HomeException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,16 +30,16 @@ class HomeControllerImplTest {
     private HomeServiceImpl homeService;
 
     @Test
-    public void createHomeExceptionTest(){
+    public void createHomeExceptionTest() throws HomeException {
         // Datos de Entrada
         HomeDTO homeDTO = null;
         Mockito.when(homeService.createHome(homeDTO))
-               .thenThrow(new DataIncorrectException(ErrorMessages.HOME_INFORMATION_ERR));
+               .thenThrow(new HomeException(ErrorMessages.HOME_INFORMATION_ERR));
         assertEquals(HttpStatus.BAD_REQUEST, homeController.createHome(homeDTO).getStatusCode());
     }
 
     @Test
-    public void createHomeSuccessTest(){
+    public void createHomeSuccessTest() throws HomeException {
         HomeDTO homeDTO = new HomeDTO();
         homeDTO.setId(1L);
         Home home = new Home();

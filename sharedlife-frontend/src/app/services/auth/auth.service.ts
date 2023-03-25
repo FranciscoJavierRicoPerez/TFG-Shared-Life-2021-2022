@@ -19,7 +19,7 @@ export class AuthService {
     return this.HttpClient.post<JwtDto>(this.URL+"login", UserLoginDto);
   }
 
-  public register(newUser: NewUserDTO): Observable<any>{
-    return this.HttpClient.post<any>(this.URL+"register", newUser);
+  public async register(newUser: NewUserDTO): Promise<Observable<any>>{
+    return await this.HttpClient.post<any>(this.URL+"register", newUser);
   }
 }
