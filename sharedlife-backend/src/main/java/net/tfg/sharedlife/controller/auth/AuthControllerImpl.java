@@ -3,6 +3,11 @@ package net.tfg.sharedlife.controller.auth;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.tfg.sharedlife.exception.DataIncorrectException;
+import net.tfg.sharedlife.service.home.HomeServiceImpl;
+import net.tfg.sharedlife.service.mail.MailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import net.tfg.sharedlife.dto.JwtDto;
 import net.tfg.sharedlife.dto.LoginUserDto;
@@ -46,6 +48,11 @@ public class AuthControllerImpl implements AuthController{
 	
 	@Autowired
 	JwtProvider jwtProvider;
+
+	@Autowired
+	MailService mailService;
+
+	private final static Logger logger = LoggerFactory.getLogger(AuthControllerImpl.class);
 
 	@Override
 	@PostMapping("/register")
@@ -87,6 +94,20 @@ public class AuthControllerImpl implements AuthController{
 		JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
 		return new ResponseEntity(jwtDto, HttpStatus.OK);
 	}
-	
-	
+
+	@Override
+	@PutMapping("/updatePassword")
+	public ResponseEntity<Boolean> updatePassword(String email) {
+		logger.info("Starting the process of recovery the password");
+		Boolean resultado = false;
+		HttpStatus status = HttpStatus.OK;
+		try {
+			resultado = mailService.sendGmail(email);
+		} catch (DataIncorrectException e){
+			status = HttpStatus.BAD_REQUEST;
+		}
+		return new ResponseEntity<>(resultado, status);
+	}
+
+
 }
