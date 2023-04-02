@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtDto } from 'src/app/models/jwt/jwt-dto';
 import { NewUserDTO } from 'src/app/models/user/new-user-dto/NewUserDTO';
+import { PasswordUpdateDTO } from 'src/app/models/Password/PasswordUpdateDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -25,4 +26,9 @@ export class AuthService {
   updatePassword(email: string): Observable<any> {
     return this.HttpClient.put<any>(this.URL + 'updatePassword', email);
   }
+
+  async newPassword(passwordUpdateDTO: PasswordUpdateDTO):Promise<Observable<any>> {
+    return await this.HttpClient.post<any>(this.URL + 'newPassword', passwordUpdateDTO);
+  }
+
 }

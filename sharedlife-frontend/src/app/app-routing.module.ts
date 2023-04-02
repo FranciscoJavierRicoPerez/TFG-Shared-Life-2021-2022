@@ -12,6 +12,7 @@ import { TaskCreateComponent } from './components/task/task-create/task-create.c
 import { MemberProfileComponent } from './components/user/member-profile/member-profile.component';
 import { HomeChatPageComponent } from './components/chat/home-chat-page/home-chat-page.component';
 import { PasswordRecoveryComponent } from './components/user/password-recovery/password-recovery.component';
+import { PasswordUpdateComponent } from './components/user/password-update/password-update.component';
 
 const routes: Routes = [
   { path: 'register', component: UserRegisterComponent },
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'usuario/:username/perfil', component: MemberProfileComponent },
   { path: 'vivienda/:id/chat', component: HomeChatPageComponent },
   { path: 'solicitud-contraseña', component: PasswordRecoveryComponent },
+  { path: 'actualizar-contraseña', component: PasswordUpdateComponent },
 ];
 
 @NgModule({

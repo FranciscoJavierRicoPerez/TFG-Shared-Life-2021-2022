@@ -3,6 +3,7 @@ package net.tfg.sharedlife.controller.auth;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.tfg.sharedlife.dto.PasswordUpdateDTO;
 import net.tfg.sharedlife.exception.DataIncorrectException;
 import net.tfg.sharedlife.service.home.HomeServiceImpl;
 import net.tfg.sharedlife.service.mail.MailService;
@@ -107,6 +108,23 @@ public class AuthControllerImpl implements AuthController{
 			status = HttpStatus.BAD_REQUEST;
 		}
 		return new ResponseEntity<>(resultado, status);
+	}
+
+	@Override
+	public ResponseEntity<Boolean> newPassword(PasswordUpdateDTO passwordUpdateDTO) {
+		logger.info("Starting the process of creation a new password");
+		Boolean result = false;
+		HttpStatus status = HttpStatus.OK;
+		try {
+			result = userService.registerNewPassword(
+					passwordUpdateDTO.getEmail(),
+					passwordUpdateDTO.getActualPassword(),
+					passwordUpdateDTO.getNewPassword()
+			);
+		} catch (DataIncorrectException e) {
+			status = HttpStatus.BAD_REQUEST;
+		}
+		return new ResponseEntity<>(result, status);
 	}
 
 

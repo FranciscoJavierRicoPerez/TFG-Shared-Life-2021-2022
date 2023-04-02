@@ -1,5 +1,6 @@
 package net.tfg.sharedlife.controller.auth;
 
+import net.tfg.sharedlife.dto.PasswordUpdateDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,4 +21,7 @@ public interface AuthController {
 
 	@PutMapping("/updatePassword")
 	ResponseEntity<Boolean> updatePassword(@RequestBody String email);
+
+	@PostMapping("/newPassword")
+	ResponseEntity<Boolean> newPassword(@RequestBody PasswordUpdateDTO passwordUpdateDTO);
 }

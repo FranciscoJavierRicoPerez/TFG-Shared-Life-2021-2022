@@ -1,8 +1,6 @@
 package net.tfg.sharedlife.service.user;
 
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Base64.Encoder;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +41,10 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private InvitationRepository invitationRepository;
+
+	@Lazy
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	@Value("${jwt.secret}")
 	private String secret;
@@ -171,6 +173,24 @@ public class UserServiceImpl implements UserService{
 		String vars[] = email.split("@");
 		String toEncode = vars[0] + secret;
 		return toEncode;
+	}
+
+	@Override
+	public boolean registerNewPassword(String email, String actualPassword, String newPassword) {
+		boolean result = false;
+		User user = userRepository.findByEmail(email);
+		if(user != null) {
+			if(passwordEncoder.matches(actualPassword, user.getPassword())) {
+				user.setPassword(passwordEncoder.encode(newPassword));
+				userRepository.save(user);
+				result = true;
+			} else {
+				throw new DataIncorrectException(ErrorMessages.ERR_PASSWORD_INCORRECT);
+			}
+		} else {
+			throw new DataIncorrectException(ErrorMessages.USER_NOT_FOUND);
+		}
+		return result;
 	}
 
 	private User findUserByEmail(String email){

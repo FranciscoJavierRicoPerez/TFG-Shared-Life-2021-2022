@@ -34,6 +34,8 @@ public class ErrorMessages {
 
     public static final String ERR_HOME_ALREADY_EXISTS = "The home already exists";
 
+    public static final String ERR_PASSWORD_INCORRECT = "The password is incorrect";
+
     /**
      * Instantiates a new error messages.
      */

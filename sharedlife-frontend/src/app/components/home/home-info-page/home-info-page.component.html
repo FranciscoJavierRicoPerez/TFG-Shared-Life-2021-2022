@@ -2,12 +2,12 @@
 <div class="container justify-content-center">
   <div class="card">
     <div class="card-header">
-      <h3>{{ home.address }}</h3>
+      <h3><i><strong>{{ home.address }}</strong></i></h3>
     </div>
     <div class="card-body">
       <div class="card">
         <div class="card-header">
-          <h3>Datos de la vivienda</h3>
+          <h3><i><strong>Datos de la vivienda</strong></i></h3>
         </div>
         <div class="card-body">
           <i><strong>País: </strong></i>{{ home.country }}<br />
@@ -23,7 +23,7 @@
       <p></p>
       <div class="card">
         <div class="card-header">
-          <h3>Miembros</h3>
+          <h3><i><strong>Miembros</strong></i></h3>
         </div>
         <div class="card-body card-deck mt-3">
           <div *ngFor="let user of users">
@@ -66,7 +66,7 @@
       <!-- INVITACIONES -->
       <div *ngIf="isAdmin">
         <div class="card">
-          <div class="card-header"><h3>Invitaciones</h3></div>
+          <div class="card-header"><h3><i><strong>Invitaciones</strong></i></h3></div>
           <form
             [formGroup]="invitationForm"
             (ngSubmit)="sendInvitation()"
@@ -74,7 +74,7 @@
           >
             <div class="card-body">
               <div class="form-group" style="margin: 5px">
-                <label for="username">Nombre usuario</label>
+                <label for="username">Invitar a</label>
                 <input
                   type="text"
                   name="username"
