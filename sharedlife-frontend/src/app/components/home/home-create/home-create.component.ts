@@ -9,12 +9,14 @@ import { HomeCreateDTO } from 'src/app/models/home/home-create-dto/home-create-d
 @Component({
   selector: 'app-home-create',
   templateUrl: './home-create.component.html',
-  styleUrls: ['./home-create.component.css']
+  styleUrls: ['./home-create.component.css'],
 })
 export class HomeCreateComponent implements OnInit {
-
   token: string;
   home: HomeCreateDTO;
+  errorMessage: string = "";
+  successMessage: string = "";
+
 
   myForm = new FormGroup({
     address: new FormControl('', Validators.required),
@@ -22,24 +24,26 @@ export class HomeCreateComponent implements OnInit {
     number: new FormControl('', Validators.required),
     city: new FormControl('', Validators.required),
     country: new FormControl('', Validators.required),
-    rooms: new FormControl('', Validators.required)
+    rooms: new FormControl('', Validators.required),
   });
 
   constructor(
     private HomeService: HomeService,
     private Router: Router,
-    private TokenService: TokenService) {}
+    private TokenService: TokenService
+  ) {}
 
   ngOnInit(): void {
-    if(this.TokenService.getToken()){
+    if (this.TokenService.getToken()) {
       this.token = this.TokenService.getToken();
-    }
-    else{
-      this.token = "";
+    } else {
+      this.token = '';
     }
   }
 
-  saveHome(){
+  saveHome() {
+    this.errorMessage = "";
+    this.successMessage = "";
     this.home = new HomeCreateDTO(
       this.myForm.value.address,
       this.myForm.value.floor,
@@ -48,20 +52,23 @@ export class HomeCreateComponent implements OnInit {
       this.myForm.value.country,
       this.myForm.value.rooms,
       this.token,
-      false);
+      false
+    );
     this.HomeService.createHouse(this.home).subscribe(
-    data => {
-      console.log(data);
-    }, error => {
-      console.log(error)
-    });
-    this.Router.navigate(['/']);
-
+      (data) => {
+        console.log("OK home created succesfully");
+        this.successMessage = "La vivienda se ha creado correctamente, ya puedes empezar a gestionarla.";
+      },
+      (error) => {
+        console.log("ERR home can't be created");
+        this.errorMessage = "No se ha podido crear la vivienda, revisa que los datos sean correctos";
+      }
+    );
+    //this.Router.navigate(['/']);
   }
 
-  onSubmit(){
+  onSubmit() {
     console.log(this.myForm.value);
     this.saveHome();
   }
-
 }

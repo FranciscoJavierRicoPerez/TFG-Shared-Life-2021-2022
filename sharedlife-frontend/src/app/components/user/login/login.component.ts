@@ -9,10 +9,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-
   isLogged = false;
   isLoginFail = false;
   roles: string[] = [];
@@ -20,28 +19,31 @@ export class LoginComponent implements OnInit {
 
   myForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required])
-  })
+    password: new FormControl('', [Validators.required]),
+  });
 
   constructor(
     private TokenService: TokenService,
     private AuthService: AuthService,
     private Router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     // Setteamos los valores iniciales
-    if(this.TokenService.getToken()){
+    if (this.TokenService.getToken()) {
       this.isLogged = true;
       this.isLoginFail = false;
       this.roles = this.TokenService.getAuthorities();
     }
   }
 
-  onLogin(): void{
-    this.loginUserDto = new UserLoginDto(this.myForm.value.username, this.myForm.value.password);
+  onLogin(): void {
+    this.loginUserDto = new UserLoginDto(
+      this.myForm.value.username,
+      this.myForm.value.password
+    );
     this.AuthService.login(this.loginUserDto).subscribe(
-      data => {
+      (data) => {
         this.isLogged = true;
         this.isLoginFail = false;
 
@@ -50,11 +52,10 @@ export class LoginComponent implements OnInit {
         this.TokenService.setAuthorities(data.authorities);
         this.Router.navigate(['/inicio']);
       },
-      err => {
+      (err) => {
         this.isLogged = false;
         this.isLoginFail = true;
       }
     );
   }
-
 }

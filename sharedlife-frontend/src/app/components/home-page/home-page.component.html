@@ -1,43 +1,46 @@
 <app-menu></app-menu>
 <div class="container justify-content-center">
-  <div *ngIf="!isLogged; else logged">
-    <h3>Bienvenido a Shared Life</h3>
-  </div>
-  <p>Compartir es vivir, pero con tus amigos es disfrutarlo</p>
-
-  <div style="text-align: center;">
-    <img src="./assets/compas1.png" alt="" width="500px">
-  </div>
-
-  <div>
-    <h3>Descripción</h3>
-    <p>
-      Shared Life es una aplicacion que tiene como objetivo facilitar la comunicacion entre compañeros de piso
-      y con el propietario de la vivienda.
-    </p>
-  </div>
-  <div>
-    <h3>Información del desarrollador</h3>
-    <p>
-      La aplicación esta siendo desarrollada por Francisco Javier Rico Pérez, estudiante del Grado en Ingenería
-      Informática en la Universidad de Alicante, como Trabajo de Final de Grado.
-    </p>
-  </div>
-  <div>
-    <h3>Redes Sociales</h3>
-    <div>
-      <span>
-        <a href="https://twitter.com/ri_co9297"><img src="./assets/twitter.png" alt="" width="50px"></a>
-        <a href="https://www.instagram.com/franricoperez97/"><img src="./assets/instragram.png" alt="" width="50px"></a>
-        <a href="https://www.youtube.com/channel/UCLYyJ-MS-03NH6ofHSBAZwA"><img src="./assets/youtube.png" alt="" width="50px"></a>
-      </span>
+  <div class="card">
+    <div class="card-body">
+      <div *ngIf="!isLogged; else logged">
+        <h3>Bienvenido a Shared Life</h3>
+      </div>
+      <p>Compartir es vivir, pero con tus amigos es disfrutarlo</p>
+    
+      <div style="text-align: center;">
+        <img src="./assets/compas1.png" alt="" width="450px">
+      </div>
+    
+      <div>
+        <h3>Descripción</h3>
+        <p>
+          Shared Life es una aplicacion que tiene como objetivo facilitar la comunicacion entre compañeros de piso
+          y con el propietario de la vivienda.
+        </p>
+      </div>
+      <div>
+        <h3>Información del desarrollador</h3>
+        <p>
+          La aplicación esta siendo desarrollada por Francisco Javier Rico Pérez, estudiante del Grado en Ingenería
+          Informática en la Universidad de Alicante, como Trabajo de Final de Grado.
+        </p>
+      </div>
+      <div>
+        <h3>Redes Sociales</h3>
+        <div>
+          <span>
+            <a href="https://twitter.com/ri_co9297"><img src="./assets/twitter.png" alt="" width="50px"></a>
+            <a href="https://www.instagram.com/franricoperez97/"><img src="./assets/instragram.png" alt="" width="50px"></a>
+            <a href="https://www.youtube.com/channel/UCLYyJ-MS-03NH6ofHSBAZwA"><img src="./assets/youtube.png" alt="" width="50px"></a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- templates -->
+    <ng-template #logged>
+      <div>
+        <h3>Bienvenido a Shared Life, {{ username }}</h3>
+      </div>
+    </ng-template>
     </div>
   </div>
-</div>
-<!-- templates -->
-<ng-template #logged>
-  <div>
-    <h3>Bienvenido a Shared Life, {{ username }}</h3>
-  </div>
-</ng-template>
-

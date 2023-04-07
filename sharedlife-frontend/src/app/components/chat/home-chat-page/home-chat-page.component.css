@@ -1,0 +1,17 @@
+* {
+    margin:0 important!;
+    padding:0 important!;
+}
+#columna1 {
+    top:0px;
+    left:0px;
+    width:50%;
+    margin-top:10px;
+    background-color:#ffff55;
+}
+#columna2 {
+    margin-left:50%;
+    margin-right:20px;
+    margin-top:10px;
+    background-color:#ffffbb;
+}

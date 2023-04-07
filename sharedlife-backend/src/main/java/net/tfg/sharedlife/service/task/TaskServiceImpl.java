@@ -4,10 +4,12 @@ import java.util.*;
 
 import net.tfg.sharedlife.dto.*;
 import net.tfg.sharedlife.model.*;
+import net.tfg.sharedlife.service.home.HomeService;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import net.tfg.sharedlife.enums.HomeRoomEnum;
@@ -19,6 +21,8 @@ import net.tfg.sharedlife.repository.TaskRepository;
 import net.tfg.sharedlife.repository.UserRepository;
 import net.tfg.sharedlife.service.taskTraking.TaskTrakingService;
 import net.tfg.sharedlife.service.user.UserService;
+
+import javax.transaction.Transactional;
 
 @Service
 public class TaskServiceImpl implements TaskService{
@@ -40,6 +44,10 @@ public class TaskServiceImpl implements TaskService{
 
 	@Autowired
 	private TaskTrakingService taskTrakingService;
+
+	@Autowired
+	@Lazy
+	private HomeService homeService;
 
 	private TaskTrakingMapper taskTrakingMapper = Mappers.getMapper(TaskTrakingMapper.class);
 	
@@ -168,8 +176,9 @@ public class TaskServiceImpl implements TaskService{
 			task.setStartDate(new Date());
 			task.setFinished(false);
 			Set<User> users = home.getUsers();
-			boolean isAdmin = false;
+			boolean isAdmin;
 			for(User u : users){
+				isAdmin = false;
 				for(Role role : u.getRoles()){
 					if(role.getRoleName().equals(RoleEnum.ROLE_ADMIN)){
 						isAdmin = true;
@@ -204,6 +213,7 @@ public class TaskServiceImpl implements TaskService{
 		return weeklyTasks;
 	}
 
+	@Transactional
 	@Override
 	public void updateTaskResponsabilities(User user,  List<Task> tasks) {
 		for(Task task : tasks){
@@ -255,7 +265,6 @@ public class TaskServiceImpl implements TaskService{
 			user.setRoles(roles);
 			renters.add(user);
 		}
-		///////////////////////////////////////////////////////
 		return taskTrakingService.taskTrakingProcess(getTaskById(confirmedTaskDTO.getIdTask()), confirmedTaskDTO.getUsername(), renters);
 	}
 
@@ -296,5 +305,13 @@ public class TaskServiceImpl implements TaskService{
 			t.setUser(null);
 			taskRepository.save(t);
 		}
+	}
+
+	@Override
+	public void deleteWeeklyTask(Task t) {
+		if(t.getTaskTraking() != null){
+			taskTrakingService.deleteTaskTraking(t);
+		}
+		taskRepository.delete(t);
 	}
 }

@@ -15,10 +15,9 @@ import { User } from 'src/app/models/user/user';
 @Component({
   selector: 'app-home-info-page',
   templateUrl: './home-info-page.component.html',
-  styleUrls: ['./home-info-page.component.css']
+  styleUrls: ['./home-info-page.component.css'],
 })
 export class HomeInfoPageComponent implements OnInit {
-
   username: string;
   isAdmin: boolean;
   invitation: Invitation;
@@ -29,53 +28,50 @@ export class HomeInfoPageComponent implements OnInit {
   tasks: Task[] = [];
   debts: Debt[] = [];
   spent: Spent;
-  displayStyle = "none";
+  displayStyle = 'none';
   spents: Spent[] = [];
   debtsUsers: User[] = [];
   errorSendInvitation: boolean;
   alreadyInvited: boolean;
   userNotExists: boolean;
   renters: User[] = [];
+  errorMessage: string = '';
+  successMessage: string = '';
   invitationForm = new FormGroup({
-    username: new FormControl('', [Validators.required])
-  })
+    username: new FormControl('', [Validators.required]),
+  });
   constructor(
     private HomeService: HomeService,
     private Router: Router,
     private ActivatedRoute: ActivatedRoute,
     private TokenService: TokenService,
-    private SpentService: SpentService,
-  ) { }
+    private SpentService: SpentService
+  ) {}
 
   ngOnInit(): void {
-    console.log("CARGANDO HOME INFO PAGE")
-    if(this.TokenService.getToken()){
+    if (this.TokenService.getToken()) {
       this.username = this.TokenService.getUserName();
       this.authorities = this.TokenService.getAuthorities();
-      this.authorities.forEach(role => {
-        if(role.indexOf('ROLE_ADMIN') === 0){
+      this.authorities.forEach((role) => {
+        if (role.indexOf('ROLE_ADMIN') === 0) {
           this.isAdmin = true;
         }
-      })
+      });
       this.idHome = this.ActivatedRoute.snapshot.params['id'];
-      this.HomeService.getHomeById(this.idHome).subscribe(
-        data => {
-          this.home = data;
-        }
-      );
-      this.HomeService.getAllHomeMembers(this.idHome).subscribe(
-        data => {
-          this.users = data;
-          this.renters = data;
-          console.log(this.users);
-        }
-      );
+      this.HomeService.getHomeById(this.idHome).subscribe((data) => {
+        this.home = data;
+      });
+      this.HomeService.getAllHomeMembers(this.idHome).subscribe((data) => {
+        this.users = data;
+        this.renters = data;
+        console.log(this.users);
+      });
     }
   }
 
-  sendInvitation(): void{
-    console.log(this.invitationForm.value)
-    console.log(this.idHome);
+  sendInvitation(): void {
+    this.successMessage = '';
+    this.errorMessage = '';
     this.invitation = new Invitation(
       this.invitationForm.value['username'],
       this.idHome,
@@ -83,61 +79,64 @@ export class HomeInfoPageComponent implements OnInit {
       this.home.address
     );
     this.HomeService.sendInvitation(this.invitation).subscribe(
-      data => {
-        console.log("Invitation send ok");
-        window.location.reload();
+      (data) => {
+        console.log('Invitation send ok');
+        this.successMessage = "La invitación ha sido enviada correctamente";
+        // window.location.reload();
       },
-      err => {
-        console.log("Invitation send err");
-        if(err.status == 401){
+      (err) => {
+        console.log('Invitation send err');
+        if (err.status == 401) {
           this.alreadyInvited = true;
-        } else { 
-          if(err.status == 503){
+          this.errorMessage = 'El usuario ya tiene una invitación pendiente';
+        } else {
+          if (err.status == 503) {
             this.userNotExists = true;
+            this.errorMessage = 'No existe ningun usuario con ese nombre';
           } else {
             this.errorSendInvitation = true;
+            this.errorMessage = 'Este usuario ya esta registrado en otra vivienda';
           }
         }
       }
     );
   }
 
-  leaveHouse(){
+  leaveHouse() {
     console.log(this.idHome);
     this.HomeService.leaveHome(this.idHome, this.username).subscribe(
-      data => {
-        console.log("User leave home sucessfully");
+      (data) => {
+        console.log('User leave home sucessfully');
         this.Router.navigate(['/']);
       },
-      error => {
-        console.log("Error leaving home");
+      (error) => {
+        console.log('Error leaving home');
       }
     );
   }
 
-  deleteHouse(){
+  deleteHouse() {
     console.log(this.idHome);
     this.HomeService.deleteHome(this.idHome).subscribe(
-      data => {
-        console.log("home delete successfully");
+      (data) => {
+        console.log('home delete successfully');
         this.Router.navigate(['/']);
       },
-      err => {
-        console.log("home delete error");
+      (err) => {
+        console.log('home delete error');
       }
     );
   }
 
-  deleteSpentAndDebts(idSpent: string){
+  deleteSpentAndDebts(idSpent: string) {
     console.log(idSpent);
     this.SpentService.deleteSpentAndDebts(idSpent).subscribe(
-      data => {
-        console.log("spent delete successfully");
+      (data) => {
+        console.log('spent delete successfully');
       },
-      error => {
-        console.log("error deleting spents");
+      (error) => {
+        console.log('error deleting spents');
       }
     );
   }
-
 }

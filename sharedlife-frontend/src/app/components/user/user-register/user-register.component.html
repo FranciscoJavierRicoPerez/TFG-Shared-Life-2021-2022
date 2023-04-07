@@ -1,5 +1,11 @@
 <app-menu></app-menu>
-<div class="container justify-content-center">
+
+<div class="loading" *ngIf="loading">
+  <img src="../../../../assets/spinner.gif">
+</div>
+
+
+<div class="container justify-content-center" *ngIf="!loading">
   <div class="card">
     <div class="card-header" align="center">
       <h3>Bienvenido a Shared Life</h3>

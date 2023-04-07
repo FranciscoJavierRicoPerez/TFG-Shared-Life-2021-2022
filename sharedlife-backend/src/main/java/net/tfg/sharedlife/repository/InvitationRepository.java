@@ -10,4 +10,7 @@ import net.tfg.sharedlife.model.Invitation;
 @Repository
 public interface InvitationRepository extends JpaRepository<Invitation, Long>{
 	List<Invitation> findByUsername(String username);
+
+	List<Invitation> findByIdHome(String idHome);
+
 } 

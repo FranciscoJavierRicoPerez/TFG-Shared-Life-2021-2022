@@ -100,7 +100,7 @@ public class SpentControllerImpl implements SpentController {
 	@DeleteMapping("/{id}/delete")
 	@Override
 	public ResponseEntity<?> deleteSpentAndDebts(Long id) {
-		logger.info("Deleting the spent with id {} and his associated debts");
+		logger.info("Deleting the spent with id {} and his associated debts", id);
 		spentService.deleteSpentAndDebts(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

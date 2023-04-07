@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+<nav class="navbar navbar-expand navbar-dark bg-dark mb-5">
   <div class="navbar-collapse collapse" id="navbarSupportedContent">
     <ul class="nav navbar-nav navbar-left">
       <li class="nav-item">
@@ -9,7 +9,7 @@
         </a>
       </li>
       <li class = "nav-item" *ngIf="isLogged && isAdmin">
-        <a routerLink="/vivienda/nueva" routerLinkActive="active" class="nav-link">Añadir casa</a>
+        <a routerLink="/vivienda/nueva" routerLinkActive="active" class="nav-link"><i class="bi bi-house"></i> Nueva vivienda</a>
       </li>
       <!-- Acceso al formulario de creación de tareas para el inquilino -->
       <li class = "nav-item" *ngIf="isLogged && userHasHome && !isAdmin">
@@ -20,7 +20,7 @@
 
       <!-- Acceso al formulario de creación de tareas para el propietario -->
       <li class="nav-item dropdown" *ngIf="isLogged && userHasHome && isAdmin">
-        <a class="nav-link dropdown-toggl bi bi-list-task" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle bi bi-list-task" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Gestión de Tareas
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -67,6 +67,35 @@
         </div>
       </li>
 
+      <li class="nav-item dropdown" *ngIf="isLogged && userHasHome && isAdmin">
+          <a class="nav-link dropdown-toggle bi bi-chat-dots" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Chat
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div *ngFor="let home of homes">
+            <div *ngIf="home.actualMemberCount >= 2; then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+              <a class="dropdown-item" href="/vivienda/{{home.id}}/chat">{{ home.address }}</a>
+            </ng-template>
+            <ng-template #elseBlock>
+              <a class="dropdown-item disabled" href="/vivienda/{{home.id}}/chat">{{ home.address }}</a>
+            </ng-template>
+          </div>
+        </div>
+      </li>
+
+      <li class = "nav-item" *ngIf="isLogged && userHasHome && !isAdmin">
+        <div *ngFor="let home of homes">
+          <div *ngIf="home.actualMemberCount >= 2; then thenBlock else elseBlock"></div>
+          <ng-template #thenBlock>
+            <a routerLink="/vivienda/{{home.id}}/chat" routerLinkActive="active" class="nav-link bi bi-chat-dots"> Chat</a>
+          </ng-template>
+          <ng-template #elseBlock>
+            <a routerLink="/vivienda/{{home.id}}/chat" routerLinkActive="active" class="nav-link bi bi-chat-dots disabled"> hat</a>
+          </ng-template>
+        </div>
+      </li>
+
     </ul>
     <div class="col-md">
     </div>
@@ -78,10 +107,10 @@
         <a routerLink="/register" routerLinkActive="active" class="nav-link bi bi-person-plus"> Registro</a>
       </li>
       <li class="nav-item" *ngIf="isLogged">
-        <a class="nav-link" routerLink="/perfil">{{username}}</a>
+        <a class="nav-link bi bi-person-square" routerLink="/perfil"> {{username}}</a>
       </li>
       <li class = "nav-item" *ngIf="isLogged" >
-        <a routerLink="/inicio" class="nav-link bi bi-box-arrow-left" (click)="onLogOut()"> Cerrar Sesion</a>
+        <a routerLink="/inicio" class="nav-link bi bi-box-arrow-left" (click)="onLogOut()"> Cerrar Sesión</a>
       </li>
     </ul>
   </div>

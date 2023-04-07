@@ -9,4 +9,8 @@ import net.tfg.sharedlife.model.Home;
  * The Interface HomeRepository.
  */
 @Repository
-public interface HomeRepository extends JpaRepository<Home, Long>{}
+public interface HomeRepository extends JpaRepository<Home, Long>{
+    boolean existsByAddressAndFloorAndCityAndNumber(String address, String floor, String city, String number);
+
+
+}

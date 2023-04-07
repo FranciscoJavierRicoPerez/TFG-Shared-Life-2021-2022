@@ -1,10 +1,7 @@
 package net.tfg.sharedlife.service.taskTraking;
 
 import net.tfg.sharedlife.dto.TaskTrakingStatusDTO;
-import net.tfg.sharedlife.model.Home;
-import net.tfg.sharedlife.model.Task;
-import net.tfg.sharedlife.model.TaskTraking;
-import net.tfg.sharedlife.model.User;
+import net.tfg.sharedlife.model.*;
 
 import java.util.List;
 
@@ -21,4 +18,6 @@ public interface TaskTrakingService {
     void deleteTaskTraking(Task t);
 
     void saveTaskTraking(TaskTraking taskTraking);
+
+    void updateTaskTrakingResponsability(TaskTrakingsUsers taskTrakingsUsers, User user);
 }

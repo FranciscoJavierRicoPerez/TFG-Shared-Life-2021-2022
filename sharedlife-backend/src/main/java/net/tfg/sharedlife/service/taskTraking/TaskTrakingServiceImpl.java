@@ -62,10 +62,6 @@ public class TaskTrakingServiceImpl implements TaskTrakingService {
                     }
                 }
             } else {
-                //if(!taskTraking.isConfirmed()){
-                //    taskTraking.setConfirmed(true);
-                //}
-                System.out.println("CONFIRMACION");
                 // Para la confirmacion lo que hay que hacer es obtener el tasktrakingsusers asociado a la tarea task o
                 // al usuario que hace la confirmacion
                 for(User user : renters){
@@ -176,5 +172,15 @@ public class TaskTrakingServiceImpl implements TaskTrakingService {
     @Override
     public void saveTaskTraking(TaskTraking taskTraking) {
         taskTrakingRepository.save(taskTraking);
+    }
+
+    @Override
+    public void updateTaskTrakingResponsability(TaskTrakingsUsers taskTrakingsUsers, User user) {
+        taskTrakingsUsers.setUser(user);
+        taskTrakingsUsersRepository.save(taskTrakingsUsers);
+        // BUSCAR CUAL DE LOS TASKTRAKINGUSER QUE TENGO AQUI ES EL QUE TENGO QUE MODIFICAR.
+            // => SERA EL QUE TENGA ASIGNADO UN USUARIO QUE YA NO PERTENECE A LA VIVIENDA.
+        // UNA VEZ HE ENCONTRADO ESE TASKTRAKINGUSER, TENGO QUE ASIGNARLO A UN INQUILINO
+        // QUE NO SEA NI EL QUE TIENE ASIGNADO ESA TAREA.
     }
 }

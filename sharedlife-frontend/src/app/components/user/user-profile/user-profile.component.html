@@ -2,7 +2,7 @@
 <div class="container justify-content-center">
   <div class="card">
     <div class="card-header">
-      <h1>{{ user.firstName }}</h1>
+      <h1><i><strong>{{ user.firstName }}</strong></i></h1>
     </div>
     <div class="card-body">
       <div class="container">
@@ -18,13 +18,13 @@
               </div>
               <div>
                 <p>
-                  Nombre:
-                  {{ user.firstName }}
-                  {{ user.lastName }}
-                  <br />
-                  Correo: {{ user.email }}
-                  <br />
-                  Usuario: {{ user.username }}
+                  <strong>
+                    {{ user.firstName }}
+                    {{ user.lastName }}
+                    <br />
+                    {{ user.email }}
+                    <br />
+                  </strong>
                 </p>
               </div>
             </div>
@@ -34,7 +34,7 @@
         <div *ngIf="isAdmin && homes.length > 0">
           <div class="card">
             <div class="card-header">
-              <h1>Viviendas</h1>
+              <h1><i><strong>Viviendas</strong></i></h1>
             </div>
             <div class="card-body card-deck mt-3">
               <div *ngFor="let home of homes">
@@ -52,8 +52,8 @@
                       <p class="card-text">{{ home.city }}</p>
                       <a
                         routerLink="/vivienda/{{ home.id }}"
-                        class="btn btn-warning"
-                        >Ver</a
+                        class="btn btn-warning bi bi-house"
+                        > Ver</a
                       >
                     </div>
                   </div>
@@ -84,14 +84,14 @@
                               class="btn btn-success"
                               (click)="copyToClipBoard(invitation.homeCode)"
                             >
-                              <i class="bi bi-clipboard"></i> Copiar
+                              <i class="bi bi-clipboard"></i> Código de acceso
                             </button>
                             <button
                               type="button"
                               class="btn btn-primary"
                               (click)="openPopup()"
                             >
-                              Aceptar
+                              <i class="bi bi-check2"></i>Aceptar
                             </button>
                           </label>
                         </div>
@@ -198,8 +198,9 @@
                       <p class="card-text">{{ home.city }}</p>
                       <a
                         routerLink="/vivienda/{{ home.id }}"
-                        class="btn btn-warning"
-                        >Ver</a
+                        class="btn btn-warning bi bi-house"
+                      >
+                       Ver</a
                       >
                     </div>
                   </div>
