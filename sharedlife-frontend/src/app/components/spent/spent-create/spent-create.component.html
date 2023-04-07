@@ -5,11 +5,19 @@
 <div class="container justify-content-center">
   <div class="card">
     <div class="card-header">
-      <h3>Gestión de gastos de {{ home.address }}</h3>
+      <h3>
+        <i
+          ><strong>Gestión de gastos de {{ home.address }}</strong></i
+        >
+      </h3>
     </div>
     <div class="card-body">
       <div class="card">
-        <div class="card-header"><h2>Nuevo Gasto</h2></div>
+        <div class="card-header">
+          <h2>
+            <i><strong>Nuevo Gasto</strong></i>
+          </h2>
+        </div>
         <div class="card-body">
           <form [formGroup]="spentCreateForm" (ngSubmit)="createSpent()">
             <div class="form-group" style="margin: 5px">
@@ -85,10 +93,18 @@
       </div>
       <p></p>
       <div class="card">
-        <div class="card-header"><h2>Gastos</h2></div>
+        <div class="card-header">
+          <h2>
+            <i><strong>Gastos</strong></i>
+          </h2>
+        </div>
         <div class="card-body">
           <div class="card">
-            <div class="card-header"><h3>Gastos de la vivienda</h3></div>
+            <div class="card-header">
+              <h3>
+                <i><strong>Gastos de la vivienda</strong></i>
+              </h3>
+            </div>
             <div class="card-body">
               <div *ngIf="spents.length === 0">
                 <div align="center">

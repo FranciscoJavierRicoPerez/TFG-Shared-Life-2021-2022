@@ -2,7 +2,7 @@
 <div class="container justify-content-center">
   <div class="card">
     <div class="card-header">
-      <h1>{{ user.firstName }}</h1>
+      <h1><i><strong>{{ user.firstName }}</strong></i></h1>
     </div>
     <div class="card-body">
       <div class="container">
@@ -34,7 +34,7 @@
         <div *ngIf="isAdmin && homes.length > 0">
           <div class="card">
             <div class="card-header">
-              <h1>Viviendas</h1>
+              <h1><i><strong>Viviendas</strong></i></h1>
             </div>
             <div class="card-body card-deck mt-3">
               <div *ngFor="let home of homes">

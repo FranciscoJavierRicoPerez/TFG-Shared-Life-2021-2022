@@ -3,17 +3,21 @@ import { AuthService } from './../../../services/auth/auth.service';
 import { UserService } from './../../../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user/user';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ThisReceiver } from '@angular/compiler';
 import { NewUserDTO } from 'src/app/models/user/new-user-dto/NewUserDTO';
 
 @Component({
   selector: 'app-user-register',
   templateUrl: './user-register.component.html',
-  styleUrls: ['./user-register.component.css']
+  styleUrls: ['./user-register.component.css'],
 })
 export class UserRegisterComponent implements OnInit {
-
   user: NewUserDTO;
 
   loading: boolean = false;
@@ -24,18 +28,14 @@ export class UserRegisterComponent implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
-    isOwner: new FormControl(false) // Inicialización del checkbox a false (USUARIO)
+    isOwner: new FormControl(false), // Inicialización del checkbox a false (USUARIO)
   });
 
-  constructor(
-    private AuthService: AuthService,
-    private Router: Router
-  ) {
+  constructor(private AuthService: AuthService, private Router: Router) {
     this.loading = false;
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   async saveUser() {
     this.loading = true;
@@ -45,26 +45,27 @@ export class UserRegisterComponent implements OnInit {
       this.myForm.value.lastName,
       this.myForm.value.email,
       this.myForm.value.password,
-      this.myForm.value.username);
-    if(this.myForm.value.isOwner == true){
-      this.user.roles.push("admin");
+      this.myForm.value.username
+    );
+    if (this.myForm.value.isOwner == true) {
+      this.user.roles.push('admin');
     }
     console.log(this.user);
     (await this.AuthService.register(this.user)).subscribe(
-      data => {
+      (data) => {
         debugger;
-        console.log("Ok register user");
+        console.log('Ok register user');
         this.loading = false;
-        this.Router.navigate(['/login'])
-      }, 
-      error => {
-        console.log("Err register user");
+        this.Router.navigate(['/login']);
+      },
+      (error) => {
+        console.log('Err register user');
         this.loading = false;
       }
     );
   }
 
-  async onSubmit(){
+  async onSubmit() {
     await this.saveUser();
   }
 }

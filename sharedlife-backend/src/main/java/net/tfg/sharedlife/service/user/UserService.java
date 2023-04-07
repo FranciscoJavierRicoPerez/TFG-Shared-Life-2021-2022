@@ -29,5 +29,10 @@ public interface UserService {
 	void deleteUser(Long id);
 
 	void saveUserInformation(User user);
-	
+
+	boolean updatePassword(String password, String email);
+
+	String generateNewPassword(String email);
+
+	boolean registerNewPassword(String email, String actualPassword, String newPassword);
 }

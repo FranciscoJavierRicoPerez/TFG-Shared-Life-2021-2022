@@ -9,7 +9,9 @@ import net.tfg.sharedlife.service.home.HomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import net.tfg.sharedlife.common.ErrorMessages;
@@ -19,6 +21,8 @@ import net.tfg.sharedlife.model.Invitation;
 import net.tfg.sharedlife.model.User;
 import net.tfg.sharedlife.repository.InvitationRepository;
 import net.tfg.sharedlife.repository.UserRepository;
+
+import javax.transaction.Transactional;
 
 /**
  * The Class UserServiceImpl.
@@ -37,6 +41,15 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private InvitationRepository invitationRepository;
+
+	@Lazy
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Value("${jwt.secret}")
+	private String secret;
+
+
 	
 	/**
 	 * Creates the user.
@@ -138,6 +151,50 @@ public class UserServiceImpl implements UserService{
 	public void saveUserInformation(User user) {
 		Log.info("Saving infotmation of the user: " + user.getUsername());
 		userRepository.save(user);
+	}
+
+	@Override
+	@Transactional
+	public boolean updatePassword(String password, String email) {
+		boolean updated = false;
+		User user = this.findUserByEmail(email);
+		if(user != null) {
+			user.setPassword(password);
+			userRepository.save(user);
+			updated = true;
+		} else {
+			updated = false;
+		}
+		return updated;
+	}
+
+	@Override
+	public String generateNewPassword(String email) {
+		String vars[] = email.split("@");
+		String toEncode = vars[0] + secret;
+		return toEncode;
+	}
+
+	@Override
+	public boolean registerNewPassword(String email, String actualPassword, String newPassword) {
+		boolean result = false;
+		User user = userRepository.findByEmail(email);
+		if(user != null) {
+			if(passwordEncoder.matches(actualPassword, user.getPassword())) {
+				user.setPassword(passwordEncoder.encode(newPassword));
+				userRepository.save(user);
+				result = true;
+			} else {
+				throw new DataIncorrectException(ErrorMessages.ERR_PASSWORD_INCORRECT);
+			}
+		} else {
+			throw new DataIncorrectException(ErrorMessages.USER_NOT_FOUND);
+		}
+		return result;
+	}
+
+	private User findUserByEmail(String email){
+		return userRepository.findByEmail(email);
 	}
 
 }

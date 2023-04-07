@@ -23,6 +23,8 @@ import { SpentTableComponent } from './components/tables/spent-table/spent-table
 import { DebtTableComponent } from './components/tables/debt-table/debt-table.component';
 import { MemberProfileComponent } from './components/user/member-profile/member-profile.component';
 import { HomeChatPageComponent } from './components/chat/home-chat-page/home-chat-page.component';
+import { PasswordRecoveryComponent } from './components/user/password-recovery/password-recovery.component';
+import { PasswordUpdateComponent } from './components/user/password-update/password-update.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { HomeChatPageComponent } from './components/chat/home-chat-page/home-cha
     DebtTableComponent,
     MemberProfileComponent,
     HomeChatPageComponent,
+    PasswordRecoveryComponent,
+    PasswordUpdateComponent,
   ],
   imports: [
     BrowserModule,
