@@ -62,19 +62,20 @@ public class SpentServiceImpl implements SpentService {
 		spent.setDebts(createDebt(admin, spentDto, spent));
 	
 	}
+
+	// CAUSISTICA
+	// 1 - SI EL GASTO LO CREA EL ADMIN
+	// => LAS DEUDAS ES PARA CADA UNO DE LOS MIEMBROS DE LA VIVIENDA (HECHA)
+	// 2 - SI EL GASTO LO CREA EL USUARIO
+	// => LAS DEUDAS DEL PISO SE CREAN PARA TODOS MENOS PARA EL QUE LA HA CREADO Y PARA EL ADMIN
+	// => ES DECIR EL USUARIO QUE TENGA EL NOMBRE Y EL QUE CONTENGA EL ROL DE USUARIO
 	
 	private Set<Debt> createDebt(boolean admin, SpentDTO spentDto, Spent spent) {
-		// CAUSISTICA
-		// 1 - SI EL GASTO LO CREA EL ADMIN
-			// => LAS DEUDAS ES PARA CADA UNO DE LOS MIEMBROS DE LA VIVIENDA (HECHA)
-		// 2 - SI EL GASTO LO CREA EL USUARIO 
-			// => LAS DEUDAS DEL PISO SE CREAN PARA TODOS MENOS PARA EL QUE LA HA CREADO Y PARA EL ADMIN
-			// => ES DECIR EL USUARIO QUE TENGA EL NOMBRE Y EL QUE CONTENGA EL ROL DE USUARIO
 		logger.info("Creating de debts for the member users");
 		Set<Debt> debts = new HashSet<>();
 		List<UserDTO> members = homeService.getMembers(Long.parseLong(spentDto.getIdHome()));
 		for(UserDTO u : members) {
-			if(!spentDto.getUserToPay().equals(u.getUsername()) && !admin && !u.getRoles().contains("ROLE_ADMIN")) { // En este caso no crea si es ADMIN
+			if(!spentDto.getUserToPay().equals(u.getUsername()) && !admin && !u.getRoles().contains("ROLE_ADMIN")) {
 				logger.info("Debts in the case the spent is creating by the user");
 				User member = userService.getByUsername(u.getUsername()).get();
 				Debt debt = new Debt();
@@ -83,7 +84,7 @@ public class SpentServiceImpl implements SpentService {
 				//debt.setIdSpent(spent.getId());
 				System.out.println("CANTIDAD DE MIEMBROS => " + members.size());
 				System.out.println("CANTIDAD A PAGAR => " + spent.getTotalPrice());
-				debt.setPricePerPerson(spent.getTotalPrice() / (members.size() - 2)); // Resto al admin y al usuario que crea el gasto
+				debt.setPricePerPerson(spent.getTotalPrice() / (members.size() - 2));
 				debt.setPaid(false);
 				debt.setUserToPay(spentDto.getUserToPay());
 				debt.setSpent(spent);
@@ -98,7 +99,7 @@ public class SpentServiceImpl implements SpentService {
 					debt.setIdHome(spent.getHome().getId());
 					debt.setIdUser(member.getId());
 					//debt.setIdSpent(spent.getId());
-					debt.setPricePerPerson(spent.getTotalPrice() / (members.size() - 1)); // Resto al admin
+					debt.setPricePerPerson(spent.getTotalPrice() / (members.size() - 1));
 					debt.setPaid(false);
 					debt.setUserToPay(spentDto.getUserToPay());
 					debt.setSpent(spent);

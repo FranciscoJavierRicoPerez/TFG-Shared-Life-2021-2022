@@ -385,29 +385,17 @@ public class HomeServiceImpl implements HomeService {
     private void manageWeeklyTaskOwner(Home home) {
         logger.info("Updating the weekly task responsible");
         List<User> renters = getAllRentersByHomeId(home.getId());
-        /*
-         * ALGORITMO DE REPARTO DE TAREAS SEMANALES
-         * -> Inicialmente cuando se une el primer inquilino a la vivienda, se crean las
-         * 4 tareas iniciales y se le asignan todas a el
-         * -> Cuando se empiezan a añadir miembros a la vivienda, se tienen que repartir
-         * las tareas entre ellos
-         * -> CASOS MENOS INQUILINOS QUE TAREAS:
-         * - En primera instancia solo van a haber 4 tareas semanales
-         * - Para saber cuantas tareas tengo que asignarle a cada uno tengo que dividir
-         * el número de tareas semanales por el actualMemberCount
-         * - Esa es la cantidad de tareas que tienen que asi
-         */
         int actualMemberCount = renters.size();
         List<Task> auxWeekTasks = new ArrayList<>();
         User newRenter = null;
         for (User user : renters) {
-            if (user.getTasks().isEmpty()) { // Usuario que acaba de entrar
+            if (user.getTasks().isEmpty()) {
                 newRenter = user;
             } else {
-                if (actualMemberCount == 3) { // Los dos inquilinos tienen 2 tareas por lo que quiero 1 de cada uno
+                if (actualMemberCount == 3) {
                     auxWeekTasks.add(user.getTasks().get(0));
                 } else {
-                    if (actualMemberCount == 4 && user.getTasks().size() > 1) { // Solo quiero quitarle tareas al que
+                    if (actualMemberCount == 4 && user.getTasks().size() > 1) {
                         // mas tiene
                         auxWeekTasks.add(user.getTasks().get(0));
                     } else {

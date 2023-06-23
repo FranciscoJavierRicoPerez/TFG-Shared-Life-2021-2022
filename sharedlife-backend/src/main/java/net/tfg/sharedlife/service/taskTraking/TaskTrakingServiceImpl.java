@@ -62,12 +62,10 @@ public class TaskTrakingServiceImpl implements TaskTrakingService {
                     }
                 }
             } else {
-                // Para la confirmacion lo que hay que hacer es obtener el tasktrakingsusers asociado a la tarea task o
-                // al usuario que hace la confirmacion
                 for(User user : renters){
-                    if(user.getUsername().equals(username)){ // es el usuario que ha confirmado la tarea
-                        // REVISAR ESTA LLAMADA AL REPOSITORIO POR QUE PUEDE EXISTIR MAS DE UNO
-                        List<TaskTrakingsUsers> taskTrakingsUsersList = taskTrakingsUsersRepository.findAllByUserId(user.getId());
+                    if(user.getUsername().equals(username)){
+                        List<TaskTrakingsUsers> taskTrakingsUsersList =
+                                taskTrakingsUsersRepository.findAllByUserId(user.getId());
                         for(TaskTrakingsUsers taskTrakingsUsers : taskTrakingsUsersList){
                             if(taskTrakingsUsers.getTaskTraking().getId().equals(taskTraking.getId())) {
                                 taskTrakingsUsers.setConfirmed(true);

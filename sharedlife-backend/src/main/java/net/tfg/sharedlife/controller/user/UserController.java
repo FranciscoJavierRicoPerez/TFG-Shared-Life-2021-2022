@@ -34,7 +34,7 @@ public interface UserController {
 	ResponseEntity<AuthUserDto> getUserById(@PathVariable("idUser") Long idUser);
 	
 	
-	@GetMapping("/email")
+	@GetMapping("/username")
 	ResponseEntity<AuthUserDto> getAuthUserByUserName(@RequestParam("username") String username);
 	
 	@GetMapping("/invitation")

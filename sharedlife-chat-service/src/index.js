@@ -1,8 +1,8 @@
+
+
 const http = require('http');
-const path = require('path');
 
 const express = require('express');
-// const socketio = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
@@ -27,9 +27,8 @@ io.on('connection', socket => {
 
 });
 
-// stating the serve
-app.use(express.static(path.join(__dirname, 'public')));
-
 server.listen(app.get('port'), () => {
     console.log('CHAT SERVICE ON PORT ' + app.get('port'));
 });
+
+

@@ -50,8 +50,8 @@ public class MailServiceImpl implements MailService{
 
         try {
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("franricoperez1997@gmail.com")); // crear un corre, en plan, sharedlifeadministracion@gmail.com
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver)); // receiver
+            message.setFrom(new InternetAddress("franricoperez1997@gmail.com"));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
             message.setSubject(topic);
             message.setText(body);
             Transport t = session.getTransport("smtp");
